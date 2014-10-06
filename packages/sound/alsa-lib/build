@@ -1,0 +1,34 @@
+#!/bin/sh
+
+. config/options
+get_meta $1
+
+cd $PKG_BUILD_DIR
+
+export CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=32 -fPIC -DPIC"
+#CFLAGS="-fPIC -DPIC"
+
+
+
+
+
+do_configure \
+            --with-plugindir=/usr/lib/alsa \
+            --with-debug=no \
+            --with-versioned=no \
+            --disable-python \
+            --disable-dependency-tracking \
+	    --enable-symbolic-functions \
+	    --enable-debug \
+
+#do_configure \
+#	    --with-plugindir=/usr/lib/alsa \
+#	    --disable-python \
+#	    --without-debug \
+#	    --disable-dependency-tracking
+
+sed -i 's/.*PKGLIBDIR.*/#define PKGLIBDIR ""/' include/config.h
+
+make
+make_install
+sed -i 's%.*~/\.asoundrc.*%%' .install/usr/share/alsa/alsa.conf

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+. config/options
+
+cd $BUILD/$1*
+
+setup_toolchain target
+
+if [ "$TARGET_MACHINE" = raspberrypi ]; then
+   SPLASH_FILE="$ROOT/$CONFIG/flavours/$FLAVOUR/Rasplash.png"
+else
+   SPLASH_FILE="$ROOT/$CONFIG/flavours/$FLAVOUR/splash-frontend.png"
+fi
+[ -f "$SPLASH_FILE" ] && cp -P "$SPLASH_FILE" splash.png
+
+make
+make_install
+
+

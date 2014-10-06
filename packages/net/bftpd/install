@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+
+cd $BUILD/$1-*
+
+do_install usr/sbin/bftpd
+
+mkdir -p $INSTALL/etc
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/$1.conf $INSTALL/etc
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/ftp $INSTALL/etc

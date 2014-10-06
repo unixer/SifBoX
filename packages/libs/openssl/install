@@ -1,0 +1,16 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $BUILD/$1*
+
+do_install usr/lib/libcrypto.so*
+do_install usr/lib/libssl.so*
+do_install usr/lib/engines
+do_install usr/bin
+do_install etc
+if [ "$TARGET_MACHINE" = raspberrypi ]; then
+   mkdir -p $INSTALL/etc/profile.d
+   cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/openssl.sh $INSTALL/etc/profile.d
+fi

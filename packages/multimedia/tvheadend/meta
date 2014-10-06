@@ -1,0 +1,22 @@
+PKG_NAME=tvheadend
+#PKG_URL_REV=819627e
+#PKG_URL_REV=342d0e7
+PKG_URL_REV=c84bc2b
+PKG_VERSION=3.9.422
+PKG_URL_PROTO=git
+PKG_URL="https://github.com/tvheadend/tvheadend.git"
+#PKG_URL_REV=e0d07fa
+#PKG_VERSION=3.7+${PKG_URL_REV}
+
+#PKG_URL="https://github.com/seife/tvheadend.git"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC openssl curl"
+PKG_BUILD_DEPENDS="toolchain"
+PKG_USE="zeroconf dvbcsa"
+PKG_DEPENDS_zeroconf="avahi"
+PKG_DEPENDS_dvbcsa="libdvbcsa"
+PKG_PRIORITY=optional
+PKG_SECTION=multimedia
+PKG_SHORTDESC="Combined DVB receiver, Digital Video Recorder and Live TV streaming server for Linux"
+PKG_LONGDESC="Tvheadend is a TV streaming server for Linux supporting DVB-S, DVB-S2, DVB-C, DVB-T, ATSC, IPTV, and Analog video (V4L) as input sources. It also comes with a powerful and easy to use web interface both used for configuration and day-to-day operations, such as searching the EPG and scheduling recordings."
+PKG_BUILD_DEPENDS_zeroconf="avahi"

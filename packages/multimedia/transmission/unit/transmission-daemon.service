@@ -1,0 +1,10 @@
+[Unit]
+Description=Transmission BitTorrent Daemon
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/transmission-daemon --log-error -f -g /etc/transmission 
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,33 @@
+#!/bin/sh
+
+if test -d /.root && touch /.root/testfile 2>/dev/null; then
+  cachedir=/.root
+  rm /.root/testfile
+else
+  cachedir=/video
+fi
+
+if [ -f $cachedir/epg.dat ]; then
+  a=`find $cachedir -mmin +480 -name epg.dat -print`
+  [ X$a = "X" ] && exit 0
+fi
+
+#zh_epgurl=http://epg.xltvrobbs.net/epg/dm800/gemini800.tgz
+zh_epgurl=http://epg.xltvrobbs.net/epg/G/gemini.tgz
+
+. /etc/locale.conf
+
+case $LANG in
+  zh*)
+    if wget -t 3 $zh_epgurl -O /tmp/epg.tgz; then
+      tar zvfx /tmp/epg.tgz -C /tmp || exit
+      epgen -i /tmp/gemini.epg.dat -o $cachedir/epg.dat -v7le
+      rm /tmp/epg.tgz /tmp/gemini.epg.dat
+      if ! grep -q "^E2EPG=" /etc/system.options >/dev/null 2>&1; then
+        echo "E2EPG=yes" >> /etc/system.options
+      fi
+    fi
+    ;;
+  *)
+    exit
+esac

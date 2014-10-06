@@ -1,0 +1,30 @@
+#!/bin/sh
+
+. config/path
+SECTIONS="admin drivers filesystem firmware fonts games libs misc multimedia nodejs net perl python sound system utils" 
+
+echo $SECTIONS
+read enterKey
+# populate SEC_$section variables with list of packages per section
+for section in $SECTIONS; do
+  for package in packages/$section/*; do
+    packages=`echo $package | sed s:packages/$section/::`
+    #package=`echo $package`
+    echo "section" $section
+    echo "packages" $packages
+    echo "package" $package
+    read enterKey
+    [ -f packages/$section/$package/meta ] || continue
+    # source the package meta to populate PKG_SECTION
+    PKG_SECTION=
+    . packages/$section/$package/meta
+    #. $package/meta
+    old=
+    cmd=
+    var="SEC_$PKG_SECTION"
+    old="`valueof $var`"
+    cmd="$var=\"$old $package\""
+    eval $cmd
+  done
+done
+

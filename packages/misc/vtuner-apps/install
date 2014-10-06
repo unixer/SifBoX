@@ -1,0 +1,12 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $BUILD/$1*
+do_install usr/sbin
+mkdir -p $INSTALL/etc/
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/* $INSTALL/etc/
+
+mkdir -p $INSTALL/usr/sbin
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/script/vtuner.sh $INSTALL/usr/sbin/vtuner.sh 

@@ -1,0 +1,132 @@
+#!/bin/sh
+
+. config/options
+get_meta $1
+
+if pkg_uses $1 vdpau; then
+  VDPAU_CONFIG="--enable-vdpau"
+else
+  VDPAU_CONFIG="--disable-vdpau"
+fi
+
+if pkg_uses $1 vaapi; then
+  VAAPI_CONFIG="--enable-vaapi"
+else
+  VAAPI_CONFIG="--disable-vaapi"
+fi
+
+if [ "$DEBUG" = yes ]; then
+  DEBUG_CONFIG="--enable-debug --disable-stripping"
+else
+  DEBUG_CONFIG="--disable-debug --enable-stripping"
+fi
+
+if [ "$OPTIMIZATIONS" = size ]; then
+  OPTIM_CONFIG="--enable-small"
+else
+  OPTIM_CONFIG="--disable-small"
+fi
+
+if [ "$FPU_OPTIMIZATIONS" = neon -o "$FPU_OPTIMIZATIONS" = "neon-vfp4" ]; then
+  FPU_CONFIG="--enable-neon"
+else
+  FPU_CONFIG="--disable-neon"
+fi
+
+cd $PKG_BUILD_DIR
+
+do_gcc_strip_lto
+do_gcc_strip_gold
+case "$TARGET_ARCH" in
+  arm)
+      FFMPEG_CPU=""
+      FFMPEG_TABLES="--enable-hardcoded-tables"
+      FFMPEG_PIC="--enable-pic"
+  ;;
+  i?86)
+      FFMPEG_CPU=""
+      FFMPEG_TABLES="--disable-hardcoded-tables"
+      FFMPEG_PIC="--disable-pic"
+  ;;
+  x86_64)
+      FFMPEG_CPU=""
+      FFMPEG_TABLES="--disable-hardcoded-tables"
+      FFMPEG_PIC="--enable-pic"
+  ;;
+esac
+
+case "$TARGET_FPU" in
+  neon*)
+      FFMPEG_FPU="--enable-neon"
+  ;;
+  vfp*)
+      FFMPEG_FPU=""
+  ;;
+  *)
+      FFMPEG_FPU=""
+  ;;
+esac
+
+#export LIBRARY_PATH=$XORG_PREFIX/lib
+sed -i 's/-lflite"/-lflite -lasound"/' configure &&
+./configure --enable-cross-compile \
+            --cross-prefix=$TARGET_PREFIX \
+            --arch=$TARGET_ARCH \
+            --prefix=/usr \
+            --target-os=linux \
+            --extra-cflags="$CFLAGS" \
+            --cpu=$TARGET_CPU \
+            --enable-static \
+            --enable-shared \
+            --enable-gpl \
+            --disable-ffserver \
+            --enable-ffmpeg \
+            --enable-postproc \
+            --enable-avfilter \
+            --enable-pthreads \
+            --disable-x11grab \
+            $OPTIM_CONFIG \
+            --enable-encoders \
+            --enable-decoders \
+            --enable-muxers \
+            --enable-demuxers \
+            --enable-parsers \
+            --enable-bsfs \
+            --enable-protocols \
+            --disable-indevs \
+            --disable-outdevs \
+            --disable-devices \
+            --enable-filters \
+            --enable-zlib \
+            --enable-bzlib \
+            --disable-ffplay \
+            --disable-libvpx \
+            $DEBUG_CONFIG \
+            $VDPAU_CONFIG \
+            $VAAPI_CONFIG \
+            $FPU_CONFIG \
+	    $FFMPEG_TABLES \
+	    $FFMPEG_PIC \
+	    --enable-gpl         \
+	    --enable-version3    \
+            --enable-nonfree     \
+            --enable-shared      \
+	    --enable-libspeex    \
+            --enable-libtheora   \
+            --enable-libvorbis   \
+            --enable-openssl     \
+            --disable-symver     \
+	    $FFMPEG_CPU \
+            $FFMPEG_FPU \
+
+#            --enable-x11grab     \
+
+
+[ $TARGET_LIBC = "uclibc" ] && ! pkg_uses $1 ipv6 && \
+  sed "s%#define HAVE_STRUCT_IPV6_MREQ.*%#define HAVE_STRUCT_IPV6_MREQ 0%" -i config.h
+
+make
+$TARGET_CC tools/qt-faststart.c -o tools/qt-faststart
+unset LIBRARY_PATH
+make_install
+cp tools/qt-faststart .install/usr/bin

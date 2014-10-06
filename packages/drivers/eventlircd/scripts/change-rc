@@ -1,0 +1,15 @@
+#!/bin/sh
+
+#KEYMAPS="hauppauge"
+#KEYMAPS="rc6_mce rc6_mce2"
+
+mapdir="/etc/rc_keymaps"
+for map in $KEYMAPS ; do
+  if [ -r $mapdir/$map ] ; then
+    ir-keytable -w $mapdir/$map
+  else
+    echo "Keymap '$map' not found in $mapdir !"
+  fi
+done
+
+exit 0

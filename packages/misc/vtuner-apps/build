@@ -1,0 +1,27 @@
+#!/bin/sh
+
+. config/options
+
+cd $BUILD/$1*
+
+if [ "$TARGET_SUBARCH" = "i586" ]; then
+  ARCH="i686"
+elif [ "$TARGET_SUBARCH" = "armv7" ]; then
+  ARCH="arm"
+elif [ "$TARGET_SUBARCH" = "i486" ]; then
+  ARCH="i686"
+elif [ "$TARGET_ARCH" = "arm" ]; then
+  ARCH="arm"
+else
+  ARCH=$TARGET_SUBARCH
+fi
+make $ARCH
+do_strip bin dist/$ARCH/vtunerc.$ARCH
+do_strip bin dist/$ARCH/vtunerd.$ARCH
+mkdir -p .install/usr/sbin
+cd .install/usr/sbin
+cp ../../../dist/$ARCH/vtunerc.$ARCH .
+cp ../../../dist/$ARCH/vtunerd.$ARCH .
+ln -s vtunerd.$ARCH vtunerd ||true
+ln -s vtunerc.$ARCH vtunerc ||true
+cd ../../../ 

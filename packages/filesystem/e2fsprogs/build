@@ -1,0 +1,29 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+do_configure \
+  --exec-prefix=/ \
+  --enable-libuuid \
+  --disable-libblkid \
+  --disable-debugfs \
+  --disable-profile \
+  --disable-checker \
+  --disable-imager \
+  --enable-resizer \
+  --disable-fsck \
+  --disable-e2initrd-helper \
+  --disable-nls \
+  --enable-symlink-install \
+
+make
+make_install
+
+mkdir -p .install/include/ext2fs
+cp lib/ext2fs/*.h .install/include/ext2fs
+
+mkdir -p .install/usr/sbin
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/* .install/usr/sbin

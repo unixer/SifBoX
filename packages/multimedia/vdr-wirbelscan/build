@@ -1,0 +1,28 @@
+#!/bin/sh
+
+. config/options
+
+get_meta vdr
+VDR_VERSION=$PKG_VERSION
+
+get_meta linux
+verlte 3.6.11 $PKG_VERSION && INSDVB="yes" || INSDVB="no"
+if [ $INSDVB = "no" ]; then
+   DVB_DIR="$SYSROOT_PREFIX/usr/include"
+else
+   DVB_DIR="../linux"
+fi
+
+get_meta $1
+
+$SCRIPTS/build vdr
+
+VDR_DIR=`basename $BUILD/vdr-$VDR_VERSION`
+
+cd $BUILD/${PKG_NAME}-${PKG_VERSION}
+
+make \
+  VDRDIR="../$VDR_DIR" \
+  DVBDIR=$DVB_DIR \
+  LIBDIR="." \
+  LOCALEDIR="./locale"

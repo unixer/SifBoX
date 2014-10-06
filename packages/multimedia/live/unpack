@@ -1,0 +1,7 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+
+cp $PACKAGES/$PKG_SECTION/$PKG_NAME/config/config.sifbox $PKG_BUILD_DIR

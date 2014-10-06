@@ -1,0 +1,22 @@
+#!/bin/sh
+
+. config/options
+
+cd $BUILD/$1*
+
+do_install usr/lib
+
+if pkg_uses $1 devtools; then
+#  do_install usr/sbin/bccmd
+#  do_install usr/bin/hciattach
+#  do_install usr/bin/hciconfig
+  do_install usr/bin
+fi
+
+mkdir -p $INSTALL/etc/bluetooth
+cp -P src/main.conf $INSTALL/etc/bluetooth
+
+do_install lib/udev
+do_install etc
+do_install usr/share/dbus-1
+

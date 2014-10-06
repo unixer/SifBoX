@@ -1,0 +1,21 @@
+#
+# dvbapi configuration
+#
+# types:
+#	P - Priority
+#		format:
+#			P: <caid>:[<provider>]:[<srvid>]:[<ecmpid>]
+#	I - Ignore
+#		format:
+#			I: <caid>:[<provider>]:[<srvid>]:[<ecmpid>]
+#	M - Map
+#		format:
+#			M: <caid>:[<provider>]:[<srvid>]:[<ecmpid>] <target caid>:[<target provider>]
+#	D - Delay
+#		format:
+#			D: <caid>:[<provider>]:[<srvid>]:[<ecmpid>] <delay (ms)>
+#
+#
+
+P: 09CD:000000 0
+P: 183d::: 0
