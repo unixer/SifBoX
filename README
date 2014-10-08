@@ -27,4 +27,4 @@ Unixer
 
 Per evitare errori di compilazione si consiglia di compilare nell dir /root magari anche creando un simlink del tipo ln -s /usr/local/src/SifBoX sifbox
 
-apt-get install docbook-xsl autoconf mercurial patchutils libdigest-sha-perl libproc-processtable-perl libnl-dev libmagick++-dev subversion openjdk-6-jre openjdk-6-jre-headless openjdk-6-jre-lib flex bison xsltproc 
+apt-get install docbook-xsl autoconf mercurial patchutils libdigest-sha-perl libproc-processtable-perl libnl-dev libmagick++-dev subversion openjdk-6-jre openjdk-6-jre-headless openjdk-6-jre-lib flex bison xsltproc sendmail 
