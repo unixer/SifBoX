@@ -111,7 +111,7 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
 	    --enable-version3    \
             --enable-nonfree     \
             --enable-shared      \
-	    --enable-libspeex    \
+ 	    --disable-libspeex   \
             --enable-libtheora   \
             --enable-libvorbis   \
             --enable-openssl     \
