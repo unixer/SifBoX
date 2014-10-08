@@ -6,7 +6,7 @@
  ILCDIR   =ilclient
 -VCINCDIR =$(SDKSTAGE)/opt/vc/include
 -VCLIBDIR =$(SDKSTAGE)/opt/vc/lib
-+SDKSTAGE = /media/disk/SifBoX/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local
++SDKSTAGE = /root/SifBoX/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local
 +VCINCDIR =$(SDKSTAGE)/include
 +VCLIBDIR =$(SDKSTAGE)/lib
  
@@ -17,7 +17,7 @@
 @@ -1,9 +1,10 @@
  OBJS=ilclient.o ilcore.o
  LIB=libilclient.a
-+SDKSTAGE = /root/openrasp/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local
++SDKSTAGE = /root/SifBoX/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local
  
  CFLAGS+=-DSTANDALONE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX -D_LINUX -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -U_FORTIFY_SOURCE -Wall -g -DHAVE_LIBOPENMAX=2 -DOMX -DOMX_SKIP64BIT -ftree-vectorize -pipe -DUSE_EXTERNAL_OMX -DHAVE_LIBBCM_HOST -DUSE_EXTERNAL_LIBBCM_HOST -DUSE_VCHIQ_ARM -Wno-psabi
  

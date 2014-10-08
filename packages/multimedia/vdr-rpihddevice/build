@@ -21,6 +21,8 @@ export MAKEFLAGS=-j1
 
 cd $PKG_BUILD_DIR
 
+sed -i "s|SDKSTAGE = /root/SifBoX/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local|SDKSTAGE = $ROOT/$SYSROOT_PREFIX/usr/local|" Makefile
+sed -i "s|SDKSTAGE = /root/SifBoX/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local|SDKSTAGE = $ROOT/$SYSROOT_PREFIX/usr/local|" ilclient/Makefile
 
 make all \
   VDRDIR="../$VDR_DIR" \
