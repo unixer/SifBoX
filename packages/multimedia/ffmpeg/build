@@ -118,6 +118,7 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
             --disable-symver     \
 	    $FFMPEG_CPU \
             $FFMPEG_FPU \
+	    --enable-avcodec \
 
 #            --enable-x11grab     \
 
