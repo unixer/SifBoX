@@ -22,3 +22,5 @@ geexbox-*.tar
 *.prova
 *.mie
 *rootfs.tar.bz2
+updatevdr.sh
+fixme
