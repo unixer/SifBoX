@@ -37,9 +37,9 @@ fi
 
 tar cpaf $TARBALL_NAME -C $TARBALL_DIR .
 
-cat > $TARBALL_NAME.info << "EOF"
+cat > $TARBALL_NAME.json << "EOF"
 {
-   name: "SifBox v1.3.0",
+   name: "SifBox",
    version: "1.3.0",
    date: "09-10-2014",
    description: "Versione stabile",
