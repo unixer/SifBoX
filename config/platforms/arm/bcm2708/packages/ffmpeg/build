@@ -37,85 +37,46 @@ cd $PKG_BUILD_DIR
 
 do_gcc_strip_lto
 do_gcc_strip_gold
-case "$TARGET_ARCH" in
-  arm)
-      FFMPEG_CPU=""
-      FFMPEG_TABLES="--enable-hardcoded-tables"
-      FFMPEG_PIC="--enable-pic"
-  ;;
-  i?86)
-      FFMPEG_CPU=""
-      FFMPEG_TABLES="--disable-hardcoded-tables"
-      FFMPEG_PIC="--disable-pic"
-  ;;
-  x86_64)
-      FFMPEG_CPU=""
-      FFMPEG_TABLES="--disable-hardcoded-tables"
-      FFMPEG_PIC="--enable-pic"
-  ;;
-esac
-
-case "$TARGET_FPU" in
-  neon*)
-      FFMPEG_FPU="--enable-neon"
-  ;;
-  vfp*)
-      FFMPEG_FPU=""
-  ;;
-  *)
-      FFMPEG_FPU=""
-  ;;
-esac
-
-./configure --prefix=/usr \
-            --cpu=$TARGET_CPU \
-            --arch=$TARGET_ARCH \
-            --enable-cross-compile \
+./configure --enable-cross-compile \
             --cross-prefix=$TARGET_PREFIX \
-            --sysroot=$SYSROOT_PREFIX \
-            --sysinclude="$SYSROOT_PREFIX/usr/include" \
-            --target-os="linux" \
-            --nm="$NM" \
-            --ar="$AR" \
-            --as="$CC" \
-            --cc="$CC" \
-            --ld="$CC" \
-            --host-cc="$HOST_CC" \
-            --host-cflags="$HOST_CFLAGS" \
-            --host-ldflags="$HOST_LDFLAGS" \
-            --host-libs="-lm" \
+            --arch=$TARGET_ARCH \
+            --prefix=/usr \
+            --target-os=linux \
             --extra-cflags="$CFLAGS" \
-            --extra-ldflags="$LDFLAGS" \
-            --disable-static \
+            --cpu=$TARGET_CPU \
+            --enable-static \
             --enable-shared \
             --enable-gpl \
-            --enable-version3 \
-            --enable-nonfree \
-            --disable-doc \
-            $FFMPEG_DEBUG \
-            $FFMPEG_PIC \
-            $FFMPEG_OPTIM \
-            $FFMPEG_CRYSTALHD \
-            $FFMPEG_VAAPI \
-            $FFMPEG_VDPAU \
-            $FFMPEG_TABLES \
-            $FFMPEG_CPU \
-            $FFMPEG_FPU \
-	    --enable-avfilter \
-	    --enable-pthreads \
-	    --enable-postproc \
-	    --enable-libmp3lame \
-	    --enable-libtheora \
-	    --enable-libvorbis \
-	    --enable-filter=drawtext \
-
-
-
-
- 
+            --disable-ffserver \
+            --enable-ffmpeg \
+            --enable-postproc \
+            --enable-avfilter \
+            --enable-pthreads \
+            --disable-x11grab \
+            $OPTIM_CONFIG \
+            --enable-encoders \
+            --enable-decoders \
+            --enable-muxers \
+            --enable-demuxers \
+            --enable-parsers \
+            --enable-bsfs \
+            --enable-protocols \
+            --disable-indevs \
+            --disable-outdevs \
+            --disable-devices \
+            --enable-filters \
+            --enable-zlib \
+            --enable-bzlib \
+            --disable-ffplay \
+            --disable-libvpx \
+            $DEBUG_CONFIG \
+            $VDPAU_CONFIG \
+            $VAAPI_CONFIG \
+            $FPU_CONFIG \
+            --disable-symver \
 
 [ $TARGET_LIBC = "uclibc" ] && ! pkg_uses $1 ipv6 && \
   sed "s%#define HAVE_STRUCT_IPV6_MREQ.*%#define HAVE_STRUCT_IPV6_MREQ 0%" -i config.h
 
-make V=1
+make
 make_install

@@ -8,7 +8,8 @@ PKG_URL_REV=dd73be3
 
 PKG_VERSION=2.0.1
 PKG_URL_PROTO=git
-PKG_URL="git://projects.vdr-developer.org/xineliboutput.git"
+#PKG_URL="git://projects.vdr-developer.org/xineliboutput.git"
+PKG_URL="http://projects.vdr-developer.org/git/xineliboutput.git"
 PKG_REV=1
 PKG_DEPENDS="libjpeg-turbo xine-lib ffmpeg netcat"
 PKG_BUILD_DEPENDS="toolchain vdr"
