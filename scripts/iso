@@ -43,4 +43,21 @@ $ROOT/$TOOLCHAIN/bin/xorriso \
         -z -D -r -J $MKISOFS_ARCH \
         $BUILD/iso > $ISO
 
+cat > $ISO.json << "EOF"
+{
+   "name": "SifBox",
+   "version": "1.3.0",
+   "date": "09-10-2014",
+   "description": "Versione stabile",
+   "kernel_version": "3.14.20",
+   "vdr_version": "2.1.6",
+   "xbmc_version": "Gotham-13.2",
+   "arch": "ARCH",
+   "platform": "PLATFORM"
+}
+EOF
+
+sed -i "s|\"ARCH\"|\"$TARGET_ARCH\"|" $ISO.json
+sed -i "s|\"PLATFORM\"|\"$TARGET_MACHINE\"|" $ISO.json
+
 exit 0
