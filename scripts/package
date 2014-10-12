@@ -155,7 +155,7 @@ fi
 $INSTALL_RULE $1 >&$VERBOSE_OUT
 
 # build opk package
-[ -d $PACKAGES/$1/package ] && cp -P $PACKAGES/$1/package/* $INSTALL/CONTROL
+[ -d $PACKAGES/$PKG_SECTION/$1/package ] && cp -P $PACKAGES/$PKG_SECTION/$1/package/* $INSTALL/CONTROL
 
 add_control "Package" "$PKG_NAME"
 add_control "Version" "${PKG_VERSION}-${PKG_REV}"
