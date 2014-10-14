@@ -5,4 +5,4 @@ PKG_RUN_DEPENDS="supertux warmux"
 PKG_PRIORITY=optional
 PKG_SECTION=games
 PKG_SHORTDESC="games metapackage"
-PKG_LONGDESC="This metapackage provides all the available games in SifBoX."
+PKG_LONGDESC="This metapackage provides all the available games in GeeXboX."

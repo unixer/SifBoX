@@ -5,4 +5,4 @@
 get_meta $1
 
 mkdir -p $INSTALL/etc/keymaps
-cp $PACKAGES/$PKG_SECTION/$1/config/* $INSTALL/etc/keymaps
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/* $INSTALL/etc/keymaps
