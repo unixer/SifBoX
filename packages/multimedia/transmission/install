@@ -7,5 +7,6 @@ cd $PKG_BUILD_DIR
 
 do_install usr/bin
 do_install usr/share
+do_install srv
 mkdir -p $INSTALL//etc/transmission
 cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/* $INSTALL/etc/transmission 

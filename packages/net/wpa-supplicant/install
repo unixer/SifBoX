@@ -4,7 +4,7 @@
 
 get_meta $1
 
-cd $BUILD/$1*/wpa_supplicant
+cd $PKG_BUILD_DIR/wpa_supplicant
 
 do_install usr/sbin/wpa_supplicant
 

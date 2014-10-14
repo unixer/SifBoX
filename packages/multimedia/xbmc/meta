@@ -1,5 +1,6 @@
 PKG_NAME=xbmc
 PKG_URL_PROTO=git
+PKG_RECURSIVE=yes
 if [ "$TARGET_MACHINE" = cubieboard2 ]; then
    PKG_URL_REV=9ed3e580ea7c0
    PKG_VERSION=frodo-12.3

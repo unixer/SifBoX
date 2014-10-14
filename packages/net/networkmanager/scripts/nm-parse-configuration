@@ -29,7 +29,7 @@ COUNT="1 2 3 4 5 6 7 8 9"
     fi
   done
 else
-  [ -f /sys/class/net/$IFACE/address ] && mac_address=`cat /sys/class/net/$IFACE/address| tr '[a-z]' '[A-Z]'`
+  [ -f /sys/class/net/$IFACE/address ] && mac_address=`cat /sys/class/net/$IFACE/address| tr '[a-z]' '[A-Z]'`|| mac_address=$IFACE
 fi
 
 UUID="`cat /proc/sys/kernel/random/uuid`"
