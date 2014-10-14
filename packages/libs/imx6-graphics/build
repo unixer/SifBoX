@@ -90,3 +90,4 @@ done
 if [ "$DEVROOTFS" = yes ] ; then
   ln -sf .install .install-unstripped
 fi
+
