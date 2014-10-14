@@ -1,6 +1,7 @@
 #!/bin/sh
 
 PACKAGE="$1"
+SECTION="$2"
 
 if [ -z "$PACKAGE" ]; then
   echo "Usage: newpackage <package_name> [section_name]"
@@ -38,10 +39,11 @@ cat > packages/$SECTION/$PACKAGE/build <<EOF
 
 . config/options
 
-cd \$BUILD/\$1*
+get_meta \$1
+cd \$PKG_BUILD_DIR
+
 do_configure
 make
-do_strip bin lib$1.so.*
 make_install
 EOF
 chmod +x $PKGDIR/build
@@ -51,7 +53,8 @@ cat > $PKGDIR/install <<EOF
 
 . config/options
 
-cd \$BUILD/\$1*
+get_meta \$1
+cd \$PKG_BUILD_DIR
 
 do_install usr/bin
 EOF
@@ -62,7 +65,8 @@ cat > $PKGDIR/installdev <<EOF
 
 . config/options
 
-cd \$BUILD/\$1*
+get_meta \$1
+cd \$PKG_BUILD_DIR
 
 do_installdev usr/include
 do_installdev usr/lib
