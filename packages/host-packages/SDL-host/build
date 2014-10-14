@@ -99,6 +99,7 @@ make_install toolchain
 #make_install toolchain
 
 mkdir -p $ROOT/$PKG_BUILD_DIR
+rm -rf $ROOT/$PKG_BUILD_DIR/.install
 mv .install $ROOT/$PKG_BUILD_DIR
 mv $ROOT/$PKG_BUILD_DIR/.install/usr/bin/sdl-config $ROOT/$PKG_BUILD_DIR/.install/usr/bin/host-sdl-config
 
