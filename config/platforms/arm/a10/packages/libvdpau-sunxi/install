@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. config/options
-
-cd $BUILD/$1*
-
-do_install usr/lib/vdpau
-ln -s libvdpau_sunxi.so.1 $INSTALL/usr/lib/vdpau/libvdpau_sunxi.so 
