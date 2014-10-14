@@ -1,6 +1,6 @@
 PKG_NAME=libcec
 PKG_URL_PROTO=git
-PKG_URL_REV=4cf83161
+PKG_URL_REV=42c3c07a
 PKG_VERSION=2.1.4-2+r${PKG_URL_REV}
 PKG_URL="https://github.com/xbmc-imx6/${PKG_NAME}.git"
 #PKG_VERSION="2.1.4-2"
