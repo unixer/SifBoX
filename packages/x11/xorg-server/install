@@ -43,7 +43,7 @@ if [ "$TARGET_PLATFORM" = omap3 -o "$TARGET_PLATFORM" = omap4 ]; then
 fi
 
 # Dopo le modifiche alle unit di vdr vdr-sxfe e xorg 
-# sia bilita xorg-server all'avvio automatico
+# si abilita xorg-server all'avvio automatico
 mkdir -p $INSTALL/etc/systemd/system/multi-user.target.wants
 cd $INSTALL/etc/systemd/system/multi-user.target.wants
 ln -s /lib/systemd/system/xorg.service xorg.service
