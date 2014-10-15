@@ -1,9 +1,0 @@
-#!/bin/sh
- 
-. config/options
-
-cd $BUILD/$1*
-echo $CFLAGS
-do_configure
-make
-make_install
