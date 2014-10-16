@@ -48,7 +48,6 @@ make \
   LIBDIR="." \
   DVBDIR=$DVB_DIR \
   LOCALEDIR="./locale" \
-  PARALLEL="PARALLEL_128_SSE2" \
   $CFG_DVBCSA
 
 get_meta vdr
