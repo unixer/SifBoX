@@ -1,7 +1,7 @@
 PKG_NAME=vdr-dvbapi
 #PKG_URL_REV=dcb6efa78
 #get_meta vdr
-VDR_VERSION="2.1.6"
+VDR_VERSION=`grep -E '^PKG_VERSION' $ROOT/packages/multimedia/vdr/meta | cut -f1 |cut -f 2 -d=`
 PKG_NAME=vdr-dvbapi
 if [ "$VDR_VERSION" = "2.0.6" ]; then
    PKG_URL_REV=9b4ddce9

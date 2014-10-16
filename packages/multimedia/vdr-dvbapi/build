@@ -38,11 +38,17 @@ if pkg_uses $1 dvbcsa; then
   CFG_DVBCSA="LIBDVBCSA=1"
 fi
 
+if [ "$TARGET_ARCH" = x86_64 ]; then
+  sed -i "s|PARALLEL   ?= PARALLEL_32_INT|PARALLEL   ?= PARALLEL_128_SSE|" Makefile
+  sed -i "s|CSAFLAGS   ?= -Wall -fPIC -g -O3 -fomit-frame-pointer -fexpensive-optimizations -funroll-loops|CSAFLAGS   ?= -fPIC -O3 -fexpensive-optimizations -funroll-loops -mmmx -msse -msse2 -msse3|" Makefile
+fi
+
 make \
   VDRDIR="../$VDR_DIR" \
   LIBDIR="." \
   DVBDIR=$DVB_DIR \
   LOCALEDIR="./locale" \
+  PARALLEL="PARALLEL_128_SSE2" \
   $CFG_DVBCSA
 
 get_meta vdr
