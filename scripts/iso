@@ -46,18 +46,29 @@ $ROOT/$TOOLCHAIN/bin/xorriso \
 cat > $ISO.json << "EOF"
 {
    "name": "SifBox",
-   "version": "1.3.0",
-   "date": "09-10-2014",
+   "version": "VERS_ISO",
+   "date": "DATE",
    "description": "Versione stabile",
-   "kernel_version": "3.14.20",
-   "vdr_version": "2.1.6",
-   "xbmc_version": "Gotham-13.2",
+   "kernel_version": "KERN_VER",
+   "vdr_version": "VDR_VERSION",
+   "xbmc_version": "XBMC_VERSION",
    "arch": "ARCH",
    "platform": "PLATFORM"
 }
 EOF
 
+DATE=`date +%d-%m-%Y`
+VERS_ISO=`cat $ROOT/VERSION`
+VDR_VERSION=`grep -E '^PKG_VERSION' $ROOT/packages/multimedia/vdr/meta | cut -f1 |cut -f 2 -d=`
+KERN_VER=`grep -E '^PKG_VERSION' $ROOT/packages/system/linux/meta | cut -f1 |cut -f 2 -d=`
+get_meta xbmc
+XBMC_VERSION=`echo $PKG_VERSION |tr gotham Gotham |tr kodi Kodi`
+
+sed -i "s|\"DATE\"|\"$DATE\"|" $ISO.json
+sed -i "s|\"VERS_ISO\"|\"$VERS_ISO\"|" $ISO.json
+sed -i "s|\"KERN_VER\"|\"$KERN_VER\"|" $ISO.json
 sed -i "s|\"ARCH\"|\"$TARGET_ARCH\"|" $ISO.json
 sed -i "s|\"PLATFORM\"|\"$TARGET_MACHINE\"|" $ISO.json
-
+sed -i "s|\"VDR_VERSION\"|\"$VDR_VERSION\"|" $ISO.json
+sed -i "s|\"XBMC_VERSION\"|\"$XBMC_VERSION\"|" $ISO.json
 exit 0
