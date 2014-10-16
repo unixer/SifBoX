@@ -6,7 +6,7 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
    PKG_VERSION=frodo-12.3
 else 
 #   PKG_VERSION=kodi-14.0
-#   PKG_URL_REV=501ad2d
+#   PKG_URL_REV=4fbeb1b
    PKG_VERSION=gotham-13.2
    PKG_URL_REV=867305b97e
 fi
