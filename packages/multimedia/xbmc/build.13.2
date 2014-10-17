@@ -163,55 +163,33 @@ fi
 sed -i 's%PYTHON_VERSION=$ac_python_version%PYTHON_VERSION=2.7%' configure
 GCC_NO_LTO=1 GCC_NO_GOLD=1 GCC_NO_GRAPHITE=1 GCC_NO_LOOP_TREE=1 \
 do_configure \
-gl_cv_func_gettimeofday_clobber=no \
-                           ac_cv_lib_bluetooth_hci_devid=no \
-                           --disable-debug \
-                           --disable-optimizations \
-                           $XBMC_OPENGL \
-                           $XBMC_OPENGLES \
-                           $XBMC_SDL \
-                           $XBMC_OPENMAX \
-                           $XBMC_VDPAU \
-                           $XBMC_VAAPI \
-                           --disable-vtbdecoder \
-                           --disable-tegra \
-                           --disable-profiling \
-                           $XBMC_JOYSTICK \
-                           $XBMC_CEC \
-                           --enable-udev \
-                           --disable-libusb \
-                           $XBMC_GOOM \
-                           $XBMC_RSXS \
-                           $XBMC_PROJECTM \
-                           $XBMC_WAVEFORM \
-                           $XBMC_SPECTRUM \
-                           $XBMC_FISHBMC \
-                           $XBMC_XORG \
-                           --disable-ccache \
-                           $XBMC_ALSA \
-                           $XBMC_PULSEAUDIO \
-                           --enable-rtmp \
-                           $XBMC_SAMBA \
-                           $XBMC_NFS \
-                           $XBMC_AFP \
-                           --enable-libvorbisenc \
-                           --disable-libcap \
-                           $XBMC_DVDCSS \
-                           --disable-mid \
-                           $XBMC_AVAHI \
-                           $XBMC_UPNP \
-                           $XBMC_MYSQL \
-                           $XBMC_SSH \
-                           $XBMC_AIRPLAY \
-                           $XBMC_AIRTUNES \
-                           $XBMC_NONFREE \
-                           --disable-asap-codec \
-                           $XBMC_WEBSERVER \
-                           $XBMC_OPTICAL \
-                           $XBMC_BLURAY \
-                           --enable-texturepacker \
-                           $XBMC_CODEC \
-                           $XBMC_PLAYER
+  gl_cv_func_gettimeofday_clobber=no \
+  ac_cv_lib_bluetooth_hci_devid=no \
+  --with-arch=$TARGET_ARCH \
+  --with-cpu=$TARGET_CPU \
+  GIT_REV=`cat git.version` \
+  --disable-debug \
+  --enable-optimizations \
+  --disable-vdadecoder \
+  --disable-vtbdecoder \
+  --disable-openmax \
+  --disable-profiling \
+  --disable-goom \
+  --disable-ccache \
+  --disable-mid \
+  --disable-hal \
+  --disable-asap-codec \
+  --enable-projectm \
+  --enable-udev \
+  --disable-libusb \
+  --enable-rtmp \
+  --enable-optical-drive \
+  --enable-texturepacker --with-texturepacker-root="$ROOT/$TOOLCHAIN/include" \
+  --disable-external-libraries \
+  $CFG_TEGRA \
+  $EXTRA_CONFIG \
+  $XBMC_PLAYER \
+
 # --enable-ffmpeg-libvorbis
 # --disable-external-libraries
 # leaked host includes break the Python components build
