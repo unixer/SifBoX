@@ -69,7 +69,7 @@ if [ ! "$TARGET_MACHINE" = "iiitbs2910" ]; then
 fi
 # FINE
 kmod_dir="$install_dir/lib/modules/$(kernel_version)"
-echo $(kernel_version) > $install_dir/lib/modules/latest
+#echo $(kernel_version) > $install_dir/lib/modules/latest
 
 if [ -d .install/lib/firmware ]; then
   mv .install/lib/firmware .install/firmware
