@@ -25,6 +25,8 @@ make_install toolchain
 cd ..
 
 export gio_can_sniff=yes
+export LIBJPEG=$SYSROOT_PREFIX/usr/local/lib/libjpeg.la
+export LIBTIFF=$SYSROOT_PREFIX/usr/local/lib/libtiff.la
 
 mkdir -p objdir-target
 cd objdir-target
