@@ -13,7 +13,7 @@ if [ "$TARGET_ARCH" = i386 ] ; then
 fi
 
 if [ "$TARGET_ARCH" = x86_64 ] ; then
-  cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/x86_64/* .
+  cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/x86-64/* .
 fi
 
 arm_float_abi=""
