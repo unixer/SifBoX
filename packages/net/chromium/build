@@ -7,6 +7,8 @@ cd $PKG_BUILD_DIR
 
 export LDFLAGS="$SYSROOT_PREFIX/lib"
 
+export MAKEFLAGS=-j1
+
 ## gyp files
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/component-build.gypi .
 
@@ -89,8 +91,17 @@ export CC=$TARGET_CC
 export CXX=$TARGET_CXX
 export CC_host=$HOST_CC
 export CXX_host=$HOST_CXX
-#export LD
+export LD=$TARGET_CXX
+export LDFLAGS=""
 unset CCACHE_DIR
+
+echo "TARGETCC" $TARGET_CC
+echo "TARGETCXX" $TARGET_CXX
+echo "HOSTCC" $HOST_CC
+echo "CXXHOST" $HOST_CXX
+echo "LD" $TARGET_CXX
+echo "LDFLAGS" $LDFLAGS
+echo "CCACHE_DIR" $CCACHE_DIR
 
 build/gyp_chromium --depth=. ${EXTRA_OEGYP}
 ninja -C $PWD/out/Release chrome chrome_sandbox
