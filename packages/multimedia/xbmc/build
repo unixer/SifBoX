@@ -7,7 +7,7 @@ SWIG_VER=$PKG_VERSION
 
 get_meta $1
 
-export MAKEFLAGS=-j2
+export MAKEFLAGS=-j1
 
 xbmc_set_option() {
   PKG="$1"
@@ -153,7 +153,18 @@ if [ ! -f configure ] ; then
   cd lib/libdvd/libdvdcss && do_autoconf  && cd -
   cd lib/libdvd/libdvdread && do_autoconf  && cd -
   cd lib/libdvd/libdvdnav && do_autoconf  && cd -
+  cd lib/gtest && do_autoconf  && cd -
+  #cd tools/depends && do_autoconf && do_configure && cd -
+  #cd tools/depends/native && do_autoconf && do_configure && cd -
 fi
+
+#cd $ROOT/$PKG_BUILD_DIR/tools/depends/native/JsonSchemaBuilder/native && do_configure NATIVEPREFIX="$ROOT/$TOOLCHAIN/bin" && cd -
+cd $ROOT/$PKG_BUILD_DIR
+make \
+	-C tools/depends/native/JsonSchemaBuilder
+
+cp -PR tools/depends/native/JsonSchemaBuilder/native/JsonSchemaBuilder $ROOT/$TOOLCHAIN/bin
+
 
 if [ "$TARGET_MACHINE" != "pandaboard" ] ; then
   make -f codegenerator.mk
@@ -186,6 +197,7 @@ do_configure \
   --enable-optical-drive \
   --enable-texturepacker --with-texturepacker-root="$ROOT/$TOOLCHAIN/include" \
   --disable-external-libraries \
+  --with-ffmpeg=shared \
   $CFG_TEGRA \
   $EXTRA_CONFIG \
   $XBMC_PLAYER \
