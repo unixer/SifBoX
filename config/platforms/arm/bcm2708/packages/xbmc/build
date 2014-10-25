@@ -7,7 +7,7 @@ SWIG_VER=$PKG_VERSION
 
 get_meta $1
 
-export MAKEFLAGS=-j2
+export MAKEFLAGS=-j1
 
 xbmc_set_option() {
   PKG="$1"
@@ -137,7 +137,7 @@ fi
 # prevent internal error in gcc
 if [ ! -f configure ] ; then
   do_autoconf || true
-  cd lib/libid3tag/libid3tag && do_autoconf && cd -
+  #cd lib/libid3tag/libid3tag && do_autoconf && cd -
   cd xbmc/screensavers/rsxs-0.9 && do_autoconf && cd -
   cd xbmc/visualizations/Goom/goom2k4-0 && do_autoconf && cd -
   cd lib/libapetag && do_autoconf && cd -
@@ -146,7 +146,14 @@ if [ ! -f configure ] ; then
   cd lib/libdvd/libdvdcss && do_autoconf  && cd -
   cd lib/libdvd/libdvdread && do_autoconf  && cd -
   cd lib/libdvd/libdvdnav && do_autoconf  && cd -
+  cd lib/gtest && do_autoconf  && cd -
 fi
+
+cd $ROOT/$PKG_BUILD_DIR
+make \
+        -C tools/depends/native/JsonSchemaBuilder
+
+cp -PR tools/depends/native/JsonSchemaBuilder/native/JsonSchemaBuilder $ROOT/$TOOLCHAIN/bin
 
 if [ "$TARGET_MACHINE" != "pandaboard" ] ; then
   make -f codegenerator.mk
@@ -184,6 +191,7 @@ do_configure \
   --enable-player=omxplayer \
   --with-platform=raspberry-pi \
   --enable-ffmpeg-libvorbis \
+  --with-ffmpeg=shared \
 
 
 # leaked host includes break the Python components build
