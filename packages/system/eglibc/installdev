@@ -2,6 +2,11 @@
 
 . config/options
 
+if ! [ -f $TARGET_CC ] ; then 
+  $SCRIPTS/uninstalldev gcc-final 
+  $SCRIPTS/installdev gcc-final 
+fi 
+
 get_meta $1
 
 cd $BUILD/$1*
