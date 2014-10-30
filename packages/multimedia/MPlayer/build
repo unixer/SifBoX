@@ -2,6 +2,9 @@
 
 . config/options
 
+get_meta ffmpeg
+FFMPEG_VERSION=$PKG_VERSION
+
 setup_toolchain target
 
 set_option() {
@@ -55,13 +58,9 @@ fi
 
 if [ "$TARGET_ARCH" = arm ]; then
   VORBIS_CONFIG="--disable-libvorbis \
-                 --enable-tremor-internal \
-                 --enable-tremor-low \
                  --enable-tremor"
 else
   VORBIS_CONFIG="--disable-libvorbis \
-                 --enable-tremor-internal \
-                 --enable-tremor-low \
                  --enable-tremor"
 
 #  VORBIS_CONFIG="--enable-libvorbis \
@@ -82,7 +81,13 @@ export CFLAGS="$CFLAGS -ffast-math -DFIXED_POINT"
 
 get_meta $1
 cd $PKG_BUILD_DIR
+
 #rm -rf libavcodec # ensure we check for headers in external ffmpeg
+#rm -rf ffmpeg/libavresample # ensure we check for headers in external ffmpeg
+#rm -rf ffmpeg/libswresample
+
+#ln -s ../../ffmpeg-$FFMPEG_VERSION/libavresample ffmpeg/libavresample
+#ln -s ../../ffmpeg-$FFMPEG_VERSION/libswresample ffmpeg/libswresample
 
 
 if [ "$TARGET_ARCH" = arm ] ; then
@@ -148,7 +153,6 @@ fi
             --enable-mad \
             --disable-toolame \
             --disable-xmms \
-            --enable-mp3lib \
             --disable-liba52 \
             --disable-libmpeg2 \
             --disable-musepack \
@@ -204,5 +208,5 @@ fi
             --disable-dynamic-plugins \
             --extra-libs="$EXTRA_LIBS" \
             $DEBUG_CONFIG
-make
+make -j1
 make_install

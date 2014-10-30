@@ -184,9 +184,6 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               --enable-yasm \
               --disable-symver
 
-#            --enable-x11grab     \
-
-
 [ $TARGET_LIBC = "uclibc" ] && ! pkg_uses $1 ipv6 && \
   sed "s%#define HAVE_STRUCT_IPV6_MREQ.*%#define HAVE_STRUCT_IPV6_MREQ 0%" -i config.h
 
