@@ -9,7 +9,7 @@ if [ -c /dev/ttyACM0 ]; then
   systemctl start libcec-daemon.service
 fi
 
-if [ -f /lib/systemd/system/media-video.mount ]
+if [ -f /lib/systemd/system/media-video.mount ]; then
   /usr/bin/systemctl restart media-video.mount
 fi
 
