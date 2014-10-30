@@ -13,7 +13,7 @@ fi
 cd $PKG_BUILD_DIR
 export NCURSES_CONFIG="$ROOT/$TOOLCHAIN/bin/ncurses-config"
 do_configure \
-            --disable-nls \
+            --enable-nls \
             --with-ncurses \
             --disable-widec \
             --disable-rc-file \
