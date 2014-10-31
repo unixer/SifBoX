@@ -9,8 +9,6 @@ cd $BUILD/$1*
 
 export MAKEFLAGS=-j1
 
-sed -i 's/CONFIG_VIDEO_S5C73M3=m/CONFIG_VIDEO_S5C73M3=n/' ./v4l/.config || true
-
 echo "make KDIR=$(kernel_path) KERNELRELEASE=$(kernel_version) SRCDIR=$(kernel_path)  OUTDIR=$(kernel_path)"
 echo "make install DESTDIR=$install_dir KERNELRELEASE=$(kernel_version)"
 make \
