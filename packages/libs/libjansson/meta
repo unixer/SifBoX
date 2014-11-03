@@ -7,4 +7,4 @@ PKG_BUILD_DEPENDS="toolchain"
 PKG_PRIORITY=optional
 PKG_SECTION=libs
 PKG_SHORTDESC="libjansson Jansson is a C library for encoding, decoding and manipulating JSON data." 
-PKG_LONGDESC="Jansson is a C library for encoding, decoding and manipulating JSON data. It features:◾Simple and intuitive  
+PKG_LONGDESC="Jansson is a C library for encoding, decoding and manipulating JSON data. It features:◾Simple and intuitive "
