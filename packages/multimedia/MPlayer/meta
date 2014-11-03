@@ -1,7 +1,6 @@
 PKG_NAME=MPlayer
 PKG_VERSION=1.1.1
 PKG_URL="http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${PKG_VERSION}.tar.xz"
-#PKG_URL_REV=37312
 #PKG_URL_PROTO=svn
 #PKG_URL="svn://svn.mplayerhq.hu/mplayer/trunk"
 PKG_REV=1
