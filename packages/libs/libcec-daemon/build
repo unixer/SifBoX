@@ -9,8 +9,13 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 
-do_autoreconf -vi
-do_configure
+#do_autoreconf -vi
+#do_configure --enable-maintainer-mode
 
 make
-make_install
+#make_install
+mkdir -p .install/usr/bin 
+cp libcec-daemon .install/usr/bin 
+do_strip bin .install/usr/bin/libcec-daemon
+
+
