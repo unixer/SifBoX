@@ -215,8 +215,10 @@ sed -i lib/libdvd/libdvdnav/config.mak \
 #export MAKEFLAGS=-j4
 
 make externals
-make xbmc.bin
-make xbmc-xrandr
+#make xbmc.bin
+make kodi.bin
+#make xbmc-xrandr
+make kodi-xrandr
 make -C tools/TexturePacker
 cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
 
