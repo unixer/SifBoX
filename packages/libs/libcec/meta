@@ -1,11 +1,12 @@
 PKG_NAME=libcec
 PKG_URL_PROTO=git
-PKG_URL_REV=b5d801b8
+#PKG_URL_REV=260df18a
+PKG_URL_REV=d340966
 PKG_VERSION=2.2.0
 PKG_URL="https://github.com/Pulse-Eight/${PKG_NAME}.git"
 #PKG_VERSION="2.1.4-2"
 #PKG_URL="http://packages.pulse-eight.net/pulse/sources/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
-PKG_REV=1
+PKG_REV=2
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_DEPENDS="systemd liblockdev"
 #if [ "$TARGET_MACHINE" = raspberrypi ]; then
