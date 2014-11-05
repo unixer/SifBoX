@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Post install:"
+if [ ! 'grep -r "google-chrome" /etc/vdr/plugins/menuorg.xml' ]; then
+   echo "  Update menuorg.xml"
+   sed -i '65 i \        <command name="Internet Browser" execute="/usr/bin/google-chrome" />' /etc/vdr/plugins/menuorg.xml
+   /bin/systemctl start vdr.service
+fi
