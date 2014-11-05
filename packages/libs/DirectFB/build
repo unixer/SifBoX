@@ -44,11 +44,6 @@ do_configure \
             --without-tests \
             --without-tools \
 
-#	    --host=$TARGET_NAME \
-#            --build=$HOST_NAME \
-#            --with-arch=$TARGET_ARCH \
-#            --with-cpu=$TARGET_CPU \
-
 make
 make_install
 sed -i "s:\(['= ]\)/usr:\\1$LIB_PREFIX:g" .install/usr/bin/directfb-config

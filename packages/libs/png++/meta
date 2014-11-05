@@ -8,5 +8,5 @@ PKG_DEPENDS="$TARGET_LIBC libpng"
 PKG_BUILD_DEPENDS="toolchain libpng"
 PKG_PRIORITY=optional
 PKG_SECTION=libs
-PKG_SHORTDESC="png++ C++ wrapper for libpng"
+PKG_SHORTDESC="C++ wrapper for libpng"
 PKG_LONGDESC="PNG++ aims to provide simple yet powerful C++ interface to libpng, the PNG reference implementation library. "

@@ -6,12 +6,13 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-do_configure \
-            --prefix=/usr \
-            --enable-shared \
-            --disable-static \
-            --sysconfdir=/etc \
-            --localstatedir=/var \
+#do_configure \
+#            --prefix=/usr \
+#            --enable-shared \
+#            --disable-static \
+#            --sysconfdir=/etc \
+#            --localstatedir=/var \
+do_configure
 
 
 #	FREETYPE_CFLAGS=/root/openbricks/build/build.x86_64.eglibc/toolchain/include
