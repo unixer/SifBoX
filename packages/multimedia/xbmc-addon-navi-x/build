@@ -4,5 +4,5 @@
 
 cd $BUILD/$1*
 
-mkdir -p .install/usr/share/xbmc/addons/script.navi-x
-cp -PR * .install/usr/share/xbmc/addons/script.navi-x
+mkdir -p .install/usr/share/kodi/addons/script.navi-x
+cp -PR * .install/usr/share/kodi/addons/script.navi-x
