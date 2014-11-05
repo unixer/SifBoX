@@ -1,0 +1,11 @@
+--- xf86-video-vmware-13.0.2/configure.ac.old	2014-11-05 19:08:47.508770137 +0100
++++ xf86-video-vmware-13.0.2/configure.ac	2014-11-05 19:08:55.732770281 +0100
+@@ -126,7 +126,7 @@
+ 			  [PKG_CHECK_EXISTS([xatracker = 2.0.0],
+ 	                  [AC_DEFINE([HAVE_XA_2], 1,
+                		  [Has version 2 of XA])])],
+-			  [],[BUILD_VMWGFX=no])
++			  [BUILD_VMWGFX=no])
+ #
+ # Check for prime.
+ #
