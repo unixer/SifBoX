@@ -7,7 +7,7 @@ pre_umount () {
 killall -9 libcec-daemon && /bin/systemctl stop libcec-daemon.service --force
 killall -9 vdr && /bin/systemctl stop vdr.service --force
 [ -n "$LOGFILE" ] || LOGFILE="/dev/null"
-/usr/lib/xbmc/xbmc.bin $@
+/usr/lib/xbmc/kodi.bin $@
 EXIT_CODE=$?
 
 case "$EXIT_CODE" in

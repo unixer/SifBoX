@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "Pre install:"
+if [ -d /usr/share/xbmc ]; then
+  rm -rf /usr/share/xbmc
+fi
+if [ -d /usr/lib/xbmc ]; then
+  rm -rf /usr/lib/xbmc
+fi
+echo "Done"
+

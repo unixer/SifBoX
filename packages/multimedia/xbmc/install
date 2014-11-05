@@ -6,7 +6,9 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-mkdir -p .install/etc/xbmc
+if [ ! -d .install/etc/xbmc ]; then
+   mkdir -p .install/etc/xbmc
+fi
 
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/silent.sh .install/usr/bin
 #cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runxbmc .install/usr/bin
@@ -22,11 +24,12 @@ else
 fi
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/cputemp .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/gputemp .install/usr/bin
-mkdir -p .install/usr/share/xbmc/system/
+#mkdir -p .install/usr/share/xbmc/system/
+mkdir -p .install/usr/share/kodi/system/
 if [ "$TARGET_MACHINE" = raspberrypi ]; then
-   cp $PLATFORM_PACKAGES/$1/config/advancedsettings.xml .install/usr/share/xbmc/system/
+   cp $PLATFORM_PACKAGES/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
 else
-   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml .install/usr/share/xbmc/system/
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
 fi
 
 #Prova copia configurazione di default
@@ -34,7 +37,9 @@ mkdir -p $INSTALL/root/.xbmc
 if [ "$PKG_VERSION" = "frodo-12.3" ]; then
    cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.xbmc $INSTALL/root/
 else
-   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.xbmc13/* $INSTALL/root/.xbmc 
+   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.xbmc13/* $INSTALL/root/.xbmc 
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.xbmc $INSTALL/root/
 fi
 #Fine
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml $INSTALL/root/.xbmc/userdata/
