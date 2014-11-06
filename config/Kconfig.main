@@ -221,7 +221,7 @@ config OPT_DYNAMIC_SYSROOT
   help
    Rebuild the sysroot from scratch at each package compilation. Makes build
    slower but helps to catch wrong depends between packages.
-   
+
 config OPT_DEVROOTFS
   bool "Rootfs for debug"
   default n
@@ -381,8 +381,8 @@ config OPT_TIMEZONE
   default ""
   help
     Timezone to use (empty disables timezone support)
-    if TARGET_LIBC=uclibc use a TZ environment string 
-    if TARGET_LIBC=eglibc use a zoneinfo name and remember 
+    if TARGET_LIBC=uclibc use a TZ environment string
+    if TARGET_LIBC=eglibc use a zoneinfo name and remember
     to set INCLUDED_TIMEZONES accordingly
 
 choice KEYMAP
@@ -796,10 +796,10 @@ config OPT_EGL_PROVIDER
   default "vivante" if EGL_PROVIDER_VIVANTE
   default "vc" if EGL_PROVIDER_VC
 
-config OPT_GLX_PROVIDER 
-  string 
-  default "mesa" if GLX_PROVIDER_MESA 
-  default "imx6" if GLX_PROVIDER_IMX6 
+config OPT_GLX_PROVIDER
+  string
+  default "mesa" if GLX_PROVIDER_MESA
+  default "imx6" if GLX_PROVIDER_IMX6
 
 config OPT_GLES_PROVIDER
   string
