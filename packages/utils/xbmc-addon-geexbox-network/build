@@ -6,6 +6,6 @@ get_meta $1
 
 cd $BUILD/$1*
 
-mkdir -p .install/usr/share/xbmc/addons .install/usr/bin
-cp -R geexbox.network.cfg .install/usr/share/xbmc/addons
+mkdir -p .install/usr/share/kodi/addons .install/usr/bin
+cp -R geexbox.network.cfg .install/usr/share/kodi/addons
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/* .install/usr/bin

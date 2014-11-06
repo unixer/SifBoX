@@ -4,5 +4,5 @@
 
 cd $BUILD/$1*
 
-mkdir -p .install/usr/share/xbmc/addons
-cp -R geexbox.updater .install/usr/share/xbmc/addons
+mkdir -p .install/usr/share/kodi/addons
+cp -R geexbox.updater .install/usr/share/kodi/addons
