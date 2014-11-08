@@ -1,4 +1,4 @@
-PKG_NAME=vtuner-apps
+PKG_NAME=vtuner
 #PKG_VERSION=2.1
 PKG_VERSION=r91
 PKG_URL_REV=b6fa0d2b133b
