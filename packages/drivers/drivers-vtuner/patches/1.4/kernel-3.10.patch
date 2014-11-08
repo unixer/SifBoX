@@ -1,0 +1,14 @@
+--- vtuner-driver-14/vtunerc_main.c.org	2013-10-24 15:11:43.567534581 +0200
++++ vtuner-driver-14/vtunerc_main.c	2013-10-24 15:11:03.367533891 +0200
+@@ -342,9 +342,10 @@
+ 			sprintf(procfilename, VTUNERC_PROC_FILENAME,
+ 					ctx->idx);
+ 			ctx->procname = my_strdup(procfilename);
+-			if (create_proc_read_entry(ctx->procname, 0, NULL,
++			/*if (create_proc_read_entry(ctx->procname, 0, NULL,
+ 							vtunerc_read_proc,
+ 							ctx) == 0)
++*/
+ 				printk(KERN_WARNING
+ 					"vtunerc%d: Unable to register '%s' proc file\n",
+ 					ctx->idx, ctx->procname);
