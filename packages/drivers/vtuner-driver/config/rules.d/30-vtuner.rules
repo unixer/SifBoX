@@ -1,4 +1,0 @@
-# custom rules
-
-# DVB Vtuner rules
-KERNEL=="vtunerc*", MODE="0666"
