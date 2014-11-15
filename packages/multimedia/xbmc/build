@@ -170,6 +170,8 @@ if [ "$TARGET_MACHINE" != "pandaboard" ] ; then
   make -f codegenerator.mk
 fi
 
+#  GIT_REV=`cat git.version` \
+
 
 sed -i 's%PYTHON_VERSION=$ac_python_version%PYTHON_VERSION=2.7%' configure
 GCC_NO_LTO=1 GCC_NO_GOLD=1 GCC_NO_GRAPHITE=1 GCC_NO_LOOP_TREE=1 \
@@ -178,7 +180,6 @@ do_configure \
   ac_cv_lib_bluetooth_hci_devid=no \
   --with-arch=$TARGET_ARCH \
   --with-cpu=$TARGET_CPU \
-  GIT_REV=`cat git.version` \
   --disable-debug \
   --enable-optimizations \
   --disable-vdadecoder \
