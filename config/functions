@@ -952,3 +952,46 @@ verlte() {
      [  "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
 }
 
+add_user() {
+  # Usage: add_user "username" "password" "userid" "groupid" "description" "home" "shell"
+  mkdir -p ${INSTALL}/etc
+  touch ${INSTALL}/etc/passwd
+  if [ -z "`grep "$1:" ${INSTALL}/etc/passwd`" ]; then
+    echo "$1:x:$3:$4:$5:$6:$7" >> ${INSTALL}/etc/passwd
+  fi
+
+  touch ${INSTALL}/etc/shadow
+  PASSWORD="$2"
+  if [ "$PASSWORD" = "x" ]; then
+    PASSWORD="*"
+  fi
+  if [ -z "`grep "$1:" ${INSTALL}/etc/shadow`" ]; then
+    echo "$1:$PASSWORD:::::::" >> ${INSTALL}/etc/shadow
+  fi
+}
+
+add_group() {
+  # Usage: add_group "groupname" "groupid" ("members")
+  mkdir -p ${INSTALL}/etc
+  touch ${INSTALL}/etc/group
+  if [ -z "`grep "$1:" ${INSTALL}/etc/group`" ]; then
+    echo "$1:x:$2:$3" >> ${INSTALL}/etc/group
+  fi
+}
+
+# Usage: enable_service <unit> [target]
+enable_service () {
+  local unit="$1"
+  local unit_dir="/usr/lib/systemd/system"
+  local target="$2"
+  local target_dir=$INSTALL
+
+  [ -f "$target_dir/$unit_dir/$unit" ] || exit 1
+  [ -z "$target" ] && target=`grep '^WantedBy' $target_dir/$unit_dir/$unit | cut -f2 -d=`
+
+  if [ -n "$target" ]; then
+    mkdir -p ${target_dir}/$unit_dir/${target}.wants
+    ln -sf ../${unit} ${target_dir}/$unit_dir/${target}.wants/
+  fi
+}
+
