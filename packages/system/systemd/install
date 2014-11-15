@@ -109,4 +109,22 @@ ln -s ../wake-on-lan.service $INSTALL/lib/systemd/system/network.target.wants
 # Da system 210 in avanti
 ln -s /bin/systemctl $INSTALL/usr/bin/systemctl
 ####
+add_group systemd-journal 190
+
+add_group systemd-network 193
+add_user systemd-network x 193 193 "systemd-network" "/" "/bin/sh"
+
+add_group audio 63
+add_group cdrom 11
+add_group dialout 18
+add_group disk 6
+add_group floppy 19
+add_group kmem 9
+add_group lp 7
+add_group tape 33
+add_group tty 5
+add_group video 39
+add_group utmp 22
+add_group input 199 # TODO change gid
+
 exit 0
