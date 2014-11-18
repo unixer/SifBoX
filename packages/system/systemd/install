@@ -112,7 +112,7 @@ ln -s /bin/systemctl $INSTALL/usr/bin/systemctl
 add_group systemd-journal 190
 
 add_group systemd-network 193
-add_user systemd-network x 193 193 "systemd-network" "/" "/bin/sh"
+#add_user systemd-network x 193 193 "systemd-network" "/" "/bin/sh"
 
 add_group audio 63
 add_group cdrom 11
