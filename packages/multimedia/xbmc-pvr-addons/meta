@@ -1,7 +1,8 @@
 PKG_NAME=xbmc-pvr-addons
 PKG_URL_PROTO=git
 #PKG_URL_REV=9021115
-PKG_URL_REV=067befe
+#PKG_URL_REV=067befe
+PKG_URL_REV=06842b9
 PKG_URL="git://github.com/opdenkamp/xbmc-pvr-addons.git"
 #PKG_VERSION=frodo-12.3-r${PKG_URL_REV}
 PKG_VERSION=v1.9.23
