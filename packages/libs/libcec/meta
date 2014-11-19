@@ -9,10 +9,10 @@ PKG_URL="https://github.com/Pulse-Eight/${PKG_NAME}.git"
 PKG_REV=2
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_DEPENDS="systemd liblockdev"
-#if [ "$TARGET_MACHINE" = raspberrypi ]; then
-#  PKG_DEPENDS="$PKG_DEPENDS bcm2835-driver"
-#  PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS bcm2835-driver"
-#fi
+if [ "$TARGET_MACHINE" = raspberrypi ]; then
+  PKG_DEPENDS="$PKG_DEPENDS raspberrypi-userland"
+  PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS raspberrypi-userland"
+fi
 PKG_BUILD_DEPENDS="toolchain systemd liblockdev"
 PKG_PRIORITY=optional
 PKG_SECTION=libs
