@@ -17,3 +17,12 @@ do_install sbin/fsck
 do_install sbin/agetty
 do_install sbin/sfdisk
 do_install sbin/fstrim
+do_install sbin/swapon
+do_install sbin/swapoff
+mkdir -p $INSTALL/etc
+cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/swap.conf $INSTALL/etc
+#if [ "$TARGET_MACHINE" = raspberrypi ]; then
+#   sed -i 's|SWAPON="on"|SWAPON="off"|' $INSTALL/etc/swap.conf
+#fi
+mkdir -p $INSTALL/usr/bin
+cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/scripts/swapfile.sh $INSTALL/usr/bin

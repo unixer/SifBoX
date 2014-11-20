@@ -33,14 +33,31 @@ mkdir -p objdir-target
 cd objdir-target
 setup_toolchain target
 do_configure target \
-            --with-ncurses \
-            --without-selinux \
-            --disable-wall \
             --disable-login \
-            --disable-sulogin \
+            --enable-sulogin \
             --disable-su \
+	    --with-ncurses \
+	    --enable-arch \
+	    --enable-agetty \
+	    --disable-init \
+	    --enable-kill \
+	    --enable-rdev \
+	    --disable-last \
+	    --enable-mesg \
+	    --enable-raw \
+	    --enable-rename \
+	    --enable-reset \
+	    --enable-login-utils \
+	    --enable-schedutils \
+	    --enable-wall \
+	    --enable-write \
+	    --enable-use-tty-group \
+	    --enable-setterm \
             $TLS_CONFIG \
-            --disable-more \
- 
+	    --disable-runuser \
+	    --disable-ul \
+	    --disable-more \
+	    --disable-pg \
+
 make
 make_install
