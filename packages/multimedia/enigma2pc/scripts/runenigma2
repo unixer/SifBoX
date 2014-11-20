@@ -1,5 +1,9 @@
 #!/bin/sh
 
+. /etc/pvr.conf
+
+[ "$BACKEND" != enigma2pc ] && exit 0
+
 prefix=/usr
 exec_prefix=${prefix}
 datarootdir=${prefix}/share
@@ -69,7 +73,7 @@ while [ ! -c /dev/dvb/adapter0/frontend0 ]; do
   i=$(expr $i + 1)
 done
 
-chvt 4
+chvt 1
 
 sync
 LD_PRELOAD=$LIBS ${exec_prefix}/bin/enigma2
