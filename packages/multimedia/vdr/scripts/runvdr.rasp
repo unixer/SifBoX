@@ -7,6 +7,10 @@ killall -9 libcec-daemon && systemctl stop libcec-daemon.service --force
 echo 'on 0' | cec-client -s
 systemctl start libcec-daemon.service
 
+if [ -f /lib/systemd/system/media-video.mount ]; then
+  /usr/bin/systemctl restart media-video.mount
+fi
+
 chvt 1
 sync
 
