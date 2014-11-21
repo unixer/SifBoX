@@ -17,7 +17,7 @@ get_overlay() {
   local file_name="$2"
   local overlay_name
   if [ -r $PACKAGES/$PKG_SECTION/$pkg_name/$file_name ] ; then
-   overlay_name=$PACKAGES/$PKG_SECTION/$pkg_name/$file_name
+    overlay_name=$PACKAGES/$PKG_SECTION/$pkg_name/$file_name
   else
     overlay_name="$PACKAGES/$pkg_name/$file_name"
   fi
@@ -155,7 +155,10 @@ fi
 $INSTALL_RULE $1 >&$VERBOSE_OUT
 
 # build opk package
-[ -d $PACKAGES/$PKG_SECTION/$1/package ] && cp -P $PACKAGES/$PKG_SECTION/$1/package/* $INSTALL/CONTROL
+SOURCE_PATH=`get_overlay "$1" "package/"`
+if [ -d $SOURCE_PATH ]; then
+  cp ${SOURCE_PATH}/* $INSTALL/CONTROL
+fi
 
 add_control "Package" "$PKG_NAME"
 add_control "Version" "${PKG_VERSION}-${PKG_REV}"
