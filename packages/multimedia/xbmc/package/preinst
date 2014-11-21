@@ -1,10 +1,10 @@
 #!/bin/sh
 echo "Pre install:"
-if [ -d /usr/share/xbmc ]; then
-  rm -rf /usr/share/xbmc
+if [ -d /usr/share/kodi ]; then
+  rm -rf /usr/share/kodi
 fi
-if [ -d /usr/lib/xbmc ]; then
-  rm -rf /usr/lib/xbmc
+if [ -d /usr/lib/kodi ]; then
+  rm -rf /usr/lib/kodi
 fi
 echo "Done"
 

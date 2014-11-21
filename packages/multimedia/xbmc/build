@@ -172,7 +172,6 @@ fi
 
 #  GIT_REV=`cat git.version` \
 
-
 sed -i 's%PYTHON_VERSION=$ac_python_version%PYTHON_VERSION=2.7%' configure
 GCC_NO_LTO=1 GCC_NO_GOLD=1 GCC_NO_GRAPHITE=1 GCC_NO_LOOP_TREE=1 \
 do_configure \
@@ -181,7 +180,7 @@ do_configure \
   --with-arch=$TARGET_ARCH \
   --with-cpu=$TARGET_CPU \
   --disable-debug \
-  --enable-optimizations \
+  --disable-optimizations \
   --disable-vdadecoder \
   --disable-vtbdecoder \
   --disable-openmax \
@@ -202,6 +201,10 @@ do_configure \
   $CFG_TEGRA \
   $EXTRA_CONFIG \
   $XBMC_PLAYER \
+  --enable-rtmp \
+  --enable-libvorbisenc \
+  --disable-libcap \
+  
 
 # --enable-ffmpeg-libvorbis
 # --disable-external-libraries
