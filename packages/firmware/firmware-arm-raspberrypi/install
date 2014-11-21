@@ -5,4 +5,3 @@
 cd $BUILD/$1*
 
 do_install boot
-
