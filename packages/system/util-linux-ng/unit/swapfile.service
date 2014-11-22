@@ -4,6 +4,7 @@ Description=Create and Active Swap File
 [Service]
 ExecStart=/usr/bin/swapfile.sh
 Restart=always
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
