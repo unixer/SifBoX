@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. config/options
+
+export MAKEFLAGS=-j1
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+sed -i "s|CPPFLAGS     := -I/usr/include/ncurses|CPPFLAGS     := -I$SYSROOT_PREFIX/usr/local/include/ncursesw|" Makefile
+
+#do_configure
+make
+#make lib=lib # m64=-m32
+make_install

@@ -1,0 +1,22 @@
+--- procps-3.2.8/Makefile.org        2014-11-24 17:12:11.079988991 +0100
++++ procps-3.2.8/Makefile    2014-11-24 17:10:50.919987615 +0100
+@@ -174,7 +174,7 @@
+ # want this rule first, use := on ALL, and ALL not filled in yet
+ all: do_all
+
+--include */module.mk
++-include proc/module.mk ps/module.mk
+
+ do_all:    $(ALL)
+
+--- procps-3.2.8/Makefile.org	2014-11-24 17:27:29.576004757 +0100
++++ procps-3.2.8/Makefile	2014-11-24 17:27:50.868005123 +0100
+@@ -30,7 +30,7 @@
+ install  := install -D --owner 0 --group 0
+ 
+ # Lame x86-64 /lib64 and /usr/lib64 abomination:
+-lib64    := lib$(shell [ -d /lib64 ] && echo 64)
++lib64    := lib$(shell [ -d ../rootfs/lib64 ] && echo 64)
+ 
+ usr/bin                  := $(DESTDIR)/usr/bin/
+ bin                      := $(DESTDIR)/bin/
