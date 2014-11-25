@@ -8,6 +8,7 @@ do_configure \
 	--disable-pixbuf-loader \
 	--disable-tools \
 	--enable-gtk-doc-html=no \
+        --enable-introspection=no \
 
 make
 make_install
