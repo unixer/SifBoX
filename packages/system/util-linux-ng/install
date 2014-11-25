@@ -19,6 +19,7 @@ do_install sbin/sfdisk
 do_install sbin/fstrim
 do_install sbin/swapon
 do_install sbin/swapoff
+do_install sbin/mkswap
 mkdir -p $INSTALL/etc
 cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/swap.conf $INSTALL/etc
 #if [ "$TARGET_MACHINE" = raspberrypi ]; then

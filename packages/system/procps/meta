@@ -1,0 +1,12 @@
+PKG_NAME=procps
+PKG_VERSION=3.2.8
+PKG_URL="http://procps.sourceforge.net/procps-${PKG_VERSION}.tar.gz"
+#PKG_URL_PROTO=git
+#PKG_URL="git://gitorious.org/procps/procps-gitorious-wiki.git"
+PKG_REV=2
+PKG_DEPENDS="$TARGET_LIBC"
+PKG_BUILD_DEPENDS="toolchain"
+PKG_PRIORITY=optional
+PKG_SECTION=system
+PKG_SHORTDESC="procps (ps, top, vmstat, pgrep, w...)"
+PKG_LONGDESC="procps is the package that has a bunch of small useful utilities that give information about processes using the /proc filesystem. The package includes the programs ps, top, vmstat, w, kill, free, slabtop, and skill." 
