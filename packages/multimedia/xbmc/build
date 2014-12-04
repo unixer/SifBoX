@@ -228,6 +228,7 @@ cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
 
 make skins
 make_install
+#do_strip bin .install/usr/lib/kodi/kodi.bin
 
 if [ "$TARGET_ARCH" = arm ]; then
   # workaround to make the addons run
