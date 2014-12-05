@@ -181,29 +181,28 @@ do_configure \
   --with-cpu=$TARGET_CPU \
   --disable-debug \
   --disable-optimizations \
-  --disable-vdadecoder \
   --disable-vtbdecoder \
-  --disable-openmax \
   --disable-profiling \
   --disable-goom \
   --disable-ccache \
   --disable-mid \
-  --disable-hal \
   --disable-asap-codec \
-  --enable-projectm \
   --enable-udev \
   --disable-libusb \
-  --enable-rtmp \
   --enable-optical-drive \
   --enable-texturepacker --with-texturepacker-root="$ROOT/$TOOLCHAIN/include" \
-  --disable-external-libraries \
   --with-ffmpeg=shared \
   $CFG_TEGRA \
   $EXTRA_CONFIG \
-  $XBMC_PLAYER \
-  --enable-rtmp \
   --enable-libvorbisenc \
   --disable-libcap \
+  --enable-waveform \
+  --enable-spectrum \
+  --disable-fishbmc \
+  --enable-samba \
+  --enable-upnp \
+  --enable-mysql \
+  --enable-ssh \
   
 
 # --enable-ffmpeg-libvorbis

@@ -7,10 +7,11 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
 else 
    PKG_VERSION=kodi-14.0
    #PKG_URL_REV=bcfc032
-   PKG_URL_REV=2608400
+   #PKG_URL_REV=2608400
+   PKG_URL_REV=bc03a7c
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
-PKG_REV=7
+PKG_REV=8
 PKG_DEPENDS="$TARGET_LIBC Python boost zlib bzip2 lzo pcre libssh libass enca curl dbus fontconfig fribidi libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libvorbis libcdio libmms libmodplug faad2 flac wavpack libmpeg2 sqlite alsa yajl libplist openssl python-simplejson tinyxml systemd taglib libshairplay libxslt"
 #PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release libid3tag"
 PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release"
