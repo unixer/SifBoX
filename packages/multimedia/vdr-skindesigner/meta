@@ -1,9 +1,9 @@
 PKG_NAME=vdr-skindesigner
 PKG_URL_PROTO=git
-#PKG_VERSION=0.0.5
-#PKG_URL_REV=5d715e
-PKG_VERSION=0.0.6
-PKG_URL_REV=d684ce
+#PKG_VERSION=0.0.6
+#PKG_URL_REV=d684ce
+PKG_VERSION=0.1.0
+PKG_URL_REV=012e53
 PKG_URL="git://projects.vdr-developer.org/vdr-plugin-skindesigner.git"
 PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC cairo vdr librsvg"
