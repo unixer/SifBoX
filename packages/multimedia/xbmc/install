@@ -45,6 +45,8 @@ fi
 if [ "$TARGET_MACHINE" = raspberrypi ]; then
    mkdir -p .install/root/.kodi/userdata/peripheral_data/
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/rpi_2708_1001.xml .install/root/.kodi/userdata/peripheral_data/rpi_2708_1001.xml
+else
+   cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/usb_2548_1002.xml .install/root/.kodi/userdata/peripheral_data/usb_2548_1002.xml
 fi
 #Fine
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml $INSTALL/root/.kodi/userdata/
