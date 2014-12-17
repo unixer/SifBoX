@@ -6,7 +6,9 @@ cd $BUILD/$1*
 
 setup_toolchain host
 
-make mkdosfs
+#make mkdosfs
+make
 
-mkdir -p .install/usr/bin
-cp -P mkdosfs .install/usr/bin
+make_install
+#mkdir -p .install/usr/bin
+#cp -P mkdosfs .install/usr/bin
