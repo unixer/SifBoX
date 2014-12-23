@@ -6,9 +6,8 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
    PKG_VERSION=frodo-12.3
 else 
    PKG_VERSION=kodi-14.0
-   #PKG_URL_REV=238c5ef
-   #PKG_URL_REV=9f83097
-   PKG_URL_REV=d558be8
+   #PKG_URL_REV=d558be8
+   PKG_URL_REV=8fb5660
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
 PKG_REV=11
