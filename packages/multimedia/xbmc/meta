@@ -7,7 +7,8 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
 else 
    PKG_VERSION=kodi-14.0
    #PKG_URL_REV=d558be8
-   PKG_URL_REV=8fb5660
+   #PKG_URL_REV=8fb5660
+   PKG_URL_REV=ad747d9
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
 PKG_REV=11
