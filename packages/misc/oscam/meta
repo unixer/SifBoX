@@ -3,7 +3,7 @@ PKG_URL_PROTO=svn
 VDR_VERSION=`grep -E '^PKG_VERSION' $ROOT/packages/multimedia/vdr/meta | cut -f1 |cut -f 2 -d=`
 if [ "$VDR_VERSION" = "2.1.6" ]; then
    #PKG_URL_REV=9997
-   PKG_URL_REV=10085
+   PKG_URL_REV=10111
 else
    PKG_URL_REV=9784
 fi
