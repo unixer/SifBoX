@@ -225,7 +225,7 @@ make kodi-xrandr
 make -C tools/TexturePacker
 cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
 
-make skins
+#make skins
 make_install
 #do_strip bin .install/usr/lib/kodi/kodi.bin
 
