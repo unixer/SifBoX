@@ -5,6 +5,14 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 
+#do_install usr/bin
+#cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/dropbearkeygen $INSTALL/usr/bin
+#mkdir -p $INSTALL/etc/dropbear
 do_install usr/bin
+do_install usr/sbin
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/dropbearkeygen $INSTALL/usr/bin
+
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/sftp $INSTALL/usr/bin
+mkdir -p $INSTALL/usr/lib
+cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/sftp-server $INSTALL/usr/lib
 mkdir -p $INSTALL/etc/dropbear
