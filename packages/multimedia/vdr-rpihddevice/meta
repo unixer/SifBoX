@@ -1,11 +1,12 @@
 PKG_NAME=vdr-rpihddevice
-PKG_VERSION=0.0.10
+PKG_VERSION=0.0.11
 PKG_URL_PROTO=git
 #PKG_URL_REV=5f207c0
 #PKG_URL_REV=f5b61a0
-PKG_URL_REV=0fe3d57
+#PKG_URL_REV=0fe3d57
+PKG_URL_REV=8e2fa20
 PKG_URL="git://projects.vdr-developer.org/vdr-plugin-rpihddevice.git"
-PKG_REV=5
+PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC vdr ffmpeg" # libav"
 PKG_RUN_DEPENDS="vdr ffmpeg"
 PKG_BUILD_DEPENDS="toolchain vdr ffmpeg raspberrypi-userland"
