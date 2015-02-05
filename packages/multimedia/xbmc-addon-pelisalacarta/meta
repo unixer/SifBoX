@@ -1,7 +1,7 @@
 PKG_NAME=xbmc-addon-pelisalacarta
 PKG_VERSION=3.2.66
 PKG_URL="http://blog.tvalacarta.info/descargas/pelisalacarta-xbmc-addon-frodo-${PKG_VERSION}.zip"
-PKG_REV=3
+PKG_REV=13
 PKG_RUN_DEPENDS="$TARGET_LIBC xbmc"
 PKG_BUILD_DEPENDS="toolchain"
 PKG_PRIORITY=optional
