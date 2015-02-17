@@ -29,7 +29,6 @@ do_configure \
   LIBS="$LIBS -lz"
 
 
-#/root/openrasp/build/build.raspberrypi.eglibc/toolchain/armv6-openbricks-linux-gnueabihf/sysroot/usr/local/lib \
 make
 make_install
 

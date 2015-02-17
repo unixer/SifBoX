@@ -1,0 +1,98 @@
+# English translations for MLD package.
+# Copyright (C) 2011 Claus Muus <mail@minidvblinux.dyndns.org>
+# This file is distributed under the same license as the MLD package.
+# Automatically generated, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MLD 3\n"
+"Report-Msgid-Bugs-To: <bugs@minidvblinux.de>\n"
+"POT-Creation-Date: 2014-12-18 16:15+0100\n"
+"PO-Revision-Date: 2011-09-06 23:34+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: etc/setup/vdr.xml:1
+msgid "TV"
+msgstr ""
+
+#: etc/setup/vdr.xml:2
+msgid "Channel list"
+msgstr ""
+
+#: etc/setup/vdr.xml:2
+msgid "Use selected channel list"
+msgstr ""
+
+#: etc/setup/vdr.xml:3 etc/setup/vdr.xml:7 etc/setup/vdr.xml:25
+msgid "Restart VDR"
+msgstr ""
+
+#: etc/setup/vdr.xml:4
+msgid "DVB"
+msgstr ""
+
+#: etc/setup/vdr.xml:5
+msgid "Activate DiSEqC with the selected configuration"
+msgstr ""
+
+#: etc/setup/vdr.xml:5
+msgid "DiSEqC"
+msgstr ""
+
+#: etc/setup/vdr.xml:6
+msgid "Activate SCR with the selected configuration"
+msgstr ""
+
+#: etc/setup/vdr.xml:6
+msgid "SCR"
+msgstr ""
+
+#: etc/setup/vdr.xml:9
+msgid "VDR"
+msgstr ""
+
+#: etc/setup/vdr.xml:10
+msgid "Plugin-Arguments"
+msgstr ""
+
+#: etc/setup/vdr.xml:12
+msgid "Edit VDR-Menu"
+msgstr ""
+
+#: etc/setup/vdr.xml:12
+msgid "VDR Menu bearbeiten"
+msgstr ""
+
+#: etc/setup/vdr.xml:13
+msgid "VDR call arguments"
+msgstr ""
+
+#: etc/setup/vdr.xml:14
+msgid "Default EPG charset"
+msgstr ""
+
+#: etc/setup/vdr.xml:14
+msgid "Override default EPG charset by this value"
+msgstr ""
+
+#: etc/setup/vdr.xml:23
+msgid "Train remote"
+msgstr ""
+
+#: etc/setup/vdr.xml:23
+msgid "Train the selected input device at the next vdr start"
+msgstr ""
+
+#: etc/setup/vdr.xml:24
+msgid "Reset remote"
+msgstr ""
+
+#: etc/setup/vdr.xml:24
+msgid "Reset the selected input device to MLD default at the next vdr start"
+msgstr ""

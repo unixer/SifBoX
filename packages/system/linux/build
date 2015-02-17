@@ -1,7 +1,8 @@
 #!/bin/sh
 
 . config/options
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    export MAKEFLAGS=-j1
 fi
 
@@ -91,10 +92,11 @@ if [ -n "$MACHINE_DTS" ] ; then
 fi
 case $TARGET_ARCH in
   arm|powepc64)
-    if [ "$TARGET_PLATFORM" = bcm2708 ]; then
+    if [ "$TARGET_PLATFORM" = bcm2708 ]; then 
       # add raspberry pi magic
       cat first32k.bin arch/$TARGET_ARCH/boot/Image > .install/boot/kernel.img
-#      cat arch/$TARGET_ARCH/boot/Image > .install/boot/kernel.img
+    elif [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+      cat arch/$TARGET_ARCH/boot/Image > .install/boot/kernel.img
     else
       cp arch/$TARGET_ARCH/boot/$IMAGE .install/boot
     fi

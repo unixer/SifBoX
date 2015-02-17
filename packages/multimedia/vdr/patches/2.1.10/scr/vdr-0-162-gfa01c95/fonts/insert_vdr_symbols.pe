@@ -1,0 +1,260 @@
+#!/usr/bin/fontforge
+
+# This is a small FontForge script that extracts symbols from <source font>
+# starting at unicode position "uni_from" until "uni_to" and copies them to
+# the same positions in <destination font>.
+#
+# In the <destination font> some font infos will be modified:
+# "VDR" will be prepended to fontname, fontfamily and fullname.
+# If <destination font>'s filename will ale be prepended by "VDR" and if it
+# doesn't end in ".ttf" this suffix will be appended and a truetype font will
+# be exported.
+# Because of these changes you shouldn't reuse a generated font as
+# <destination font> (it'll lead to "VDRVDRVDRVDRMyMegaFont.ttf").
+#
+# You can use "--insert-for-old-plugins" to generate a font that also has the VDR
+# symbols at the positions they used to be (128-134, 239, 244, 245, 249-251,
+# 253, 255). This is only useful for old plugins/patches that expect them there.
+#
+# You can use "--insert-iso" to generate a font that also has the VDR symbols at
+# the positions 128 to 146. These can be used by recent plugins like ExtRecMenu v1.2,
+# NordlichtsEPG v0.9.
+
+uni_from = 0ue000
+uni_to   = 0ue015
+iso_from = 128
+iso_to   = 149
+
+insert_iso = 0
+insert_for_old_plugins = 0
+file_from = ""
+file_to   = ""
+export_only = 0
+gen_default = 0
+gen_default_bold = 0
+
+while ( $argc > 1 )
+  temp = $1
+
+  if ( temp == "--insert-iso" )
+		if ( insert_for_old_plugins == 1 )
+			Print()
+			Print("Only --insert-iso OR --insert-for-old-plugins allowed!");
+			Quit(1)
+		endif
+	  insert_iso = 1
+  elseif ( temp == "--insert-for-old-plugins" )
+		if ( insert_iso == 1 )
+			Print()
+			Print("Only --insert-iso OR --insert-for-old-plugins allowed!");
+			Quit(1)
+		endif
+		insert_for_old_plugins = 1
+	elseif ( temp == "--gen-default" )
+		Print()
+		Print("Creating default VDRSymbols.ttf...")
+		gen_default = 1
+		gen_default_bold = 0
+	elseif ( temp == "--gen-default-bold" )
+		Print()
+		Print("Creating default VDRSymbols-Bold.ttf...")
+		gen_default = 1
+		gen_default_bold = 1
+	elseif ( file_from == "" )
+	  file_from = temp
+	elseif ( file_to == "" )
+	  file_to = temp
+	else
+		Print()
+		Print("Usage: insert_vdr_symbols.pe [--insert-iso|--insert-for-old-plugins] <source font> <destination font>")
+		Quit(1)
+  endif
+  shift
+endloop
+
+if ( file_from == "")
+	Print()
+	Print("Usage: insert_vdr_symbols.pe [--insert-iso|--insert-for-old-plugins] <source font> <destination font>")
+	Quit(1)
+endif
+if ( file_to == "")
+	Print()
+	Print("Exporting font to TTF")
+	if ( Strcasecmp(Strsub(file_from, Strlen(file_from) - 4), ".ttf") == 0 )
+		Print()
+		Print("ERROR: Cannot export TTF to TTF!")
+		Quit(1)
+	endif
+	file_to = Strsub(file_from, 0, Strlen(file_from) - 4) + ".ttf"
+	export_only = 1
+endif
+
+Open(file_from)
+if ( export_only == 1 )
+	Generate(file_to)
+	new_fontname = $fontname
+	new_familyname = $familyname
+	new_fullname = $fullname
+	new_filename = file_to
+endif
+Select(uni_from, uni_to)
+Copy()
+Close()
+
+Open(file_to)
+if ( export_only == 0 )
+	if ( gen_default == 1 )
+		if ( gen_default_bold == 0 )
+			new_fontname = "VDRSymbolsSans"
+			new_familyname = "VDRSymbols Sans"
+			new_fullname = "VDRSymbols Sans"
+			new_filename = "VDRSymbolsSans.ttf"
+		elseif ( gen_default_bold == 1 )
+			new_fontname = "VDRSymbolsSans-Bold"
+			new_familyname = "VDRSymbols Sans"
+			new_fullname = "VDRSymbols Sans Bold"
+			new_filename = "VDRSymbolsSans-Bold.ttf"
+		endif
+		#TODO: copyright, version, Manufacturer, Vendor URL
+	else
+		new_fontname = "VDR" + $fontname
+		new_familyname = "VDR" + $familyname
+		new_fullname = "VDR" + $fullname
+		new_filename = "VDR" + file_to
+	endif
+
+	SetFontNames(new_fontname, new_familyname, new_fullname)
+	# See http://fontforge.sourceforge.net/scripting-alpha.html#SetTTFName
+	SetTTFName(0x409,3,new_familyname)
+	SetTTFName(0x409,16,new_familyname)
+	SetUniqueID(0)
+endif
+
+Select(uni_from, uni_to)
+Paste()
+
+if ( Strcasecmp(Strsub(new_filename, Strlen(new_filename) - 4), ".ttf") != 0 )
+	new_filename = new_filename + ".ttf"
+endif
+
+# (optionally) copy characters to positions suggested by Martin Prochnow (nordlicht)
+if ( insert_iso == 1 )
+	Select(iso_from, iso_to)
+	Paste()
+endif
+
+# (optionally) copy characters to bytes 129...
+if ( insert_for_old_plugins == 1 )
+	# Resume
+	Select(0ue000)
+	Copy()
+	Select(128)
+	Paste()
+
+  # DVD
+	Select(0ue001)
+	Copy()
+	Select(129)
+	Paste()
+
+  # Folder
+	Select(0ue002)
+	Copy()
+	Select(130)
+	Paste()
+
+  # Space
+	Select(0ue003)
+	Copy()
+	Select(131)
+	Paste()
+
+  # Cutting
+	Select(0ue004)
+	Copy()
+	Select(132)
+	Paste()
+
+  # Move
+	Select(0ue005)
+	Copy()
+	Select(133)
+	Paste()
+
+  ## Move folder
+	Select(0ue006)
+	Copy()
+	Select(134)
+	Paste()
+
+  # Progressbar 
+	#Select(0ue007)
+	#Copy()
+	#Select()
+	#Paste()
+	#Select(0ue008)
+	#Copy()
+	#Select()
+	#Paste()
+	#Select(0ue009)
+	#Copy()
+	#Select()
+	#Paste()
+	#Select(0ue00A)
+	#Copy()
+	#Select()
+	#Paste()
+
+  # REC
+	Select(0ue00B)
+	Copy()
+	Select(249)
+	Paste()
+
+  # Clock
+	Select(0ue00C)
+	Copy()
+	Select(253)
+	Paste()
+
+  # TV crypted
+	Select(0ue00D)
+	Copy()
+	Select(239)
+	Paste()
+
+  # Radio
+	Select(0ue00E)
+	Copy()
+	Select(244)
+	Paste()
+
+  # TV
+	Select(0ue00F)
+	Copy()
+	Select(245)
+	Paste()
+
+  # NEW
+	Select(0ue010)
+	Copy()
+	Select(250)
+	Paste()
+
+  # Repeating Timer
+	Select(0ue011)
+	Copy()
+	Select(255)
+	Paste()
+
+  # Running
+	Select(0ue012)
+	Copy()
+	Select(251)
+	Paste()
+endif
+
+Generate(new_filename)
+Close()
+
+Quit(0)

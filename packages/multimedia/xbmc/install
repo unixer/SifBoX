@@ -15,7 +15,8 @@ cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/silent.sh .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/setwakeup.sh .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/menuorg-appswitcher .install/usr/bin
 #cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/RssFeeds.xml .install/usr/share/xbmc/userdata
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runxbmc .install/usr/bin/xbmc
 elif [ "$TARGET_MACHINE" = tbs2910 ]; then
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runxbmc .install/usr/bin/xbmc
@@ -26,7 +27,8 @@ cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/cputemp .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/gputemp .install/usr/bin
 #mkdir -p .install/usr/share/xbmc/system/
 mkdir -p .install/usr/share/kodi/system/
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    cp $PLATFORM_PACKAGES/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
 else
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
@@ -42,7 +44,8 @@ else
    cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
    #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.xbmc $INSTALL/root/
 fi
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    mkdir -p .install/root/.kodi/userdata/peripheral_data/
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/rpi_2708_1001.xml .install/root/.kodi/userdata/peripheral_data/rpi_2708_1001.xml
 else

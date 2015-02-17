@@ -55,3 +55,6 @@ echo "$CMDLINE" > .install/boot/cmdline.txt
 #cp $ROOT/$PACKAGES/$PKG_SECTION/$1/bootloader/* .install/boot
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/bootloader/config.txt .install/boot
 
+if [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/boot/* .install/boot
+fi  

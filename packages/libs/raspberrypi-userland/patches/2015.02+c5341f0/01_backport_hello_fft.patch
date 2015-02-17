@@ -1,0 +1,292 @@
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_base.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_base.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_base.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_base.c	2015-02-13 22:56:36.368737494 +0100
+@@ -26,11 +26,11 @@
+ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+ 
+-#include "bcm_host.h"
+ #include "gpu_fft.h"
+ #include "mailbox.h"
+ 
+-#define BUS_TO_PHYS(x) ((x)&~0xC0000000)
++#define PERI_BASE 0x20000000
++#define PERI_SIZE 0x02000000
+ 
+ // V3D spec: http://www.broadcom.com/docs/support/videocore/VideoCoreIV-AG100-R.pdf
+ #define V3D_L2CACTL (0xC00020>>2)
+@@ -42,10 +42,11 @@
+ #define V3D_DBQITE  (0xC00e2c>>2)
+ #define V3D_DBQITC  (0xC00e30>>2)
+ 
++#define GPU_FFT_MEM_FLG 0xC // cached=0xC; direct=0x4
+ #define GPU_FFT_MEM_MAP 0x0 // cached=0x0; direct=0x20000000
+ 
+ #define GPU_FFT_NO_FLUSH 1
+-#define GPU_FFT_TIMEOUT 2000 // ms
++#define GPU_FFT_TIMEOUT 2000 // ms
+ 
+ unsigned gpu_fft_base_exec_direct (
+     struct GPU_FFT_BASE *base,
+@@ -81,7 +82,6 @@
+ 
+     if (base->vc_msg) {
+         // Use mailbox
+-        // Returns: 0x0 for success; 0x80000000 for timeout
+         return execute_qpu(base->mb, num_qpus, base->vc_msg, GPU_FFT_NO_FLUSH, GPU_FFT_TIMEOUT);
+     }
+     else {
+@@ -101,15 +101,14 @@
+ 
+     if (qpu_enable(mb, 1)) return -1;
+ 
+-    // Shared memory : cached=0xC; direct=0x4
+-    unsigned mem_flg = bcm_host_get_sdram_address() == 0x40000000 ? 0xC : 0x4;
+-    handle = mem_alloc(mb, size, 4096, mem_flg);
++    // Shared memory
++    handle = mem_alloc(mb, size, 4096, GPU_FFT_MEM_FLG);
+     if (!handle) {
+         qpu_enable(mb, 0);
+         return -3;
+     }
+ 
+-    peri = (volatile unsigned *) mapmem(bcm_host_get_peripheral_address(), bcm_host_get_peripheral_size());
++    peri = (volatile unsigned *) mapmem(PERI_BASE, PERI_SIZE);
+     if (!peri) {
+         mem_free(mb, handle);
+         qpu_enable(mb, 0);
+@@ -117,7 +116,7 @@
+     }
+ 
+     ptr->vc = mem_lock(mb, handle);
+-    ptr->arm.vptr = mapmem(BUS_TO_PHYS(ptr->vc+GPU_FFT_MEM_MAP), size);
++    ptr->arm.vptr = mapmem(ptr->vc+GPU_FFT_MEM_MAP, size);
+ 
+     base = (struct GPU_FFT_BASE *) ptr->arm.vptr;
+     base->peri   = peri;
+@@ -131,7 +130,7 @@
+ void gpu_fft_base_release(struct GPU_FFT_BASE *base) {
+     int mb = base->mb;
+     unsigned handle = base->handle, size = base->size;
+-    unmapmem((void*)base->peri, bcm_host_get_peripheral_size());
++    unmapmem((void*)base->peri, PERI_SIZE);
+     unmapmem((void*)base, size);
+     mem_unlock(mb, handle);
+     mem_free(mb, handle);
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.c	2015-02-13 22:56:36.396737492 +0100
+@@ -127,7 +127,7 @@
+ }
+ 
+ unsigned gpu_fft_execute(struct GPU_FFT *info) {
+-    return gpu_fft_base_exec(&info->base, GPU_FFT_QPUS);
++    gpu_fft_base_exec(&info->base, GPU_FFT_QPUS);
+ }
+ 
+ void gpu_fft_release(struct GPU_FFT *info) {
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_shaders.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_shaders.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_shaders.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_shaders.c	2015-02-13 22:56:36.408737492 +0100
+@@ -65,9 +65,6 @@
+ static unsigned int shader_1024k[] = {
+     #include "hex/shader_1024k.hex"
+ };
+-static unsigned int shader_2048k[] = {
+-    #include "hex/shader_2048k.hex"
+-};
+ 
+ static struct {
+     unsigned int size, *code;
+@@ -85,8 +82,7 @@
+     {sizeof(shader_128k), shader_128k},
+     {sizeof(shader_256k), shader_256k},
+     {sizeof(shader_512k), shader_512k},
+-    {sizeof(shader_1024k), shader_1024k},
+-    {sizeof(shader_2048k), shader_2048k}
++    {sizeof(shader_1024k), shader_1024k}
+ };
+ 
+ unsigned int  gpu_fft_shader_size(int log2_N) {
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_trans.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_trans.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_trans.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_trans.c	2015-02-13 22:56:36.368737494 +0100
+@@ -87,7 +87,7 @@
+ }
+ 
+ unsigned gpu_fft_trans_execute(struct GPU_FFT_TRANS *info) {
+-    return gpu_fft_base_exec(&info->base, 1);
++    gpu_fft_base_exec(&info->base, 1);
+ }
+ 
+ void gpu_fft_trans_release(struct GPU_FFT_TRANS *info) {
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_twiddles.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_twiddles.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_twiddles.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft_twiddles.c	2015-02-13 22:56:36.408737492 +0100
+@@ -243,19 +243,6 @@
+         out = twiddles_base_32(two_pi, out, two_pi/N*q);
+ }
+ 
+-static void twiddles_2048k(double two_pi, float *out) {
+-    double N=2048*1024;
+-    int q;
+-
+-    out = twiddles_base_64(two_pi, out);
+-    out = twiddles_step_32(two_pi, out, two_pi/N * 32*32);
+-    out = twiddles_step_32(two_pi, out, two_pi/N * 32);
+-    out = twiddles_step_32(two_pi, out, two_pi/N * GPU_FFT_QPUS);
+-
+-    for (q=0; q<GPU_FFT_QPUS; q++)
+-        out = twiddles_base_32(two_pi, out, two_pi/N*q);
+-}
+-
+ /****************************************************************************/
+ 
+ static struct {
+@@ -275,12 +262,11 @@
+     {4, 5, 1, twiddles_128k},
+     {4, 6, 2, twiddles_256k},
+     {4, 7, 2, twiddles_512k},
+-    {4, 8, 2, twiddles_1024k},
+-    {4,10, 2, twiddles_2048k}
++    {4, 8, 2, twiddles_1024k}
+ };
+ 
+ int gpu_fft_twiddle_size(int log2_N, int *shared, int *unique, int *passes) {
+-    if (log2_N<8 || log2_N>21) return -1;
++    if (log2_N<8 || log2_N>20) return -1;
+     *shared = shaders[log2_N-8].shared;
+     *unique = shaders[log2_N-8].unique;
+     *passes = shaders[log2_N-8].passes;
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.txt raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.txt
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.txt	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/gpu_fft.txt	2015-02-13 22:56:36.408737492 +0100
+@@ -1,9 +1,9 @@
+-BCM2835 "GPU_FFT" release 2.0 by Andrew Holme, 2014.
++BCM2835 "GPU_FFT" release 2.0 by Andrew Holme, 2014.
+ 
+ GPU_FFT is an FFT library for the Raspberry Pi which exploits the BCM2835 SoC
+ 3D hardware to deliver ten times more data throughput than is possible on the
+ 700 MHz ARM.  Kernels are provided for all power-of-2 FFT lengths between 256
+-and 2,097,152 points inclusive.  A transpose function, which also uses the 3D
++and 1,048,576 points inclusive.  A transpose function, which also uses the 3D
+ hardware, is provided to support 2-dimensional transforms.
+ 
+ 
+@@ -16,8 +16,8 @@
+ log2(N) |  8    | 9    | 10   |  11   |  12  |  13  |  14  |  15  |  16 |  17
+ ppm rms |  0.27 | 0.42 | 0.50 |  0.70 |  2.3 |  4.4 |  7.6 |  9.2 |  18 |  70
+ 
+-log2(N) |  18 |  19 |  20 |  21 |                8...17 batch of 10
+-ppm rms | 100 | 180 | 360 | 720 |               18...21 batch of  1
++log2(N) |  18 |  19 |  20 |                 8...17 batch of 10
++ppm rms | 100 | 180 | 360 |                18...20 batch of  1
+ 
+ 
+ *** Throughput ***
+@@ -36,9 +36,9 @@
+      10 | 0.016 | 0.027 | 0.045 | 0.095 | 0.25 | 0.61 |  1.2 |  3.2 |
+    FFTW | 0.092 | 0.22  | 0.48  | 0.95  | 3.0  | 5.1  | 12   | 31   |
+ 
+-log2(N) |  16  |  17 |  18 |  19 |   20 |   21 |       All times in
+-      1 |  6.8 |  16 |  42 |  95 |  190 |  380 |       milliseconds
+-   FFTW | 83   | 180 | 560 | 670 | 1600 | 3400 |       2 sig. figs.
++log2(N) |  16  |  17 |  18 |  19 |   20 |           All times in
++      1 |  6.8 |  16 |  42 |  95 |  190 |           milliseconds
++   FFTW | 83   | 180 | 560 | 670 | 1600 |           2 sig. figs.
+ 
+ 
+ *** API functions ***
+@@ -57,7 +57,7 @@
+ 
+     int mb          Mailbox file descriptor obtained by calling mbox_open()
+ 
+-    int log2_N      log2(FFT length) = 8 to 21
++    int log2_N      log2(FFT length) = 8 to 20
+ 
+     int direction   FFT direction:  GPU_FFT_FWD for forward FFT
+                                     GPU_FFT_REV for inverse FFT
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/hello_fft_2d.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/hello_fft_2d.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/hello_fft_2d.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/hello_fft_2d.c	2015-02-13 22:56:36.408737492 +0100
+@@ -69,8 +69,8 @@
+     // Write bitmap info
+     memset(&bih, 0, sizeof(bih));
+     bih.biSize = sizeof(bih);
+-    bih.biWidth = N;
+-    bih.biHeight = N;
++    bih.biWidth = N-1;
++    bih.biHeight = N-1;
+     bih.biPlanes = 1;
+     bih.biBitCount = 24;
+     bih.biCompression = BI_RGB;
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/hello_fft.c raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/hello_fft.c
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/hello_fft.c	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/hello_fft.c	2015-02-13 22:56:36.408737492 +0100
+@@ -37,7 +37,7 @@
+ 
+ char Usage[] =
+     "Usage: hello_fft.bin log2_N [jobs [loops]]\n"
+-    "log2_N = log2(FFT_length),       log2_N = 8...21\n"
++    "log2_N = log2(FFT_length),       log2_N = 8...20\n"
+     "jobs   = transforms per batch,   jobs>0,        default 1\n"
+     "loops  = number of test repeats, loops>0,       default 1\n";
+ 
+@@ -55,7 +55,7 @@
+     struct GPU_FFT_COMPLEX *base;
+     struct GPU_FFT *fft;
+ 
+-    log2_N = argc>1? atoi(argv[1]) : 12; // 8 <= log2_N <= 21
++    log2_N = argc>1? atoi(argv[1]) : 12; // 8 <= log2_N <= 20
+     jobs   = argc>2? atoi(argv[2]) : 1;  // transforms per batch
+     loops  = argc>3? atoi(argv[3]) : 1;  // test repetitions
+ 
+@@ -69,7 +69,7 @@
+ 
+     switch(ret) {
+         case -1: printf("Unable to enable V3D. Please check your firmware is up to date.\n"); return -1;
+-        case -2: printf("log2_N=%d not supported.  Try between 8 and 21.\n", log2_N);         return -1;
++        case -2: printf("log2_N=%d not supported.  Try between 8 and 20.\n", log2_N);         return -1;
+         case -3: printf("Out of memory.  Try a smaller batch or increase GPU memory.\n");     return -1;
+         case -4: printf("Unable to map Videocore peripherals into ARM memory space.\n");      return -1;
+     }
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/makefile raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/makefile
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/makefile	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/makefile	2015-02-13 22:56:36.384737493 +0100
+@@ -10,8 +10,7 @@
+     hex/shader_128k.hex \
+     hex/shader_256k.hex \
+     hex/shader_512k.hex \
+-    hex/shader_1024k.hex \
+-    hex/shader_2048k.hex
++    hex/shader_1024k.hex
+ 
+ C = mailbox.c gpu_fft.c gpu_fft_base.c gpu_fft_twiddles.c gpu_fft_shaders.c
+ 
+@@ -21,7 +20,7 @@
+ H1D = gpu_fft.h
+ H2D = gpu_fft.h gpu_fft_trans.h hello_fft_2d_bitmap.h
+ 
+-F = -lrt -lm -L../lib -L/opt/vc/lib/ -lbcm_host -I/opt/vc/include -I/opt/vc/include/interface/vcos/pthreads -I/opt/vc/include/interface/vmcs_host/linux
++F = -lrt -lm
+ 
+ hello_fft.bin:	$(S) $(C1D) $(H1D)
+ 	gcc -o hello_fft.bin $(F) $(C1D)
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_1024k.qasm raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_1024k.qasm
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_1024k.qasm	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_1024k.qasm	2015-02-13 22:56:36.408737492 +0100
+@@ -1,4 +1,4 @@
+-# BCM2835 "GPU_FFT" release 2.0
++# BCM2835 "GPU_FFT" release 2.0 BETA
+ #
+ # Copyright (c) 2014, Andrew Holme.
+ # All rights reserved.
+diff -urN raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_128k.qasm raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_128k.qasm
+--- raspberrypi-userland-2015.02+c5341f0.org/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_128k.qasm	2015-02-13 13:38:04.000000000 +0100
++++ raspberrypi-userland-2015.02+c5341f0/host_applications/linux/apps/hello_pi/hello_fft/qasm/gpu_fft_128k.qasm	2015-02-13 22:56:36.408737492 +0100
+@@ -1,4 +1,4 @@
+-# BCM2835 "GPU_FFT" release 2.0
++# BCM2835 "GPU_FFT" release 2.0 BETA
+ #
+ # Copyright (c) 2014, Andrew Holme.
+ # All rights reserved.

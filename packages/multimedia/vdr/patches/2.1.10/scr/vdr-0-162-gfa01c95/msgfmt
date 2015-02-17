@@ -1,0 +1,9 @@
+#!/bin/bash
+#
+# build .mo files as utf8 encoded
+
+eval "in=\${$#}"
+options=$*
+options=${options% *}
+
+iconv -f $(grep "Content-Type: text/plain; charset=" $in | sed 's/.*=\(.*\)\\n"/\1/') -t utf8 $in | sed 's/\(Content\-Type\: text\/plain\; charset\=\).*/\1utf-8\\n"/' | /usr/bin/msgfmt $options -

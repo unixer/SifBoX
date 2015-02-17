@@ -6,7 +6,8 @@ cd $BUILD/$1*
 
 setup_toolchain target
 
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    SPLASH_FILE="$ROOT/$CONFIG/flavours/$FLAVOUR/Rasplash.png"
 else
    SPLASH_FILE="$ROOT/$CONFIG/flavours/$FLAVOUR/splash-frontend.png"

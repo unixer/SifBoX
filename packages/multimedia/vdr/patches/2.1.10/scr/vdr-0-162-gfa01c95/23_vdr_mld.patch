@@ -1,0 +1,45 @@
+diff -ruN vdr-2.1.4_22/menu.c vdr-2.1.4_23/menu.c
+--- vdr-2.1.4_22/menu.c	2014-01-26 14:43:42.000000000 +0100
++++ vdr-2.1.4_23/menu.c	2014-01-26 14:45:30.137212648 +0100
+@@ -3841,7 +3841,7 @@
+ {
+   Clear();
+   char buffer[64];
+-  snprintf(buffer, sizeof(buffer), "%s - VDR %s", tr("Setup"), VDRVERSION);
++  snprintf(buffer, sizeof(buffer), "%s - VDR %s", tr("VDR Setup"), VDRVERSION);
+   SetTitle(buffer);
+   SetHasHotkeys();
+   Add(new cOsdItem(hk(tr("OSD")),           osUser1));
+@@ -3919,9 +3919,9 @@
+ :cOsdMenu("")
+ {
+   // Load Menu Configuration
+-  cString menuXML = cString::sprintf("%s/setup/vdr-menu.%s.xml", cPlugin::ConfigDirectory(), Setup.OSDLanguage);
++  cString menuXML = cString::sprintf("%s/../menu.%s.xml", cPlugin::ConfigDirectory(), Setup.OSDLanguage);
+   if (access(menuXML, 04) == -1)
+-     menuXML = cString::sprintf("%s/setup/vdr-menu.xml", cPlugin::ConfigDirectory());
++     menuXML = cString::sprintf("%s/../menu.xml", cPlugin::ConfigDirectory());
+   subMenu.LoadXml(menuXML);
+   nrDynamicMenuEntries = 0;
+   SetMenuCategory(mcMain);
+@@ -4010,7 +4010,7 @@
+          else if (strcmp(item, "Recordings") == 0)
+             Add(new cOsdItem(hk(tr("Recordings")), osRecordings));
+          else if (strcmp(item, "Setup") == 0) {
+-            cString itemSetup = cString::sprintf("%s%s", tr("Setup"), *subMenu.GetMenuSuffix());
++            cString itemSetup = cString::sprintf("%s%s", tr("VDR Setup"), *subMenu.GetMenuSuffix());
+             Add(new cOsdItem(hk(itemSetup), osSetup));
+             }
+          else if (strcmp(item, "Commands") == 0 && Commands.Count() > 0) {
+diff -ruN vdr-2.1.4_22/menuitems.c vdr-2.1.4_23/menuitems.c
+--- vdr-2.1.4_22/menuitems.c	2013-11-03 15:48:21.000000000 +0100
++++ vdr-2.1.4_23/menuitems.c	2014-01-26 14:45:30.137212648 +0100
+@@ -1176,7 +1176,7 @@
+ 
+ void cMenuSetupPage::SetSection(const char *Section)
+ {
+-  SetTitle(cString::sprintf("%s - %s", tr("Setup"), Section));
++  SetTitle(cString::sprintf("%s - %s", tr("VDR Setup"), Section));
+ }
+ 
+ eOSState cMenuSetupPage::ProcessKey(eKeys Key)

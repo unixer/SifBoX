@@ -1,0 +1,22 @@
+# German translations for MLD package.
+# Copyright (C) 2014 MLD <mail@minidvblinux.de>
+# This file is distributed under the same license as the MLD package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MLD 4.0.1-64\n"
+"Report-Msgid-Bugs-To: <bugs@minidvblinux.de>\n"
+"POT-Creation-Date: 2014-12-18 16:33+0100\n"
+"PO-Revision-Date: 2014-12-18 16:33+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: etc/init.d/vdr:25
+msgid "Select a channel list"
+msgstr "Bitte unter System/Konfiguration/TV/Kanalliste ein Kannalliste ausw..hlen"

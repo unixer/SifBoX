@@ -9,7 +9,8 @@ PKG_URL="https://github.com/Pulse-Eight/${PKG_NAME}.git"
 PKG_REV=2
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_DEPENDS="systemd liblockdev"
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
   PKG_DEPENDS="$PKG_DEPENDS raspberrypi-userland"
   PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS raspberrypi-userland"
 fi

@@ -1,0 +1,85 @@
+# English translations for MLD package.
+# Copyright (C) 2014 MLD <mail@minidvblinux.de>
+# This file is distributed under the same license as the MLD package.
+# Automatically generated, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: MLD 4.0.0\n"
+"Report-Msgid-Bugs-To: <bugs@minidvblinux.de>\n"
+"POT-Creation-Date: 2014-12-18 16:53+0100\n"
+"PO-Revision-Date: 2014-03-27 04:56+0100\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:13
+msgid "Edit Channellist"
+msgstr "Edit Channellist"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:13
+msgid "Setup"
+msgstr ""
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:13
+msgid "TV"
+msgstr ""
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:17
+msgid "Upload a channel list config file"
+msgstr "Upload a channel list config file"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:17
+msgid "Upload channel list"
+msgstr "Upload channel list"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:21
+msgid "Select file"
+msgstr "Select file"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:23
+msgid "Name"
+msgstr "Name"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:23
+msgid "Name of channellist"
+msgstr "Name of channellist"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:25
+msgid "Save"
+msgstr "Save"
+
+#: var/www/tpl/setup/TV/Edit-Channellist/50_vdr_edit.sh:26
+#: var/www/tpl/commands/vdr/restart.sh:1
+msgid "Restart VDR"
+msgstr "Restart VDR"
+
+#: var/www/tpl/commands/vdr.sh:1 var/www/tpl/logfiles/vdr.sh:1
+msgid "VDR"
+msgstr "VDR"
+
+#: var/www/tpl/commands/vdr/start.sh:1
+msgid "Start VDR"
+msgstr "Start VDR"
+
+#: var/www/tpl/commands/vdr/stop.sh:1
+msgid "Stop VDR"
+msgstr "Stop VDR"
+
+#: var/www/tpl/navi/services/remotecontrol.sh:1
+#: var/www/tpl/remotecontrol_layout.sh:7
+msgid "Remote control"
+msgstr "Remote control"
+
+#: var/www/tpl/quickstart/TV/50_DiSEqC_SCR.sh:3
+msgid "Setup DiSEqC and SCR"
+msgstr "Setup DiSEqC and SCR (Unicable)"
+
+#: var/www/tpl/quickstart/TV/50_Edit-Channellist.sh:3
+#: var/www/tpl/setup/TV/12_Edit-Channellist.sh:1
+msgid "Edit-Channellist"
+msgstr "Edit Channellist"

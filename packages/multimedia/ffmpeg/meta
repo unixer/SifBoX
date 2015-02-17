@@ -1,6 +1,7 @@
 PKG_NAME=ffmpeg
 #PKG_VERSION=1.2.4
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    #PKG_VERSION=0.10.7
    #PKG_VERSION=1.2.4
    PKG_VERSION=2.4.2

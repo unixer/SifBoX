@@ -16,7 +16,8 @@ mkdir -p $INSTALL/usr/share/fonts/truetype
 mkdir -p $INSTALL/usr/bin
 cp -r $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/fonts $INSTALL/usr/share/
 #cp $ROOT/$PACKAGES/$1/scripts/runvdr $INSTALL/usr/sbin
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/scripts/runvdr.rasp $INSTALL/usr/sbin/runvdr
    cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/scripts/vdrshutdown.rasp $INSTALL/usr/bin/vdrshutdown 
    sed -i "s|/bin/systemctl restart mixer.service||" $INSTALL/usr/sbin/runvdr
@@ -61,7 +62,8 @@ mkdir -p $INSTALL/etc/vdr/plugins.d
 
 cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/wakeup $INSTALL/etc
 cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/channels.conf $INSTALL/etc/vdr/channels.conf
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/setup.conf.rasp $INSTALL/etc/vdr/setup.conf
 else
    cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/setup.conf $INSTALL/etc/vdr

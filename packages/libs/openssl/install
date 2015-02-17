@@ -14,7 +14,8 @@ do_install etc
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/ssl-cert-scripts/* \
  $INSTALL/usr/bin
 
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
    mkdir -p $INSTALL/etc/profile.d
    cp $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/openssl.sh $INSTALL/etc/profile.d
 fi

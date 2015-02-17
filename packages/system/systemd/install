@@ -73,7 +73,8 @@ cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/journald.conf $INSTALL/etc/systemd/
 ln -s /dev/null $INSTALL/etc/systemd/system/display-manager.service
 
 # on RaspberryPi we don't use X
-if [ "$TARGET_MACHINE" = raspberrypi ]; then
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
   ln -s /dev/null $INSTALL/etc/systemd/system/xorg.service
 fi
 
@@ -91,6 +92,7 @@ fi
 # disable Journal on these machines/platforms
 if [ "$TARGET_MACHINE" = cubox ] || \
    [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ] || \
    [ "$TARGET_PLATFORM" = a10 ] || \
    [ "$TARGET_MACHINE" = tbs2910 ]; then
   mkdir -p $INSTALL/etc/systemd/system
