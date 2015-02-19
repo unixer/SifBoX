@@ -131,7 +131,7 @@ MARCH=$TARGET_SUBARCH
 [ "$TARGET_SUBARCH" = armv7 ] && MARCH=armv7-a
 [ "$TARGET_SUBARCH" = aarch64 ] && MARCH=armv8-a
 [ "$GCC_MARCH" = yes ] && \
-  GCC_FLAGS="$GCC_FLAGS -march=$MARCH"
+  GCC_FLAGS="$GCC_FLAGS -march=$MARCH -mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated"
 
 # workaround for C-30, C-50, C-60, E-350, E-450
 if [ "$TARGET_CPU" = amdfusion ]; then

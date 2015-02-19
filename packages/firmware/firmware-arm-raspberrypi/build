@@ -50,6 +50,9 @@ cma_hwm=32
 EOF
 fi
 
+if [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+  CMDLINE="$CMDLINE quiet"
+fi
 echo "$CMDLINE" > .install/boot/cmdline.txt
 
 #cp $ROOT/$PACKAGES/$PKG_SECTION/$1/bootloader/* .install/boot
