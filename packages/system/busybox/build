@@ -16,4 +16,3 @@ rm _install/bin/bash || true
 rm _install/bin/mount || true
 rm _install/bin/umount || true
 rm _install/usr/bin/wget || true
-rm _install/bin/ps || true
