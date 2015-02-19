@@ -1,9 +1,10 @@
 PKG_NAME=vdr-softhddevice
-PKG_URL_REV=9f134c1b
+#PKG_URL_REV=9f134c1b
+PKG_URL_REV=93ea660a
 PKG_VERSION=0.6.1
 PKG_URL_PROTO=git
 PKG_URL="git://projects.vdr-developer.org/vdr-plugin-softhddevice.git"
-PKG_REV=13
+PKG_REV=220
 PKG_BUILD_DEPENDS="toolchain"
 PKG_RUN_DEPENDS="$TARGET_LIBC vdr"
 PKG_DEPENDS="libX11 libxcb xcb-util xcb-util-keysyms xcb-util-wm mesa ffmpeg"
