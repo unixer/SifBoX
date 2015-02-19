@@ -1,0 +1,62 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+
+cd $PKG_BUILD_DIR
+
+if [ ! -d .install/etc/kodi ]; then
+   mkdir -p .install/etc/kodi
+fi
+
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/silent.sh .install/usr/bin
+#cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/setwakeup.sh .install/usr/bin
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/menuorg-appswitcher .install/usr/bin
+#cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/RssFeeds.xml .install/usr/share/kodi/userdata
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin/kodi
+elif [ "$TARGET_MACHINE" = tbs2910 ]; then
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin/kodi
+else
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/kodi .install/usr/bin
+fi
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/cputemp .install/usr/bin
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/gputemp .install/usr/bin
+#mkdir -p .install/usr/share/kodi/system/
+mkdir -p .install/usr/share/kodi/system/
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   cp $PLATFORM_PACKAGES/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
+else
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml .install/usr/share/kodi/system/
+fi
+
+#Prova copia configurazione di default
+if [ "$PKG_VERSION" = "frodo-12.3" ]; then
+   mkdir -p $INSTALL/root/.kodi
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi $INSTALL/root/
+else
+   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi13/* $INSTALL/root/.kodi 
+   mkdir -p $INSTALL/root/.kodi
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
+   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
+fi
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   mkdir -p .install/root/.kodi/userdata/peripheral_data/
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/rpi_2708_1001.xml .install/root/.kodi/userdata/peripheral_data/rpi_2708_1001.xml
+else
+   mkdir -p .install/root/.kodi/userdata/peripheral_data/
+   cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/usb_2548_1002.xml .install/root/.kodi/userdata/peripheral_data/usb_2548_1002.xml
+fi
+#Fine
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml $INSTALL/root/.kodi/userdata/
+cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/*.xml .install/etc/kodi
+
+do_install usr/bin
+do_install usr/lib
+do_install usr/share
+do_install etc/kodi

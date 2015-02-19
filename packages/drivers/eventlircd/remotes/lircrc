@@ -3,8 +3,8 @@
 begin
     prog = irexec
     button = KEY_DASHBOARD
-    config = systemctl stop vdr-sxfe.service ; systemctl start xbmc.service
-    config = systemctl start vdr-sxfe.service ; systemctl stop xbmc.service
+    config = systemctl stop vdr-sxfe.service ; systemctl start kodi.service
+    config = systemctl start vdr-sxfe.service ; systemctl stop kodi.service
 end
 
 # Button Zoom

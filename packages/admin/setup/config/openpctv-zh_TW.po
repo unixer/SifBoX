@@ -403,8 +403,8 @@ msgstr ""
 msgid ""
 "OScam can used by Enigma2(Through dvbsoftwareca module to create symlinks "
 "for dvb adapters),VDR(Through VDR-DVBAPI plugin to act as a bridge between "
-"VDR and OScam) and XBMC(throgh VDR backend, so the same as VDR). VDR-SC only "
-"used by VDR(A software emulated CAM, VDR plugin) and XBMC."
+"VDR and OScam) and KODI(throgh VDR backend, so the same as VDR). VDR-SC only "
+"used by VDR(A software emulated CAM, VDR plugin) and KODI."
 msgstr ""
 
 #: packages/admin/setup/scripts/getcam:62
@@ -948,12 +948,12 @@ msgid "Press any key to enter setup,"
 msgstr ""
 
 #: packages/admin/setup/scripts/setup.sh:14
-msgid "or 3 seconds after enter XBMC automatically."
+msgid "or 3 seconds after enter KODI automatically."
 msgstr ""
 
 #: packages/admin/setup/scripts/setup.sh:74
 msgid ""
-"Would you like to scan channels for VDR/XBMC(It'll take quiet long to do "
+"Would you like to scan channels for VDR/KODI(It'll take quiet long to do "
 "it)?  You can also scan channels with vdr reelscanchannels plugin in vdr."
 msgstr ""
 
@@ -995,7 +995,7 @@ msgid "Auto scan channels"
 msgstr "自動掃描頻道"
 
 #: packages/admin/setup/scripts/setup.sh:96
-msgid "Start XBMC with VDR"
+msgid "Start KODI with VDR"
 msgstr ""
 
 #: packages/admin/setup/scripts/setup.sh:97

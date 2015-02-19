@@ -11,13 +11,13 @@ grep -q BCM2708 /proc/cpuinfo && sleep 2
 
 if grep -q -i arm /proc/cpuinfo; then
   ARCH=arm
-  echo -e -n "\e[31m$(gettext "Press any key to enter setup,")\e[0m \e[32m$(gettext "or 3 seconds after enter XBMC automatically.")\e[0m"
+  echo -e -n "\e[31m$(gettext "Press any key to enter setup,")\e[0m \e[32m$(gettext "or 3 seconds after enter KODI automatically.")\e[0m"
   read -s -n1 -t4
   result=$?
   if [ $result = 142 -o $result = 130 ]; then
     systemctl start getty\@ttymxc0
     systemctl start vdr-backend
-    systemctl start xbmc
+    systemctl start kodi
     exit 0
   elif [ $result = 0 ]; then
     clear
@@ -71,7 +71,7 @@ systemctl stop vdr-backend
 [ -f $RUN_TRANS ] && $RUN_TRANS
 [ -f $RUN_DVB ] && $RUN_DVB
 [ -f $RUN_DISEQC ] && $RUN_DISEQC
-dialog --defaultno --clear --yesno "$(gettext "Would you like to scan channels for VDR/XBMC(It'll take quiet long to do it)?  You can also scan channels with vdr reelscanchannels plugin in vdr.")" 7 70
+dialog --defaultno --clear --yesno "$(gettext "Would you like to scan channels for VDR/KODI(It'll take quiet long to do it)?  You can also scan channels with vdr reelscanchannels plugin in vdr.")" 7 70
 if [ $? -eq 0 ]; then
   $RUN_CHANNELS
 fi
@@ -93,7 +93,7 @@ echo "${DIALOG} --clear --no-cancel --backtitle \"$(gettext "OpenPCTV configurat
 [ -f $RUN_CAM ] && echo "CAM \"$(gettext "Select a software emulated CAM")\" \\" >> $MENUTMP
 [ -f $RUN_DISEQC ] && echo "DiSEqC \"$(gettext "DiSEqC configurator")\" \\" >> $MENUTMP
 [ -f $RUN_CHANNELS ] && echo "Scan \"$(gettext "Auto scan channels")\" \\" >> $MENUTMP
-[ X$ARCH = "Xarm" ] && echo "XBMC \"$(gettext "Start XBMC with VDR")\" \\" >> $MENUTMP
+[ X$ARCH = "Xarm" ] && echo "KODI \"$(gettext "Start KODI with VDR")\" \\" >> $MENUTMP
 echo "Reboot \"$(gettext "Reboot OpenPCTV")\" \\" >> $MENUTMP
 echo "Exit \"$(gettext "Exit to login shell")\" 2> $DIALOGOUT" >> $MENUTMP
 . $MENUTMP
@@ -140,9 +140,9 @@ case "$(cat $DIALOGOUT)" in
     Audio)	$RUN_AUDIO
 		MainMenu
 		;;
-    XBMC)	systemctl start getty\@ttymxc0
+    KODI)	systemctl start getty\@ttymxc0
 		systemctl start vdr-backend
-		systemctl start xbmc
+		systemctl start kodi
 		;;
     Reboot)	reboot
 		;;

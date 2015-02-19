@@ -11,4 +11,4 @@ ExecStart=/usr/bin/SifBoxConfigurator.sh
 # KillSignal=SIGKILL
 
 [Install]
-WantedBy=xbmc.target
+WantedBy=kodi.target

@@ -1,0 +1,14 @@
+PKG_NAME=kodi-addon-xvdr
+PKG_URL_PROTO=git
+PKG_URL="https://github.com/pipelka/xbmc-addon-xvdr"
+#PKG_URL_REV=f267086
+#PKG_VERSION=0.9.8
+PKG_VERSION=0.9.8
+PKG_URL_REV=2bf2563
+PKG_REV=14
+PKG_BUILD_DEPENDS="toolchain"
+PKG_RUN_DEPENDS="$TARGET_LIBC kodi"
+PKG_PRIORITY=optional
+PKG_SECTION=multimedia
+PKG_SHORTDESC="PVR add-on for KODI to add VDR (http://www.cadsoft.de/vdr) as a TV/PVR Backend to KODI"
+PKG_LONGDESC="PVR add-on for KODI to add VDR (http://www.cadsoft.de/vdr) as a TV/PVR Backend to KODI."

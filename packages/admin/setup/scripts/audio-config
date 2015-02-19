@@ -83,10 +83,10 @@ sed -i -e "s/^ALSA_CARD=.*/ALSA_CARD=\"$cardid\"/g" \
 if grep -q "Freescale i.MX 6Quad" /proc/cpuinfo; then
   if [ $cardid = 0 -a $deviceid = 0 ]; then
     sed -i 's#<fvolumelevel>.*#<fvolumelevel>0.455554</fvolumelevel>#g' \
-    /root/.xbmc/userdata/guisettings.xml
+    /root/.kodi/userdata/guisettings.xml
   else
     sed -i 's#<fvolumelevel>.*#<fvolumelevel>1.000000</fvolumelevel>#g' \
-    /root/.xbmc/userdata/guisettings.xml
+    /root/.kodi/userdata/guisettings.xml
   fi
 fi
 }
