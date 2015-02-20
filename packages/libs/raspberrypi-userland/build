@@ -22,9 +22,13 @@ install_dir="$PWD/.install"
 debug_dir="$PWD/.install-debuginfo"
 cp -PR $install_dir/opt/vc $install_dir/usr
 if pkg_uses $1 devtools; then
-  export SDKSTAGE="$install_dir"
-  export CFLAGS="$CFLAGS -I${SDKSTAGE}/opt/vc/include/interface/vmcs_host/linux -I$LIB_PREFIX/include/freetype2"
+  #export SDKSTAGE="$install_dir"
+  #export CFLAGS="$CFLAGS -I${SDKSTAGE}/opt/vc/include/interface/vmcs_host/linux -I$LIB_PREFIX/include/freetype2"
+  export CFLAGS="$CFLAGS -I$LIB_PREFIX/include/freetype2"
   export LDFLAGS="$LDFLAGS -L${LIB_PREFIX}/lib -lfreetype -lz -lbz2"
+
+  export SDKSTAGE="$install_dir"
+  export PREFIX=$SDKSTAGE
   cd $SDKSTAGE/opt/vc/src/hello_pi
   #Prevert error building with gcc 4.8
   sed -i 's|gcc -o hello_fft.bin $(F) $(C1D)|GCCX -o hello_fft.bin $(C1D) $(F)|' hello_fft/makefile
