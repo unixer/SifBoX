@@ -18,7 +18,8 @@ else
 fi
 
 if pkg_uses $1 opengles; then
-  GLES_CONFIG="--enable-egl=yes"
+  #GLES_CONFIG="--enable-egl=yes"
+  GLES_CONFIG="--enable-glesv2=yes"
 else
   GLES_CONFIG="--enable-egl=no"
 fi
@@ -58,3 +59,6 @@ do_configure \
 
 make
 make_install
+if pkg_uses $1 opengles; then
+   cp .install/usr/lib/pkgconfig/cairo-glesv2.pc .install/usr/lib/pkgconfig/glesv2.pc
+fi
