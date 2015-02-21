@@ -7,20 +7,32 @@ $SCRIPTS/build linux
 
 cd $PKG_BUILD_DIR
 
+export MAKEFLAGS=-j1
+
 setup_toolchain target
 
+#if [ "$TARGET_ARCH" = i386 ] ; then
+#  cp src/lib/wlc_hybrid.o_shipped_i386 src/lib/wlc_hybrid.o_shipped
+#else
+#  cp src/lib/wlc_hybrid.o_shipped_x86_64 src/lib/wlc_hybrid.o_shipped
+#fi
+#sed -e "/BRCM_WLAN_IFNAME/s:eth:wlan:" \
+#		-i src/wl/sys/wl_linux.c
+
+#cp Makefile src
+#cd src
 if [ "$TARGET_ARCH" = i386 ] ; then
-  cp src/lib/wlc_hybrid.o_shipped_i386 src/lib/wlc_hybrid.o_shipped
+   cd x86-32
+   ARCH="x86-32"
 else
-  cp src/lib/wlc_hybrid.o_shipped_x86_64 src/lib/wlc_hybrid.o_shipped
+   cd x86-64
+   ARCH="x86-64"
 fi
-cp Makefile src
-cd src
 make KBASE=$(kernel_path) KBUILD_DIR=$(kernel_path)
 
 cd ..
-strip_kmods src
+strip_kmods $ARCH
 mkdir -p .install/lib/modules/$(kernel_version)/kernel/drivers/net/wireless
-cp src/wl.ko .install/lib/modules/$(kernel_version)/kernel/drivers/net/wireless
+cp $ARCH/wl.ko .install/lib/modules/$(kernel_version)/kernel/drivers/net/wireless
 
 
