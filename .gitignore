@@ -25,3 +25,6 @@ geexbox-*.tar
 scripts/upload.sh
 updatevdr.sh
 fixme
+updatepackages.sh
+updatevdr.sh
+updatexbmc.sh
