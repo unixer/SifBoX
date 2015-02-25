@@ -45,7 +45,7 @@ cat > $TARBALL_NAME.json << "EOF"
    "description": "Versione stabile",
    "kernel_version": "KERN_VER",
    "vdr_version": "VDR_VERSION",
-   "xbmc_version": "XBMC_VERSION",
+   "kodi_version": "KODI_VERSION",
    "arch": "ARCH",
    "platform": "PLATFORM"
 }
@@ -55,8 +55,8 @@ DATE=`date +%d-%m-%Y`
 VERS_ISO=`cat $ROOT/VERSION`
 VDR_VERSION=`grep -E '^PKG_VERSION' $ROOT/packages/multimedia/vdr/meta | cut -f1 |cut -f 2 -d=`
 KERN_VER=`grep -E '^PKG_VERSION' $ROOT/packages/system/linux/meta | cut -f1 |cut -f 2 -d=`
-get_meta xbmc
-XBMC_VERSION=`echo $PKG_VERSION |tr gotham Gotham |tr kodi Kodi`
+get_meta kodi
+KODI_VERSION=`echo $PKG_VERSION |tr helix Helix |tr frodo Frodo`
 
 sed -i "s|\"DATE\"|\"$DATE\"|" $TARBALL_NAME.json
 sed -i "s|\"VERS_ISO\"|\"$VERS_ISO\"|" $TARBALL_NAME.json
@@ -64,7 +64,7 @@ sed -i "s|\"KERN_VER\"|\"$KERN_VER\"|" $TARBALL_NAME.json
 sed -i "s|\"ARCH\"|\"$TARGET_ARCH\"|" $TARBALL_NAME.json
 sed -i "s|\"PLATFORM\"|\"$TARGET_MACHINE\"|" $TARBALL_NAME.json
 sed -i "s|\"VDR_VERSION\"|\"$VDR_VERSION\"|" $TARBALL_NAME.json
-sed -i "s|\"XBMC_VERSION\"|\"$XBMC_VERSION\"|" $TARBALL_NAME.json
+sed -i "s|\"KODI_VERSION\"|\"$KODI_VERSION\"|" $TARBALL_NAME.json
 
 if [ "$TARGET_MACHINE" = "tbs2910" ]; then
    #mkdir -p $BINROOT/install_dir
