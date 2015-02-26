@@ -55,8 +55,8 @@ fi
 
 if [ "$TARGET_ARCH" = arm ]; then
   VORBIS_CONFIG="--disable-libvorbis \
-                 --enable-tremor-internal \
-                 --enable-tremor-low \
+  	         --enable-tremor-internal \
+	         --enable-tremor-low \
                  --enable-tremor"
 else
   VORBIS_CONFIG="--disable-libvorbis \
@@ -114,8 +114,6 @@ fi
             --disable-ivtv \
             --disable-smb \
             --disable-nemesi \
-            --disable-dvdread-internal \
-            --disable-libdvdcss-internal \
             --disable-cdparanoia \
             --enable-freetype \
             --with-freetype-config="$FREETYPE_CONFIG" \
@@ -148,7 +146,6 @@ fi
             --enable-mad \
             --disable-toolame \
             --disable-xmms \
-            --enable-mp3lib \
             --disable-liba52 \
             --disable-libmpeg2 \
             --disable-musepack \
@@ -203,6 +200,12 @@ fi
             --disable-shm \
             --disable-dynamic-plugins \
             --extra-libs="$EXTRA_LIBS" \
+            --disable-dvdread-internal \
+            --disable-libdvdcss-internal \
+            --enable-mp3lib \
+	    --disable-x264 \
             $DEBUG_CONFIG
+
+
 make
 make_install

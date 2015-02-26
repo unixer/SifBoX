@@ -1,8 +1,8 @@
 PKG_NAME=MPlayer
 PKG_VERSION=1.1.1
-PKG_URL="http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${PKG_VERSION}.tar.xz"
-#PKG_URL_PROTO=svn
-#PKG_URL="svn://svn.mplayerhq.hu/mplayer/trunk"
+PKG_URL_PROTO=git
+PKG_URL="https://github.com/GiterLab/MPlayer-1.1.1.git"
+#PKG_URL="http://www.mplayerhq.hu/MPlayer/releases/MPlayer-${PKG_VERSION}.tar.xz"
 PKG_REV=1
 PKG_DEPENDS="zlib ffmpeg freetype alsa-lib fribidi libcdio faad2 libpng enca libass fontconfig libvorbis libtheora libmad lame"
 PKG_BUILD_DEPENDS="toolchain yasm lame"
