@@ -23,7 +23,8 @@ do_configure host \
             --disable-su \
             --disable-more \
             --disable-static \
-	    --enable-shared
+	    --enable-shared \
+	    --without-python 
             
 
 make
@@ -61,7 +62,8 @@ do_configure target \
 	    --disable-more \
 	    --disable-pg \
 	    --disable-static \
-            --enable-shared
+            --enable-shared \
+	    --without-python
 
 make
 make_install
