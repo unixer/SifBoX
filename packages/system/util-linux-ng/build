@@ -22,6 +22,8 @@ do_configure host \
             --disable-sulogin \
             --disable-su \
             --disable-more \
+            --disable-static \
+	    --enable-shared
             
 
 make
@@ -58,6 +60,8 @@ do_configure target \
 	    --disable-ul \
 	    --disable-more \
 	    --disable-pg \
+	    --disable-static \
+            --enable-shared
 
 make
 make_install
