@@ -30,6 +30,8 @@ do_configure               --disable-nls \
                            --disable-selinux \
                            --disable-apparmor \
                            --disable-xz \
+		           --disable-zlib \
+                           --disable-bzip2 \
                            --disable-lz4 \
                            --disable-pam \
                            --disable-acl \
@@ -55,6 +57,7 @@ do_configure               --disable-nls \
                            --disable-rfkill \
                            --enable-logind \
                            --disable-machined \
+			   --disable-importd \
                            --disable-hostnamed \
                            --disable-timedated \
                            --disable-timesyncd \
@@ -68,14 +71,13 @@ do_configure               --disable-nls \
                            --disable-kdbus \
                            --disable-myhostname \
                            --enable-gudev \
+			   --enable-hwdb \
                            --disable-manpages \
                            --disable-hibernate \
                            --disable-ldconfig \
                            --enable-split-usr \
                            --disable-tests \
-                           --disable-hashmap-debug \
                            --without-python \
-                           --disable-python-devel \
                            --with-sysvinit-path= \
                            --with-sysvrcnd-path= \
                            --with-tty-gid=5 \
@@ -113,3 +115,92 @@ rm -f $SYSUNITS/runlevel?.target.wants/systemd-update-utmp-runlevel.service
 ln -sf ../../../lib/libsystemd.so.0.5.1 .install/usr/lib/libsystemd.so
 ln -sf ../../../lib/libudev.so.1 .install/usr/lib/libudev.so
 #sed -i -e 's/, *GROUP=\"[^\"]*\"//g' .install/lib/udev/rules.d/*
+
+#Da Openelec
+  # remove unneeded stuff
+  rm -rf .install/etc/xdg
+  rm  -f .install/usr/bin/kernel-install
+  rm -rf .install/usr/lib/kernel/install.d
+  rm -rf .install/usr/lib/rpm
+  rm -rf .install/usr/lib/systemd/user
+  rm -rf .install/usr/lib/tmpfiles.d/etc.conf
+  rm -rf .install/usr/share/factory
+  rm -rf .install/usr/share/zsh
+
+  # clean up hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-OUI.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-acpi-vendor.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-bluetooth-vendor-product.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-net-ifname.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-sdio-classes.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-sdio-vendor-model.hwdb
+
+  # remove Network adaper renaming rule, this is confusing
+  rm -rf .install/usr/lib/udev/rules.d/80-net-setup-link.rules
+
+  # remove debug-shell.service, we install our own
+  rm -rf .install/usr/lib/systemd/system/debug-shell.service
+
+  # remove getty units, we dont want a console
+  rm -rf .install/usr/lib/systemd/system/autovt@.service
+  rm -rf .install/usr/lib/systemd/system/console-getty.service
+  rm -rf .install/usr/lib/systemd/system/console-shell.service
+  rm -rf .install/usr/lib/systemd/system/container-getty@.service
+  rm -rf .install/usr/lib/systemd/system/getty.target
+  rm -rf .install/usr/lib/systemd/system/getty@.service
+  rm -rf .install/usr/lib/systemd/system/serial-getty@.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/getty.target
+
+  # remove other notused or nonsense stuff (our /etc is ro)
+  rm -rf .install/usr/lib/systemd/systemd-update-done
+  rm -rf .install/usr/lib/systemd/system/systemd-update-done.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-update-done.service
+
+  # remove systemd-udev-hwdb-update. we have own hwdb.service
+  rm -rf .install/usr/lib/systemd/system/systemd-udev-hwdb-update.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-udev-hwdb-update.service
+
+  # remove nspawn
+  rm -rf .install/usr/bin/systemd-nspawn
+  rm -rf .install/usr/lib/systemd/system/systemd-nspawn@.service
+
+  # remove genetators/catalog
+  rm -rf .install/usr/lib/systemd/system-generators
+  rm -rf .install/usr/lib/systemd/catalog
+
+  # meh presets
+  rm -rf .install/usr/lib/systemd/system-preset
+
+  # remove networkd
+  rm -rf .install/usr/lib/systemd/network
+
+  # tune journald.conf
+  sed -e "s,^.*Compress=.*$,Compress=no,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*SplitMode=.*$,SplitMode=none,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*MaxRetentionSec=.*$,MaxRetentionSec=1day,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*RuntimeMaxUse=.*$,RuntimeMaxUse=2M,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*RuntimeMaxFileSize=.*$,RuntimeMaxFileSize=128K,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*SystemMaxUse=.*$,SystemMaxUse=10M,g" -i .install/etc/systemd/journald.conf
+
+  # tune logind.conf
+  sed -e "s,^.*HandleLidSwitch=.*$,HandleLidSwitch=ignore,g" -i .install/etc/systemd/logind.conf
+
+  # replace systemd-machine-id-setup with ours
+  rm -rf .install/usr/lib/systemd/systemd-machine-id-commit
+  rm -rf .install/usr/lib/systemd/system/systemd-machine-id-commit.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-machine-id-commit.service
+  rm -rf .install/usr/bin/systemd-machine-id-setup
+  mkdir -p .install/usr/bin
+  cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/scripts/systemd-machine-id-setup .install/usr/bin
+
+  # provide 'halt', 'shutdown', 'reboot' & co.
+  mkdir -p .install/usr/sbin
+  ln -sf /usr/bin/systemctl .install/usr/sbin/halt
+  ln -sf /usr/bin/systemctl .install/usr/sbin/poweroff
+  ln -sf /usr/bin/systemctl .install/usr/sbin/reboot
+  ln -sf /usr/bin/systemctl .install/usr/sbin/runlevel
+  ln -sf /usr/bin/systemctl .install/usr/sbin/shutdown
+  ln -sf /usr/bin/systemctl .install/usr/sbin/telinit
+
+  mkdir -p .install/usr/config
+  cp -PR $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/* .install/usr/config
