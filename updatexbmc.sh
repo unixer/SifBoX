@@ -1,11 +1,11 @@
 #!/bin/bash
 
-. packages/multimedia/xbmc/meta
+. packages/multimedia/kodi/meta
 VDR_REV=$PKG_REV
 
-VDRDIR="`ls -d packages/*/xbmc-*`"
+VDRDIR="`ls -d packages/*/kodi-*`"
 for dir in $VDRDIR; do
-  DIR="`ls -d packages/*/xbmc-*/meta | tr ' ' '\n'`" 
+  DIR="`ls -d packages/*/kodi-*/meta | tr ' ' '\n'`" 
   . $dir/meta
   PLG_REV=$PKG_REV
   echo $PLG_REV $VDR_REV $PKG_REV
