@@ -128,10 +128,13 @@ esac
   GCC_FLAGS="$GCC_FLAGS -m64"
 
 MARCH=$TARGET_SUBARCH
-[ "$TARGET_SUBARCH" = armv7 ] && "MARCH=armv7-a -mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated"
+#if [ "$TARGET_SUBARCH" = armv7 ]; then
+#   OPT_BUILD="-mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated"
+#fi
+[ "$TARGET_SUBARCH" = armv7 ] && MARCH=armv7-a OPT_BUILD="-mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated"
 [ "$TARGET_SUBARCH" = aarch64 ] && MARCH=armv8-a
 [ "$GCC_MARCH" = yes ] && \
-  GCC_FLAGS="$GCC_FLAGS -march=$MARCH"
+  GCC_FLAGS="$GCC_FLAGS -march=$MARCH $OPT_BUILD"
 
 # workaround for C-30, C-50, C-60, E-350, E-450
 if [ "$TARGET_CPU" = amdfusion ]; then
