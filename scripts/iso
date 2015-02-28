@@ -70,5 +70,5 @@ sed -i "s|\"KERN_VER\"|\"$KERN_VER\"|" $ISO.json
 sed -i "s|\"ARCH\"|\"$TARGET_ARCH\"|" $ISO.json
 sed -i "s|\"PLATFORM\"|\"$TARGET_MACHINE\"|" $ISO.json
 sed -i "s|\"VDR_VERSION\"|\"$VDR_VERSION\"|" $ISO.json
-sed -i "s|\"XBMC_VERSION\"|\"$XBMC_VERSION\"|" $ISO.json
+sed -i "s|\"KODI_VERSION\"|\"$KODI_VERSION\"|" $ISO.json
 exit 0
