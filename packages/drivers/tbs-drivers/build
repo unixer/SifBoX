@@ -6,11 +6,14 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-tar xjvf linux-tbs-drivers.tar.bz2
+#export MAKEFLAGS=-j1
 
-cd linux-tbs-drivers
+#tar xjvf linux-tbs-drivers.tar.bz2
+
+#cd linux-tbs-drivers
 
 chmod -R +x linux v4l
+
 [ "$TARGET_ARCH" = "i386" ] && sh ./v4l/tbs-x86_r3.sh
 [ "$TARGET_ARCH" = "x86_64" ] && sh ./v4l/tbs-x86_64.sh
 

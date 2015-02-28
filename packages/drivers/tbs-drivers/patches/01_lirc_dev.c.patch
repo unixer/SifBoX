@@ -1,0 +1,52 @@
+--- tbs-drivers-150130/linux/drivers/media/rc/lirc_dev.c.org	2012-06-01 20:35:57.000000000 +0200
++++ tbs-drivers-150130/linux/drivers/media/rc/lirc_dev.c	2015-02-28 19:51:11.345258439 +0100
+@@ -508,7 +508,7 @@
+ 
+ unsigned int lirc_dev_fop_poll(struct file *file, poll_table *wait)
+ {
+-	struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
++	struct irctl *ir = irctls[iminor(file->f_path.dentry->d_inode)];
+ 	unsigned int ret;
+ 
+ 	if (!ir) {
+@@ -537,7 +537,7 @@
+ {
+ 	__u32 mode;
+ 	int result = 0;
+-	struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
++	struct irctl *ir = irctls[iminor(file->f_path.dentry->d_inode)];
+ 
+ 	if (!ir) {
+ 		printk(KERN_ERR "lirc_dev: %s: no irctl found!\n", __func__);
+@@ -614,7 +614,7 @@
+ 			  size_t length,
+ 			  loff_t *ppos)
+ {
+-	struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
++	struct irctl *ir = irctls[iminor(file->f_path.dentry->d_inode)];
+ 	unsigned char *buf;
+ 	int ret = 0, written = 0;
+ 	DECLARE_WAITQUEUE(wait, current);
+@@ -714,10 +714,10 @@
+ {
+ 	void *data = NULL;
+ 
+-	if (file && file->f_dentry && file->f_dentry->d_inode &&
+-	    file->f_dentry->d_inode->i_rdev) {
++	if (file && file->f_path.dentry && file->f_path.dentry->d_inode &&
++	    file->f_path.dentry->d_inode->i_rdev) {
+ 		struct irctl *ir;
+-		ir = irctls[iminor(file->f_dentry->d_inode)];
++		ir = irctls[iminor(file->f_path.dentry->d_inode)];
+ 		data = ir->d.data;
+ 	}
+ 
+@@ -729,7 +729,7 @@
+ ssize_t lirc_dev_fop_write(struct file *file, const char __user *buffer,
+ 			   size_t length, loff_t *ppos)
+ {
+-	struct irctl *ir = irctls[iminor(file->f_dentry->d_inode)];
++	struct irctl *ir = irctls[iminor(file->f_path.dentry->d_inode)];
+ 
+ 	if (!ir) {
+ 		printk(KERN_ERR "%s: called with invalid irctl\n", __func__);
