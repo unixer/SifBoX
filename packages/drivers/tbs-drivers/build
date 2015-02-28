@@ -6,6 +6,8 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
+install_dir=.install #/lib/modules/$(kernel_version)/updates/tbs
+
 #export MAKEFLAGS=-j1
 
 #tar xjvf linux-tbs-drivers.tar.bz2
@@ -19,3 +21,7 @@ chmod -R +x linux v4l
 
 make DIR=$(kernel_path) 
 strip_kmods "$moddir"
+
+make install \
+  DESTDIR=$install_dir \
+  KERNELRELEASE=$(kernel_version)
