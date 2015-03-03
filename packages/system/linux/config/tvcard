@@ -27,7 +27,7 @@ TVIN_STANDARD=pal
 #             europe-west, europe-east, italy, newzealand, australia,
 #             ireland, france, china-bcast, southafrica, argentina,
 #             australia-optus, russia
-CHANLIST=europe-west
+CHANLIST=italy
 
 # Teletext language
 # Available: 0 (English) 1 (French), 2 (Swedish/Finnish/Hungarian), 
@@ -42,7 +42,7 @@ CHANLIST=europe-west
 #            34 (Estonian), 35 (Czech/Slovak), 36 (German), 37 (Ukrainian),
 #            38 (Lettish/Lithuanian), 51 (Turkish), 55 (Greek), 64 (English),
 #            65 (French)
-TELETEXT_LANG=0
+TELETEXT_LANG=14
 
 # TV Video Settings
 TV_WIDTH=768
