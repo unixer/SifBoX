@@ -22,9 +22,9 @@ do_configure host \
             --disable-sulogin \
             --disable-su \
             --disable-more \
-            --disable-static \
-	    --enable-shared \
-	    --without-python 
+	    --disable-static \
+            --enable-shared \
+            --without-python
             
 
 make
@@ -61,9 +61,9 @@ do_configure target \
 	    --disable-ul \
 	    --disable-more \
 	    --disable-pg \
-	    --disable-static \
+            --disable-static \
             --enable-shared \
-	    --without-python
+            --without-python
 
 make
 make_install
