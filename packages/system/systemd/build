@@ -116,6 +116,9 @@ ln -sf ../../../lib/libsystemd.so.0.5.1 .install/usr/lib/libsystemd.so
 ln -sf ../../../lib/libudev.so.1 .install/usr/lib/libudev.so
 #sed -i -e 's/, *GROUP=\"[^\"]*\"//g' .install/lib/udev/rules.d/*
 
+#Necessario per riconfigurare la rete in eth0
+  rm .install/lib/udev/rules.d/75-net-description.rules
+
 #Da Openelec
   # remove unneeded stuff
   rm -rf .install/etc/xdg

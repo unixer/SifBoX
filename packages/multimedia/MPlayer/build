@@ -133,7 +133,7 @@ fi
             --disable-liblzo \
             --disable-xanim \
             --disable-xvid \
-            --disable-x264 \
+            --enable-x264 \
             --disable-demuxer=matroska \
             $LIBAV \
             --disable-speex \
