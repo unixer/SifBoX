@@ -6,12 +6,14 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
    PKG_VERSION=frodo-12.3
 else 
    PKG_VERSION=helix-14.2
-   PKG_URL_REV=085163e
-   #PKG_URL_REV=b5dbdb5
+   PKG_URL_REV=4606179
+   #PKG_URL_REV=085163e
+   #PKG_VERSION=isengard-15.0
+   #PKG_URL_REV=c317874
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
 PKG_REV=1
-PKG_DEPENDS="$TARGET_LIBC Python boost zlib bzip2 lzo pcre libssh libass enca curl dbus fontconfig fribidi libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libvorbis libcdio libmms libmodplug faad2 flac wavpack libmpeg2 sqlite alsa yajl libplist openssl python-simplejson tinyxml systemd taglib libshairplay libxslt"
+PKG_DEPENDS="$TARGET_LIBC Python boost zlib bzip2 lzo pcre libssh libass enca curl dbus fontconfig fribidi libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libvorbis libcdio libmms libmodplug faad2 flac wavpack libmpeg2 sqlite alsa yajl libplist openssl python-simplejson tinyxml systemd taglib libshairplay libxslt" ## libsquish"
 #PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release libid3tag"
 PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release"
 PKG_BUILD_DEPENDS="toolchain boost mysql samba unzip-host zip swig SDL-image-host libmpeg2"

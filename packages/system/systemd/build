@@ -10,6 +10,7 @@ echo 'EXTRA_DIST =' > docs/gtk-doc.make
 [ -x configure ] || do_autoconf
 do_autoconf
 export ac_cv_func_malloc_0_nonnull=yes
+export ac_cv_have_decl_IFLA_BOND_AD_INFO=no \ac_cv_have_decl_IFLA_BOND_AD_INFO=no
 export ac_cv_path_KMOD="/usr/bin/kmod"
 GCC_NO_LTO=1 GCC_NO_GOLD=1 \
 do_configure               --disable-nls \
@@ -118,6 +119,10 @@ ln -sf ../../../lib/libudev.so.1 .install/usr/lib/libudev.so
 
 #Necessario per riconfigurare la rete in eth0
   rm .install/lib/udev/rules.d/75-net-description.rules
+
+#Eliminazione Syslog che rea errore nella splash iniziale
+#  rm .install/lib/systemd/system/syslog.socket
+   ln -sf rsyslog.service .install/lib/systemd/system/syslog.service
 
 #Da Openelec
   # remove unneeded stuff

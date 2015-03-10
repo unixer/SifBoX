@@ -1,0 +1,12 @@
+--- kmod-20/configure.old	2015-03-04 18:18:33.434041708 +0100
++++ kmod-20/configure	2015-03-04 18:18:47.302041903 +0100
+@@ -12567,9 +12567,6 @@
+ 
+ 
+ 
+-if test "x$enable_static" = "xyes"; then :
+-  as_fn_error $? "--enable-static is not supported by kmod" "$LINENO" 5
+-fi
+ if test "x$enable_largefile" = "xno"; then :
+   as_fn_error $? "--disable-largefile is not supported by kmod" "$LINENO" 5
+ fi
