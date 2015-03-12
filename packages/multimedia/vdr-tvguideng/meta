@@ -1,0 +1,12 @@
+PKG_NAME=vdr-tvguideng
+PKG_VERSION=0.0.1
+PKG_URL_PROTO=git
+PKG_URL_REV=3cc8e78
+PKG_URL="git://projects.vdr-developer.org/vdr-plugin-tvguideng.git"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC vdr"
+PKG_BUILD_DEPENDS="toolchain vdr"
+PKG_PRIORITY=optional
+PKG_SECTION=multimedia
+PKG_SHORTDESC="vdr-tvguideng is a highly customizable 2D EPG viewer plugin"
+PKG_LONGDESC="\"TvGuideNG\" is a highly customizable 2D EPG viewer plugin. The \"Search & Recordings\" Menü provided by the red button allows to search in the EPG and manage timers, search timers, series timers and switch timers in an convenient way."
