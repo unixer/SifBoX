@@ -7,7 +7,6 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
 else 
    PKG_VERSION=helix-14.2
    PKG_URL_REV=4606179
-   #PKG_URL_REV=085163e
    #PKG_VERSION=isengard-15.0
    #PKG_URL_REV=c317874
 fi
@@ -54,6 +53,10 @@ PKG_DEPENDS_xorg="libX11 libXext libXt libXtst libXmu libXrandr libXinerama glew
 PKG_RUN_DEPENDS_xorg="mesa-demos xdpyinfo"
 PKG_DEPENDS_sdl="SDL SDL-mixer SDL-image"
 PKG_DEPENDS_alsa="alsa-lib"
+if [ $PKG_VERSION = "isengard-15.0" ]; then
+   PKG_DEPENDS="$PKG_DEPENDS SDL2 libsquish"
+   PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS SDL2 libsquis"
+fi 
 PKG_PRIORITY=optional
 PKG_SECTION=multimedia
 PKG_SHORTDESC="KODI MediaCenter"

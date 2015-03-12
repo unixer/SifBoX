@@ -150,7 +150,7 @@ fi
 # prevent internal error in gcc
 if [ ! -f configure ] ; then
   # git version
-  echo "$PKG_URL_REV-$PKG_REV" > VERSION
+  echo "$PKG_URL_REV" > VERSION
 
   do_autoconf || true
   #cd lib/libid3tag/libid3tag && do_autoconf && cd -
@@ -229,8 +229,10 @@ sed -i lib/libdvd/libdvdnav/config.mak \
 make externals
 make kodi.bin
 make kodi-xrandr
-make -C tools/TexturePacker
-cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
+if [ $PKG_VERSION = "helix-14.2" ]; then
+   make -C tools/TexturePacker
+   cp -PR tools/TexturePacker/TexturePacker $ROOT/$TOOLCHAIN/bin
+fi
 
 #make skins
 make_install
