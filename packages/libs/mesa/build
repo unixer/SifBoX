@@ -14,6 +14,8 @@ fi
 
 
 export ac_cv_prog_PYTHON2="$ROOT/$TOOLCHAIN/bin/python"
+export ac_cv_prog_PYTHON3="$ROOT/$TOOLCHAIN/bin/python"
+
 
 # DRI: Direct Rendering Interface
 pkg_uses $1 intel     && DRI_DRIVERS="${DRI_DRIVERS}i915,i965,"
@@ -59,6 +61,7 @@ sed -i 's%LLVM_LIBS=".*"%LLVM_LIBS="-lLLVM-$LLVM_VERSION"%' configure
 GCC_NO_GOLD=1 GCC_NO_LTO=1 \
 do_configure target \
   --disable-debug \
+  --disable-mangling \
   --enable-texture-float \
   --disable-selinux \
   --enable-glx-tls \
@@ -77,17 +80,22 @@ do_configure target \
   --disable-gles2 \
   --disable-opencl \
   --disable-xlib-glx \
+  --enable-opencl-icd \
   --with-osmesa-lib-name=OSMesa \
   --enable-xa \
   $GALLIUM_OVG \
   $GALLIUM_LLVM \
   --enable-shared-glapi \
+  --enable-shader-cache \
+  --enable-sysfs \
   --enable-driglx-direct \
   --enable-dependency-tracking \
   --disable-gallium-tests \
   $VDPAU \
   $XVMC \
   $OSMESA \
+  --disable-gallium-osmesa \
+  --disable-silent-rules \
 
 # now build Mesa for target
 make
