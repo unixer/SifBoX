@@ -8,7 +8,15 @@ cd $BUILD/$1*
 [ "$ARM_HARDFLOAT_ABI" = yes ] && VC=hardfp/opt/vc || VC=opt/vc
 
 mkdir -p .install/boot
-cp -P boot/*.elf boot/*.dat boot/bootcode.bin .install/boot/
+#cp -P boot/*.elf boot/*.dat boot/bootcode.bin .install/boot/
+cp -P boot/bootcode.bin .install/boot/
+cp -P boot/COPYING.linux  .install/boot/
+cp -P boot/LICENCE.broadcom .install/boot/
+cp -P boot/bcm* .install/boot/
+cp -P boot/fix* .install/boot/
+cp -P boot/start* .install/boot/
+cp -Pr boot/overlays .install/boot/
+
 echo "$DISTRONAME $TARGET_ARCH $DISTRO_VERSION $DISTRO_COPYRIGHT" \
   > .install/boot/issue.txt
 
@@ -59,5 +67,5 @@ echo "$CMDLINE" > .install/boot/cmdline.txt
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/bootloader/config.txt .install/boot
 
 if [ "$TARGET_MACHINE" = raspberrypi2 ]; then
-   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/boot/* .install/boot
+   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/boot/config.txt .install/boot
 fi  
