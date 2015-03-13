@@ -1,0 +1,3298 @@
+diff -urN squish-1.10/alpha.cpp libsquish-1.10-openelec/alpha.cpp
+--- squish-1.10/alpha.cpp	2006-06-29 14:43:24.000000000 +0200
++++ libsquish-1.10-openelec/alpha.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -24,6 +24,7 @@
+    -------------------------------------------------------------------------- */
+    
+ #include "alpha.h"
++#include <limits.h>
+ #include <algorithm>
+ 
+ namespace squish {
+@@ -106,10 +107,10 @@
+ 		// check this pixel is valid
+ 		int bit = 1 << i;
+ 		if( ( mask & bit ) == 0 )
+-		{
+-			// use the first code
+-			indices[i] = 0;
+-			continue;
++		{
++			// use the first code
++			indices[i] = 0;
++			continue;
+ 		}
+ 		
+ 		// find the least error and corresponding index
+diff -urN squish-1.10/clusterfit.cpp libsquish-1.10-openelec/clusterfit.cpp
+--- squish-1.10/clusterfit.cpp	2007-03-23 11:19:20.000000000 +0100
++++ libsquish-1.10-openelec/clusterfit.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -31,22 +31,21 @@
+ 
+ namespace squish {
+ 
+-ClusterFit::ClusterFit( ColourSet const* colours, int flags ) 
++ClusterFit::ClusterFit( ColourSet const* colours, int flags, float* metric ) 
+   : ColourFit( colours, flags )
+ {
+ 	// set the iteration count
+ 	m_iterationCount = ( m_flags & kColourIterativeClusterFit ) ? kMaxIterations : 1;
+ 
+-	// initialise the best error
+-	m_besterror = VEC4_CONST( FLT_MAX );
+-
+-	// initialise the metric
+-	bool perceptual = ( ( m_flags & kColourMetricPerceptual ) != 0 );
+-	if( perceptual )
+-		m_metric = Vec4( 0.2126f, 0.7152f, 0.0722f, 0.0f );
++	// initialise the metric (old perceptual = 0.2126f, 0.7152f, 0.0722f)
++	if( metric )
++		m_metric = Vec4( metric[0], metric[1], metric[2], 1.0f );
+ 	else
+ 		m_metric = VEC4_CONST( 1.0f );	
+ 
++	// initialise the best error
++	m_besterror = VEC4_CONST( FLT_MAX );
++
+ 	// cache some values
+ 	int const count = m_colours->GetCount();
+ 	Vec3 const* values = m_colours->GetPoints();
+diff -urN squish-1.10/clusterfit.h libsquish-1.10-openelec/clusterfit.h
+--- squish-1.10/clusterfit.h	2007-03-23 11:19:20.000000000 +0100
++++ libsquish-1.10-openelec/clusterfit.h	2015-01-09 10:58:43.000000000 +0100
+@@ -37,7 +37,7 @@
+ class ClusterFit : public ColourFit
+ {
+ public:
+-	ClusterFit( ColourSet const* colours, int flags );
++	ClusterFit( ColourSet const* colours, int flags, float* metric );
+ 	
+ private:
+ 	bool ConstructOrdering( Vec3 const& axis, int iteration );
+diff -urN squish-1.10/colourfit.cpp libsquish-1.10-openelec/colourfit.cpp
+--- squish-1.10/colourfit.cpp	2006-04-07 19:30:11.000000000 +0200
++++ libsquish-1.10-openelec/colourfit.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -34,6 +34,10 @@
+ {
+ }
+ 
++ColourFit::~ColourFit()
++{
++}
++
+ void ColourFit::Compress( void* block )
+ {
+ 	bool isDxt1 = ( ( m_flags & kDxt1 ) != 0 );
+diff -urN squish-1.10/colourfit.h libsquish-1.10-openelec/colourfit.h
+--- squish-1.10/colourfit.h	2006-04-07 19:30:11.000000000 +0200
++++ libsquish-1.10-openelec/colourfit.h	2015-01-09 10:58:43.000000000 +0100
+@@ -27,6 +27,7 @@
+ #define SQUISH_COLOURFIT_H
+ 
+ #include <squish.h>
++#include <limits.h>
+ #include "maths.h"
+ 
+ namespace squish {
+@@ -37,6 +38,7 @@
+ {
+ public:
+ 	ColourFit( ColourSet const* colours, int flags );
++	virtual ~ColourFit();
+ 
+ 	void Compress( void* block );
+ 
+diff -urN squish-1.10/config libsquish-1.10-openelec/config
+--- squish-1.10/config	2006-10-01 21:40:09.000000000 +0200
++++ libsquish-1.10-openelec/config	2015-01-09 16:51:36.000000000 +0100
+@@ -18,5 +18,4 @@
+ endif
+ 
+ # where should we install to
+-INSTALL_DIR ?= /usr/local
+-
++INSTALL_DIR ?= @PREFIX@
+diff -urN squish-1.10/config.h libsquish-1.10-openelec/config.h
+--- squish-1.10/config.h	2006-10-01 21:40:09.000000000 +0200
++++ libsquish-1.10-openelec/config.h	2015-01-09 10:58:43.000000000 +0100
+@@ -28,15 +28,25 @@
+ 
+ // Set to 1 when building squish to use Altivec instructions.
+ #ifndef SQUISH_USE_ALTIVEC
++#if defined(__ALTIVEC__)
++#define SQUISH_USE_ALTIVEC 1
++#else
+ #define SQUISH_USE_ALTIVEC 0
+ #endif
++#endif
+ 
+ // Set to 1 or 2 when building squish to use SSE or SSE2 instructions.
+ #ifndef SQUISH_USE_SSE
++#if defined(__SSE2__)
++#define SQUISH_USE_SSE 2
++#elif defined(__SSE__)
++#define SQUISH_USE_SSE 1
++#else
+ #define SQUISH_USE_SSE 0
+ #endif
++#endif
+ 
+-// Internally et SQUISH_USE_SIMD when either Altivec or SSE is available.
++// Internally set SQUISH_USE_SIMD when either Altivec or SSE is available.
+ #if SQUISH_USE_ALTIVEC && SQUISH_USE_SSE
+ #error "Cannot enable both Altivec and SSE!"
+ #endif
+diff -urN squish-1.10/config.in libsquish-1.10-openelec/config.in
+--- squish-1.10/config.in	1970-01-01 01:00:00.000000000 +0100
++++ libsquish-1.10-openelec/config.in	2015-01-09 10:58:43.000000000 +0100
+@@ -0,0 +1,21 @@
++# config file used for the Makefile only
++
++# define to 1 to use Altivec instructions
++USE_ALTIVEC ?= 0
++
++# define to 1 to use SSE2 instructions
++USE_SSE ?= 0
++
++# default flags
++CXXFLAGS ?= -O2
++ifeq ($(USE_ALTIVEC),1)
++CPPFLAGS += -DSQUISH_USE_ALTIVEC=1
++CXXFLAGS += -maltivec
++endif
++ifeq ($(USE_SSE),1)
++CPPFLAGS += -DSQUISH_USE_SSE=2
++CXXFLAGS += -msse
++endif
++
++# where should we install to
++INSTALL_DIR ?= @PREFIX@
+diff -urN squish-1.10/extra/squishpng.cpp libsquish-1.10-openelec/extra/squishpng.cpp
+--- squish-1.10/extra/squishpng.cpp	2007-03-21 20:31:51.000000000 +0100
++++ libsquish-1.10-openelec/extra/squishpng.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -25,11 +25,13 @@
+    
+ /*! @file
+ 
+-	@brief	Example program that converts between the PNG and DXT formats.
++	@brief	Test program that compresses images loaded using the PNG format.
+ 	
+-	This program requires libpng for PNG input and output, and is designed
+-	to show how to prepare data for the squish library when it is not simply
+-	a contiguous block of memory.
++	This program requires libpng for PNG input and output, and is designed to
++	test the RMS error for DXT compression for a set of test images.
++
++	This program uses the high-level image compression and decompression
++	functions that process an entire image at a time.
+ */
+ 
+ #include <iostream>
+@@ -74,8 +76,16 @@
+ class Mem : NonCopyable
+ {
+ public:
++	Mem() : m_p( 0 ) {}
+ 	explicit Mem( int size ) : m_p( new u8[size] ) {}
+ 	~Mem() { delete[] m_p; }
++
++	void Reset( int size )
++	{
++		u8 *p = new u8[size];
++		delete m_p;
++		m_p = p;
++	}
+ 	
+ 	u8* Get() const { return m_p; }
+ 	
+@@ -172,53 +182,71 @@
+ class PngRows : NonCopyable
+ {
+ public:
+-	PngRows( int width, int height, int stride ) : m_width( width ), m_height( height )
++	PngRows( int pitch, int height ) : m_height( height )
+ 	{
+-		m_rows = ( png_bytep* )malloc( m_height*sizeof( png_bytep ) );
++		m_rows = new png_bytep[m_height];
+ 		for( int i = 0; i < m_height; ++i )
+-			m_rows[i] = ( png_bytep )malloc( m_width*stride );
++			m_rows[i] = new png_byte[pitch];
+ 	}
+ 	
+ 	~PngRows() 
+ 	{
+ 		for( int i = 0; i < m_height; ++i )
+-			free( m_rows[i] );
+-		free( m_rows );
++			delete[] m_rows[i];
++		delete[] m_rows;
+ 	}
+ 	
+ 	png_bytep* Get() const { return m_rows; }
++
++	png_bytep operator[](int y) const { return m_rows[y]; }
+ 	
+ private:
+ 	png_bytep* m_rows;
+-	int m_width, m_height;
++	int m_height;
+ };
+ 
+-class PngImage
++//! Represents a DXT compressed image in memory.
++struct DxtData
++{
++	int width;
++	int height;
++	int format;		//!< Either kDxt1, kDxt3 or kDxt5.
++	Mem data;
++	bool isColour;
++	bool isAlpha;
++};
++
++//! Represents an uncompressed RGBA image in memory.
++class Image
+ {
+ public:
+-	explicit PngImage( std::string const& fileName );
++	Image();
+ 
+-	int GetWidth() const { return m_width; }
+-	int GetHeight() const { return m_height; }
+-	int GetStride() const { return m_stride; }
+-	bool IsColour() const { return m_colour; }
+-	bool IsAlpha() const { return m_alpha; }
+-	
+-	u8 const* GetRow( int row ) const { return ( u8* )m_rows[row]; }
++	void LoadPng( std::string const& fileName );
++	void SavePng( std::string const& fileName ) const;
+ 
+-private:
+-	PngReadStruct m_png;
++	void Decompress( DxtData const& dxt );
++	void Compress( DxtData& dxt, int flags ) const;
++
++	double GetRmsError( Image const& image ) const;
+ 
++private:
+ 	int m_width;
+ 	int m_height;
+-	int m_stride;
+-	bool m_colour;
+-	bool m_alpha;
+-	
+-	png_bytep* m_rows;
++	bool m_isColour;	//!< Either colour or luminance.
++	bool m_isAlpha;		//!< Either alpha or not.
++	Mem m_pixels;
+ };
+ 
+-PngImage::PngImage( std::string const& fileName )
++Image::Image() 
++  : m_width( 0 ), 
++  	m_height( 0 ),
++	m_isColour( false ),
++	m_isAlpha( false )
++{
++}
++
++void Image::LoadPng( std::string const& fileName )
+ {
+ 	// open the source file
+ 	File file( fopen( fileName.c_str(), "rb" ) );
+@@ -231,7 +259,9 @@
+ 	
+ 	// check the signature bytes
+ 	png_byte header[8];
+-	fread( header, 1, 8, file.Get() );
++	size_t check = fread( header, 1, 8, file.Get() );
++	if( check != 8 )
++		throw Error( "file read error" );
+ 	if( png_sig_cmp( header, 0, 8 ) )
+ 	{
+ 		std::ostringstream oss;
+@@ -240,16 +270,17 @@
+ 	}
+ 	
+ 	// read the image into memory
+-	png_init_io( m_png.GetPng(), file.Get() );
+-	png_set_sig_bytes( m_png.GetPng(), 8 );
+-	png_read_png( m_png.GetPng(), m_png.GetInfo(), PNG_TRANSFORM_EXPAND, 0 );
++	PngReadStruct png;
++	png_init_io( png.GetPng(), file.Get() );
++	png_set_sig_bytes( png.GetPng(), 8 );
++	png_read_png( png.GetPng(), png.GetInfo(), PNG_TRANSFORM_EXPAND, 0 );
+ 
+ 	// get the image info
+ 	png_uint_32 width;
+ 	png_uint_32 height;
+ 	int bitDepth;
+ 	int colourType;
+-	png_get_IHDR( m_png.GetPng(), m_png.GetInfo(), &width, &height, &bitDepth, &colourType, 0, 0, 0 );
++	png_get_IHDR( png.GetPng(), png.GetInfo(), &width, &height, &bitDepth, &colourType, 0, 0, 0 );
+ 	
+ 	// check the image is 8 bit
+ 	if( bitDepth != 8 )
+@@ -258,235 +289,157 @@
+ 		oss << "cannot process " << bitDepth << "-bit image (bit depth must be 8)";
+ 		throw Error( oss.str() );
+ 	}
+-	
+-	// save the info
++
++	// copy the data into a contiguous array
+ 	m_width = width;
+ 	m_height = height;
+-	m_colour = ( ( colourType & PNG_COLOR_MASK_COLOR ) != 0 );
+-	m_alpha = ( ( colourType & PNG_COLOR_MASK_ALPHA ) != 0 );
+-	m_stride = ( m_colour ? 3 : 1 ) + ( m_alpha ? 1 : 0 );
++	m_isColour = ( ( colourType & PNG_COLOR_MASK_COLOR ) != 0 );
++	m_isAlpha = ( ( colourType & PNG_COLOR_MASK_ALPHA ) != 0 );
++	m_pixels.Reset(4*width*height);
+ 
+ 	// get the image rows
+-	m_rows = png_get_rows( m_png.GetPng(), m_png.GetInfo() );
+-	if( !m_rows )
++	png_bytep const *rows = png_get_rows( png.GetPng(), png.GetInfo() );
++	if( !rows )
+ 		throw Error( "failed to get image rows" );
+-}
+-
+-static void Compress( std::string const& sourceFileName, std::string const& targetFileName, int flags )
+-{
+-	// load the source image
+-	PngImage sourceImage( sourceFileName );
+-
+-	// get the image info
+-	int width = sourceImage.GetWidth();
+-	int height = sourceImage.GetHeight();
+-	int stride = sourceImage.GetStride();
+-	bool colour = sourceImage.IsColour();
+-	bool alpha = sourceImage.IsAlpha();
+ 
+-	// check the image dimensions
+-	if( ( width % 4 ) != 0 || ( height % 4 ) != 0 )
++	// copy the pixels into the storage
++	u8 *dest = m_pixels.Get();
++	for( int y = 0; y < m_height; ++y )
+ 	{
+-		std::ostringstream oss;
+-		oss << "cannot compress " << width << "x" << height
+-			<< "image (dimensions must be multiples of 4)";
+-		throw Error( oss.str() );
+-	}
+-	
+-	// create the target data
+-	int bytesPerBlock = ( ( flags & kDxt1 ) != 0 ) ? 8 : 16;
+-	int targetDataSize = bytesPerBlock*width*height/16;
+-	Mem targetData( targetDataSize );
+-	
+-	// loop over blocks and compress them
+-	clock_t start = std::clock();
+-	u8* targetBlock = targetData.Get();
+-	for( int y = 0; y < height; y += 4 )
+-	{
+-		// process a row of blocks
+-		for( int x = 0; x < width; x += 4 )
++		u8 const *src = rows[y];
++		for( int x = 0; x < m_width; ++x )
+ 		{
+-			// get the block data
+-			u8 sourceRgba[16*4];
+-			for( int py = 0, i = 0; py < 4; ++py )
++			if( m_isColour )
+ 			{
+-				u8 const* row = sourceImage.GetRow( y + py ) + x*stride;
+-				for( int px = 0; px < 4; ++px, ++i )
+-				{
+-					// get the pixel colour 
+-					if( colour )
+-					{
+-						for( int j = 0; j < 3; ++j )
+-							sourceRgba[4*i + j] = *row++;
+-					}
+-					else
+-					{
+-						for( int j = 0; j < 3; ++j )
+-							sourceRgba[4*i + j] = *row;
+-						++row;
+-					}
+-					
+-					// skip alpha for now
+-					if( alpha )
+-						sourceRgba[4*i + 3] = *row++;
+-					else
+-						sourceRgba[4*i + 3] = 255;
+-				}
++				dest[0] = src[0];
++				dest[1] = src[1];
++				dest[2] = src[2];
++				src += 3;
++			}
++			else
++			{
++				u8 lum = *src++;
++				dest[0] = lum;
++				dest[1] = lum;
++				dest[2] = lum;
+ 			}
+ 			
+-			// compress this block
+-			Compress( sourceRgba, targetBlock, flags );
+-			
+-			// advance
+-			targetBlock += bytesPerBlock;			
++			if( m_isAlpha )
++				dest[3] = *src++;
++			else
++				dest[3] = 255;
++
++			dest += 4;
+ 		}
+ 	}
+-	clock_t end = std::clock();
+-	double duration = ( double )( end - start ) / CLOCKS_PER_SEC;
+-	std::cout << "time taken: " << duration << " seconds" << std::endl;
+-	
+-	// open the target file
+-	File targetFile( fopen( targetFileName.c_str(), "wb" ) );
+-	if( !targetFile.IsValid() )
+-	{
+-		std::ostringstream oss;
+-		oss << "failed to open \"" << sourceFileName << "\" for writing";
+-		throw Error( oss.str() );
+-	}
+-	
+-	// write the header
+-	fwrite( &width, sizeof( int ), 1, targetFile.Get() );
+-	fwrite( &height, sizeof( int ), 1, targetFile.Get() );
+-	
+-	// write the data
+-	fwrite( targetData.Get(), 1, targetDataSize, targetFile.Get() );
+ }
+ 
+-static void Decompress( std::string const& sourceFileName, std::string const& targetFileName, int flags )
++void Image::SavePng( std::string const& fileName ) const
+ {
+-	// open the source file
+-	File sourceFile( fopen( sourceFileName.c_str(), "rb" ) );
+-	if( !sourceFile.IsValid() )
+-	{
+-		std::ostringstream oss;
+-		oss << "failed to open \"" << sourceFileName << "\" for reading";
+-		throw Error( oss.str() );
+-	}
+-	
+-	// get the width and height
+-	int width, height;
+-	fread( &width, sizeof( int ), 1, sourceFile.Get() ); 
+-	fread( &height, sizeof( int ), 1, sourceFile.Get() );
+-	
+-	// work out the data size
+-	int bytesPerBlock = ( ( flags & kDxt1 ) != 0 ) ? 8 : 16;
+-	int sourceDataSize = bytesPerBlock*width*height/16;
+-	Mem sourceData( sourceDataSize );
+-	
+-	// read the source data
+-	fread( sourceData.Get(), 1, sourceDataSize, sourceFile.Get() );
+-		
+ 	// create the target rows
+-	PngRows targetRows( width, height, 4 );
+-	
+-	// loop over blocks and compress them
+-	u8 const* sourceBlock = sourceData.Get();
+-	for( int y = 0; y < height; y += 4 )
++	int const pixelSize = ( m_isColour ? 3 : 1 ) + ( m_isAlpha ? 1 : 0 );
++	PngRows rows( m_width*pixelSize, m_height );
++
++	// fill the rows with pixel data
++	u8 const *src = m_pixels.Get();
++	for( int y = 0; y < m_height; ++y )
+ 	{
+-		// process a row of blocks
+-		for( int x = 0; x < width; x += 4 )
++		u8 *dest = rows[y];
++		for( int x = 0; x < m_width; ++x )
+ 		{
+-			// decompress back
+-			u8 targetRgba[16*4];
+-			Decompress( targetRgba, sourceBlock, flags );
+-			
+-			// write the data into the target rows
+-			for( int py = 0, i = 0; py < 4; ++py )
++			if( m_isColour )
+ 			{
+-				u8* row = ( u8* )targetRows.Get()[y + py] + x*4;
+-				for( int px = 0; px < 4; ++px, ++i )
+-				{	
+-					for( int j = 0; j < 4; ++j )
+-						*row++ = targetRgba[4*i + j];
+-				}
++				dest[0] = src[0];
++				dest[1] = src[1];
++				dest[2] = src[2];
++				dest += 3;
+ 			}
++			else
++				*dest++ = src[1];
+ 			
+-			// advance
+-			sourceBlock += bytesPerBlock;
++			if( m_isAlpha )
++				*dest++ = src[3];
++
++			src += 4;
+ 		}
+ 	}
+-	
+-	// create the target PNG
+-	PngWriteStruct targetPng;
+ 
+ 	// set up the image
++	PngWriteStruct png;
+ 	png_set_IHDR(
+-		targetPng.GetPng(), targetPng.GetInfo(), width, height,
+-		8, PNG_COLOR_TYPE_RGBA, PNG_INTERLACE_NONE,
+-		PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT 
++		png.GetPng(), png.GetInfo(), m_width, m_height,
++		8, ( m_isColour ? PNG_COLOR_MASK_COLOR : 0) | ( m_isAlpha ? PNG_COLOR_MASK_ALPHA : 0 ), 
++		PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT 
+ 	);
+ 	   
+ 	// open the target file
+-	File targetFile( fopen( targetFileName.c_str(), "wb" ) );
+-	if( !targetFile.IsValid() )
++	File file( fopen( fileName.c_str(), "wb" ) );
++	if( !file.IsValid() )
+ 	{
+ 		std::ostringstream oss;
+-		oss << "failed to open \"" << targetFileName << "\" for writing";
++		oss << "failed to open \"" << fileName << "\" for writing";
+ 		throw Error( oss.str() );
+ 	}
+ 	
+ 	// write the image
+-	png_set_rows( targetPng.GetPng(), targetPng.GetInfo(), targetRows.Get() );
+-	png_init_io( targetPng.GetPng(), targetFile.Get() );
+-	png_write_png( targetPng.GetPng(), targetPng.GetInfo(), PNG_TRANSFORM_IDENTITY, 0 );
++	png_set_rows( png.GetPng(), png.GetInfo(), rows.Get() );
++	png_init_io( png.GetPng(), file.Get() );
++	png_write_png( png.GetPng(), png.GetInfo(), PNG_TRANSFORM_IDENTITY, 0 );
+ }
+ 
+-static void Diff( std::string const& sourceFileName, std::string const& targetFileName )
++void Image::Decompress( DxtData const& dxt )
+ {
+-	// load the images
+-	PngImage sourceImage( sourceFileName );
+-	PngImage targetImage( targetFileName );
+-	
+-	// get the image info
+-	int width = sourceImage.GetWidth();
+-	int height = sourceImage.GetHeight();
+-	int sourceStride = sourceImage.GetStride();
+-	int targetStride = targetImage.GetStride();
+-	int stride = std::min( sourceStride, targetStride );
+-
+-	// check they match
+-	if( width != targetImage.GetWidth() || height != targetImage.GetHeight() )
+-		throw Error( "source and target dimensions do not match" );
+-		
+-	// work out the error
+-	double error = 0.0;
+-	for( int y = 0; y < height; ++y )
+-	{
+-		u8 const* sourceRow = sourceImage.GetRow( y );
+-		u8 const* targetRow = targetImage.GetRow( y );
+-		for( int x = 0; x < width; ++x )
+-		{	
+-			u8 const* sourcePixel = sourceRow + x*sourceStride;
+-			u8 const* targetPixel = targetRow + x*targetStride;
+-			for( int i = 0; i < stride; ++i )
+-			{
+-				int diff = ( int )sourcePixel[i] - ( int )targetPixel[i];
+-				error += ( double )( diff*diff );
+-			}
+-		}
+-	}
+-	error = std::sqrt( error / ( width*height ) );
+-	
+-	// print it out
+-	std::cout << "rms error: " << error << std::endl;
++	// allocate storage
++	m_width = dxt.width;
++	m_height = dxt.height;
++	m_isColour = dxt.isColour;
++	m_isAlpha = dxt.isAlpha;
++	m_pixels.Reset( 4*m_width*m_height );
++
++	// use the whole image decompression function to do the work
++	DecompressImage( m_pixels.Get(), m_width, m_height, dxt.data.Get(), dxt.format );
+ }
+ 
+-enum Mode
++void Image::Compress( DxtData& dxt, int flags ) const
+ {
+-	kCompress, 
+-	kDecompress,
+-	kDiff
+-};
++	// work out how much memory we need
++	int storageSize = GetStorageRequirements( m_width, m_height, flags );
++
++	// set the structure fields and allocate it
++	dxt.width = m_width;
++	dxt.height = m_height;
++	dxt.format = flags & ( kDxt1 | kDxt3 | kDxt5 );
++	dxt.isColour = m_isColour;
++	dxt.isAlpha = m_isAlpha;
++	dxt.data.Reset( storageSize );
++
++	// use the whole image compression function to do the work
++	CompressImage( m_pixels.Get(), m_width, m_height, dxt.data.Get(), flags );
++}
++
++double Image::GetRmsError( Image const& image ) const
++{
++	if( m_width != image.m_width || m_height != image.m_height )
++		throw Error( "image dimensions mismatch when computing RMS error" );
++
++	// accumulate colour error
++	double difference = 0;
++	u8 const *a = m_pixels.Get();
++	u8 const *b = image.m_pixels.Get();
++	for( int y = 0; y < m_height; ++y )
++	{
++		for( int x = 0; x < m_width; ++x )
++		{
++			int d0 = ( int )a[0] - ( int )b[0];
++			int d1 = ( int )a[1] - ( int )b[1];
++			int d2 = ( int )a[2] - ( int )b[2];
++			difference += ( double )( d0*d0 + d1*d1 + d2*d2 ); 
++			a += 4;
++			b += 4;
++		}
++	}
++	return std::sqrt( difference/( double )( m_width*m_height ) );
++}
+ 
+ int main( int argc, char* argv[] )
+ {
+@@ -495,13 +448,12 @@
+ 		// parse the command-line
+ 		std::string sourceFileName;
+ 		std::string targetFileName;
+-		Mode mode = kCompress;
+-		int method = kDxt1;
+-		int metric = kColourMetricPerceptual;
++		int format = kDxt1;
+ 		int fit = kColourClusterFit;
+ 		int extra = 0;
+ 		bool help = false;
+ 		bool arguments = true;
++		bool error = false;
+ 		for( int i = 1; i < argc; ++i )
+ 		{
+ 			// check for options
+@@ -513,20 +465,16 @@
+ 					switch( word[j] )
+ 					{
+ 					case 'h': help = true; break;
+-					case 'c': mode = kCompress; break;
+-					case 'd': mode = kDecompress; break;
+-					case 'e': mode = kDiff; break;
+-					case '1': method = kDxt1; break;
+-					case '3': method = kDxt3; break;
+-					case '5': method = kDxt5; break;
+-					case 'u': metric = kColourMetricUniform; break;
++					case '1': format = kDxt1; break;
++					case '3': format = kDxt3; break;
++					case '5': format = kDxt5; break;
+ 					case 'r': fit = kColourRangeFit; break;
+ 					case 'i': fit = kColourIterativeClusterFit; break;
+ 					case 'w': extra = kWeightColourByAlpha; break;
+ 					case '-': arguments = false; break;
+ 					default:
+-						std::cerr << "unknown option '" << word[j] << "'" << std::endl;
+-						return -1;
++						std::cerr << "squishpng error: unknown option '" << word[j] << "'" << std::endl;
++						error = true;
+ 					}
+ 				}
+ 			}
+@@ -538,60 +486,53 @@
+ 					targetFileName.assign( word );
+ 				else
+ 				{
+-					std::cerr << "unexpected argument \"" << word << "\"" << std::endl;
++					std::cerr << "squishpng error: unexpected argument \"" << word << "\"" << std::endl;
++					error = true;
+ 				}
+ 			}
+ 		}
+ 		
+ 		// check arguments
+-		if( help )
++		if( sourceFileName.empty() )
++		{
++			std::cerr << "squishpng error: no source file given" << std::endl;
++			error = true;
++		}
++		if( help || error )
+ 		{
+ 			std::cout 
+ 				<< "SYNTAX" << std::endl
+-				<< "\tsquishpng [-cde135] <source> <target>" << std::endl 
++				<< "\tsquishpng [-135riw] <source> [<target>]" << std::endl 
+ 				<< "OPTIONS" << std::endl
+-				<< "\t-c\tCompress source png to target raw dxt (default)" << std::endl
++				<< "\t-h\tPrint this help message" << std::endl
+ 				<< "\t-135\tSpecifies whether to use DXT1 (default), DXT3 or DXT5 compression" << std::endl
+-				<< "\t-u\tUse a uniform colour metric during colour compression" << std::endl
+ 				<< "\t-r\tUse the fast but inferior range-based colour compressor" << std::endl
+ 				<< "\t-i\tUse the very slow but slightly better iterative colour compressor" << std::endl
+ 				<< "\t-w\tWeight colour values by alpha in the cluster colour compressor" << std::endl
+-				<< "\t-d\tDecompress source raw dxt to target png" << std::endl
+-				<< "\t-e\tDiff source and target png" << std::endl
+ 				;
+ 			
+-			return 0;
+-		}
+-		if( sourceFileName.empty() )
+-		{
+-			std::cerr << "no source file given" << std::endl;
+-			return -1;
+-		}
+-		if( targetFileName.empty() )
+-		{
+-			std::cerr << "no target file given" << std::endl;
+-			return -1;
++			return error ? -1 : 0;
+ 		}
+ 
+-		// do the work
+-		switch( mode )
+-		{
+-		case kCompress:
+-			Compress( sourceFileName, targetFileName, method | metric | fit | extra );
+-			break;
+-		
+-		case kDecompress:
+-			Decompress( sourceFileName, targetFileName, method );
+-			break;
+-			
+-		case kDiff:
+-			Diff( sourceFileName, targetFileName );
+-			break;
+-			
+-		default:
+-			std::cerr << "unknown mode" << std::endl;
+-			throw std::exception();
+-		}
++		// load the source image
++		Image sourceImage;
++		sourceImage.LoadPng( sourceFileName );
++
++		// compress to DXT
++		DxtData dxt;
++		sourceImage.Compress( dxt, format | fit | extra );
++
++		// decompress back
++		Image targetImage;
++		targetImage.Decompress( dxt );
++
++		// compare the images
++		double rmsError = sourceImage.GetRmsError( targetImage );
++		std::cout << sourceFileName << " " << rmsError << std::endl;
++
++		// save the target image if necessary
++		if( !targetFileName.empty() )
++			targetImage.SavePng( targetFileName );
+ 	}
+ 	catch( std::exception& excuse )
+ 	{
+diff -urN squish-1.10/extra/squishtest.cpp libsquish-1.10-openelec/extra/squishtest.cpp
+--- squish-1.10/extra/squishtest.cpp	2006-03-03 21:20:22.000000000 +0100
++++ libsquish-1.10-openelec/extra/squishtest.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -35,6 +35,7 @@
+ #include <iostream>
+ #include <cmath>
+ #include <cfloat>
++#include <cstdlib>
+ 
+ using namespace squish;
+ 
+diff -urN squish-1.10/Makefile libsquish-1.10-openelec/Makefile
+--- squish-1.10/Makefile	2006-04-07 19:30:11.000000000 +0200
++++ libsquish-1.10-openelec/Makefile	2015-01-09 16:52:04.000000000 +0100
+@@ -7,11 +7,12 @@
+ 
+ LIB = libsquish.a
+ 
+-all : $(LIB)
++all : $(LIB) squish.pc
+ 
+-install : $(LIB)
++install : $(LIB) squish.pc
+ 	install squish.h $(INSTALL_DIR)/include 
+ 	install libsquish.a $(INSTALL_DIR)/lib
++	install squish.pc $(INSTALL_DIR)/lib/pkgconfig
+ 
+ uninstall:
+ 	$(RM) $(INSTALL_DIR)/include/squish.h
+@@ -27,5 +28,6 @@
+ clean :
+ 	$(RM) $(OBJ) $(LIB)
+ 
+-
++squish.pc:
++	sed 's|@PREFIX@|$(PREFIX)|' $@.in > $@
+ 
+diff -urN squish-1.10/maths.cpp libsquish-1.10-openelec/maths.cpp
+--- squish-1.10/maths.cpp	2006-01-19 22:10:49.000000000 +0100
++++ libsquish-1.10-openelec/maths.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -30,6 +30,7 @@
+ */
+ 
+ #include "maths.h"
++#include "simd.h"
+ #include <cfloat>
+ 
+ namespace squish {
+@@ -44,7 +45,8 @@
+ 		total += weights[i];
+ 		centroid += weights[i]*points[i];
+ 	}
+-	centroid /= total;
++	if( total > FLT_EPSILON )
++		centroid /= total;
+ 
+ 	// accumulate the covariance matrix
+ 	Sym3x3 covariance( 0.0f );
+@@ -65,6 +67,8 @@
+ 	return covariance;
+ }
+ 
++#if 0
++
+ static Vec3 GetMultiplicity1Evector( Sym3x3 const& matrix, float evalue )
+ {
+ 	// compute M
+@@ -224,4 +228,32 @@
+ 	}
+ }
+ 
++#else
++
++#define POWER_ITERATION_COUNT 	8
++
++Vec3 ComputePrincipleComponent( Sym3x3 const& matrix )
++{
++	Vec4 const row0( matrix[0], matrix[1], matrix[2], 0.0f );
++	Vec4 const row1( matrix[1], matrix[3], matrix[4], 0.0f );
++	Vec4 const row2( matrix[2], matrix[4], matrix[5], 0.0f );
++	Vec4 v = VEC4_CONST( 1.0f );
++	for( int i = 0; i < POWER_ITERATION_COUNT; ++i )
++	{
++		// matrix multiply
++		Vec4 w = row0*v.SplatX();
++		w = MultiplyAdd(row1, v.SplatY(), w);
++		w = MultiplyAdd(row2, v.SplatZ(), w);
++
++		// get max component from xyz in all channels
++		Vec4 a = Max(w.SplatX(), Max(w.SplatY(), w.SplatZ()));
++
++		// divide through and advance
++		v = w*Reciprocal(a);
++	}
++	return v.GetVec3();
++}
++
++#endif
++
+ } // namespace squish
+diff -urN squish-1.10/rangefit.cpp libsquish-1.10-openelec/rangefit.cpp
+--- squish-1.10/rangefit.cpp	2006-09-02 10:48:17.000000000 +0200
++++ libsquish-1.10-openelec/rangefit.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -30,15 +30,14 @@
+ 
+ namespace squish {
+ 
+-RangeFit::RangeFit( ColourSet const* colours, int flags ) 
++RangeFit::RangeFit( ColourSet const* colours, int flags, float* metric ) 
+   : ColourFit( colours, flags )
+ {
+-	// initialise the metric
+-	bool perceptual = ( ( m_flags & kColourMetricPerceptual ) != 0 );
+-	if( perceptual )
+-		m_metric = Vec3( 0.2126f, 0.7152f, 0.0722f );
++	// initialise the metric (old perceptual = 0.2126f, 0.7152f, 0.0722f)
++	if( metric )
++		m_metric = Vec3( metric[0], metric[1], metric[2] );
+ 	else
+-		m_metric = Vec3( 1.0f );
++		m_metric = Vec3( 1.0f );	
+ 
+ 	// initialise the best error
+ 	m_besterror = FLT_MAX;
+diff -urN squish-1.10/rangefit.h libsquish-1.10-openelec/rangefit.h
+--- squish-1.10/rangefit.h	2006-07-25 16:28:13.000000000 +0200
++++ libsquish-1.10-openelec/rangefit.h	2015-01-09 10:58:43.000000000 +0100
+@@ -37,7 +37,7 @@
+ class RangeFit : public ColourFit
+ {
+ public:
+-	RangeFit( ColourSet const* colours, int flags );
++	RangeFit( ColourSet const* colours, int flags, float* metric );
+ 	
+ private:
+ 	virtual void Compress3( void* block );
+diff -urN squish-1.10/simd_ve.h libsquish-1.10-openelec/simd_ve.h
+--- squish-1.10/simd_ve.h	2007-03-21 20:31:51.000000000 +0100
++++ libsquish-1.10-openelec/simd_ve.h	2015-01-09 10:58:43.000000000 +0100
+@@ -31,7 +31,7 @@
+ 
+ namespace squish {
+ 
+-#define VEC4_CONST( X ) Vec4( ( vector float )( X ) )
++#define VEC4_CONST( X ) Vec4( ( vector float ){ X } )
+ 
+ class Vec4
+ {
+@@ -96,7 +96,7 @@
+ 	
+ 	Vec4& operator*=( Arg v )
+ 	{
+-		m_v = vec_madd( m_v, v.m_v, ( vector float )( -0.0f ) );
++		m_v = vec_madd( m_v, v.m_v, ( vector float ){ -0.0f } );
+ 		return *this;
+ 	}
+ 	
+@@ -112,7 +112,7 @@
+ 	
+ 	friend Vec4 operator*( Vec4::Arg left, Vec4::Arg right  )
+ 	{
+-		return Vec4( vec_madd( left.m_v, right.m_v, ( vector float )( -0.0f ) ) );
++		return Vec4( vec_madd( left.m_v, right.m_v, ( vector float ){ -0.0f } ) );
+ 	}
+ 	
+ 	//! Returns a*b + c
+@@ -133,7 +133,7 @@
+ 		vector float estimate = vec_re( v.m_v );
+ 		
+ 		// one round of Newton-Rhaphson refinement
+-		vector float diff = vec_nmsub( estimate, v.m_v, ( vector float )( 1.0f ) );
++		vector float diff = vec_nmsub( estimate, v.m_v, ( vector float ){ 1.0f } );
+ 		return Vec4( vec_madd( diff, estimate, estimate ) );
+ 	}
+ 	
+diff -urN squish-1.10/squish.cpp libsquish-1.10-openelec/squish.cpp
+--- squish-1.10/squish.cpp	2007-03-21 20:31:51.000000000 +0100
++++ libsquish-1.10-openelec/squish.cpp	2015-01-09 10:58:43.000000000 +0100
+@@ -22,7 +22,8 @@
+ 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ 	
+    -------------------------------------------------------------------------- */
+-   
++
++#include <string.h>
+ #include <squish.h>
+ #include "colourset.h"
+ #include "maths.h"
+@@ -39,28 +40,19 @@
+ 	// grab the flag bits
+ 	int method = flags & ( kDxt1 | kDxt3 | kDxt5 );
+ 	int fit = flags & ( kColourIterativeClusterFit | kColourClusterFit | kColourRangeFit );
+-	int metric = flags & ( kColourMetricPerceptual | kColourMetricUniform );
+-	int extra = flags & kWeightColourByAlpha;
++	int extra = flags & ( kWeightColourByAlpha | kSourceBGRA );
+ 	
+ 	// set defaults
+ 	if( method != kDxt3 && method != kDxt5 )
+ 		method = kDxt1;
+-	if( fit != kColourRangeFit )
++	if( fit != kColourRangeFit && fit != kColourIterativeClusterFit )
+ 		fit = kColourClusterFit;
+-	if( metric != kColourMetricUniform )
+-		metric = kColourMetricPerceptual;
+ 		
+ 	// done
+-	return method | fit | metric | extra;
++	return method | fit | extra;
+ }
+ 
+-void Compress( u8 const* rgba, void* block, int flags )
+-{
+-	// compress with full mask
+-	CompressMasked( rgba, 0xffff, block, flags );
+-}
+-
+-void CompressMasked( u8 const* rgba, int mask, void* block, int flags )
++void CompressMasked( u8 const* rgba, int mask, void* block, int flags, float* metric )
+ {
+ 	// fix any bad flags
+ 	flags = FixFlags( flags );
+@@ -84,13 +76,13 @@
+ 	else if( ( flags & kColourRangeFit ) != 0 || colours.GetCount() == 0 )
+ 	{
+ 		// do a range fit
+-		RangeFit fit( &colours, flags );
++		RangeFit fit( &colours, flags, metric );
+ 		fit.Compress( colourBlock );
+ 	}
+ 	else
+ 	{
+ 		// default to a cluster fit (could be iterative or not)
+-		ClusterFit fit( &colours, flags );
++		ClusterFit fit( &colours, flags, metric );
+ 		fit.Compress( colourBlock );
+ 	}
+ 	
+@@ -133,7 +125,29 @@
+ 	return blockcount*blocksize;	
+ }
+ 
+-void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags )
++void CopyRGBA( u8 const* source, u8* dest, int flags )
++{
++	if (flags & kSourceBGRA)
++	{
++		// convert from bgra to rgba
++		dest[0] = source[2];
++		dest[1] = source[1];
++		dest[2] = source[0];
++		dest[3] = source[3];
++	}
++	else
++	{
++		for( int i = 0; i < 4; ++i )
++			*dest++ = *source++;
++	}
++}
++
++void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric )
++{
++	CompressImage(rgba, width, height, width*4, blocks, flags, metric);
++}
++  
++void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric )
+ {
+ 	// fix any bad flags
+ 	flags = FixFlags( flags );
+@@ -163,23 +177,17 @@
+ 					if( sx < width && sy < height )
+ 					{
+ 						// copy the rgba value
+-						u8 const* sourcePixel = rgba + 4*( width*sy + sx );
+-						for( int i = 0; i < 4; ++i )
+-							*targetPixel++ = *sourcePixel++;
+-							
++						u8 const* sourcePixel = rgba + pitch*sy + 4*sx;
++						CopyRGBA(sourcePixel, targetPixel, flags);
+ 						// enable this pixel
+ 						mask |= ( 1 << ( 4*py + px ) );
+ 					}
+-					else
+-					{
+-						// skip this pixel as its outside the image
+-						targetPixel += 4;
+-					}
++					targetPixel += 4;
+ 				}
+ 			}
+ 			
+ 			// compress it into the output
+-			CompressMasked( sourceRgba, mask, targetBlock, flags );
++			CompressMasked( sourceRgba, mask, targetBlock, flags, metric );
+ 			
+ 			// advance
+ 			targetBlock += bytesPerBlock;
+@@ -189,6 +197,11 @@
+ 
+ void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags )
+ {
++	DecompressImage( rgba, width, height, width*4, blocks, flags );
++}
++
++void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags )
++{
+ 	// fix any bad flags
+ 	flags = FixFlags( flags );
+ 
+@@ -216,24 +229,132 @@
+ 					int sy = y + py;
+ 					if( sx < width && sy < height )
+ 					{
+-						u8* targetPixel = rgba + 4*( width*sy + sx );
++						u8* targetPixel = rgba + pitch*sy + 4*sx;
+ 						
+ 						// copy the rgba value
+-						for( int i = 0; i < 4; ++i )
+-							*targetPixel++ = *sourcePixel++;
++						CopyRGBA(sourcePixel, targetPixel, flags);
+ 					}
+-					else
++					sourcePixel += 4;
++				}
++			}
++			
++			// advance
++			sourceBlock += bytesPerBlock;
++		}
++	}
++}
++
++static double ErrorSq(double x, double y)
++{
++	return (x - y) * (x - y);
++}
++
++static void ComputeBlockWMSE(u8 const *original, u8 const *compressed, unsigned int w, unsigned int h, double &cmse, double &amse)
++{
++	// Computes the MSE for the block and weights it by the variance of the original block.
++	// If the variance of the original block is less than 4 (i.e. a standard deviation of 1 per channel)
++	// then the block is close to being a single colour. Quantisation errors in single colour blocks
++	// are easier to see than similar errors in blocks that contain more colours, particularly when there
++	// are many such blocks in a large area (eg a blue sky background) as they cause banding.  Given that
++	// banding is easier to see than small errors in "complex" blocks, we weight the errors by a factor
++	// of 5. This implies that images with large, single colour areas will have a higher potential WMSE
++	// than images with lots of detail.
++
++	cmse = amse = 0;
++	unsigned int sum_p[4];  // per channel sum of pixels
++	unsigned int sum_p2[4]; // per channel sum of pixels squared
++	memset(sum_p, 0, sizeof(sum_p));
++	memset(sum_p2, 0, sizeof(sum_p2));
++	for( unsigned int py = 0; py < 4; ++py )
++	{
++		for( unsigned int px = 0; px < 4; ++px )
++		{
++			if( px < w && py < h )
++			{
++				double pixelCMSE = 0;
++				for( int i = 0; i < 3; ++i )
++				{
++					pixelCMSE += ErrorSq(original[i], compressed[i]);
++					sum_p[i] += original[i];
++					sum_p2[i] += (unsigned int)original[i]*original[i];
++				}
++				if( original[3] == 0 && compressed[3] == 0 )
++					pixelCMSE = 0; // transparent in both, so colour is inconsequential
++				amse += ErrorSq(original[3], compressed[3]);
++				cmse += pixelCMSE;
++				sum_p[3] += original[3];
++				sum_p2[3] += (unsigned int)original[3]*original[3];
++			}
++			original += 4;
++			compressed += 4;
++		}
++	}
++	unsigned int variance = 0;
++	for( int i = 0; i < 4; ++i )
++		variance += w*h*sum_p2[i] - sum_p[i]*sum_p[i];
++	if( variance < 4 * w * w * h * h )
++	{
++		amse *= 5;
++		cmse *= 5;
++	}
++}
++  
++void ComputeMSE( u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
++{
++	ComputeMSE(rgba, width, height, width*4, dxt, flags, colourMSE, alphaMSE);
++}
++                
++void ComputeMSE( u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE )
++{
++	// fix any bad flags
++	flags = FixFlags( flags );
++	colourMSE = alphaMSE = 0;
++
++	// initialise the block input
++	squish::u8 const* sourceBlock = dxt;
++	int bytesPerBlock = ( ( flags & squish::kDxt1 ) != 0 ) ? 8 : 16;
++
++	// loop over blocks
++	for( int y = 0; y < height; y += 4 )
++	{
++		for( int x = 0; x < width; x += 4 )
++		{
++			// decompress the block
++			u8 targetRgba[4*16];
++			Decompress( targetRgba, sourceBlock, flags );
++			u8 const* sourcePixel = targetRgba;
++
++			// copy across to a similar pixel block
++			u8 originalRgba[4*16];
++			u8* originalPixel = originalRgba;
++
++			for( int py = 0; py < 4; ++py )
++			{
++				for( int px = 0; px < 4; ++px )
++				{
++					int sx = x + px;
++					int sy = y + py;
++					if( sx < width && sy < height )
+ 					{
+-						// skip this pixel as its outside the image
+-						sourcePixel += 4;
++						u8 const* targetPixel = rgba + pitch*sy + 4*sx;
++						CopyRGBA(targetPixel, originalPixel, flags);
+ 					}
++					sourcePixel += 4;
++					originalPixel += 4;
+ 				}
+ 			}
+-			
++
++			// compute the weighted MSE of the block
++			double blockCMSE, blockAMSE;
++			ComputeBlockWMSE(originalRgba, targetRgba, std::min(4, width - x), std::min(4, height - y), blockCMSE, blockAMSE);
++			colourMSE += blockCMSE;
++			alphaMSE += blockAMSE;
+ 			// advance
+ 			sourceBlock += bytesPerBlock;
+ 		}
+ 	}
++	colourMSE /= (width * height * 3);
++	alphaMSE /= (width * height);
+ }
+ 
+ } // namespace squish
+diff -urN squish-1.10/squish.h libsquish-1.10-openelec/squish.h
+--- squish-1.10/squish.h	2007-03-21 21:13:51.000000000 +0100
++++ libsquish-1.10-openelec/squish.h	2015-01-09 10:58:43.000000000 +0100
+@@ -56,14 +56,11 @@
+ 	//! Use a fast but low quality colour compressor.
+ 	kColourRangeFit	= ( 1 << 4 ),
+ 	
+-	//! Use a perceptual metric for colour error (the default).
+-	kColourMetricPerceptual = ( 1 << 5 ),
+-
+-	//! Use a uniform metric for colour error.
+-	kColourMetricUniform = ( 1 << 6 ),
+-	
+ 	//! Weight the colour by alpha during cluster fit (disabled by default).
+-	kWeightColourByAlpha = ( 1 << 7 )
++	kWeightColourByAlpha = ( 1 << 7 ),
++	
++	//! Source is BGRA rather than RGBA
++	kSourceBGRA = ( 1 << 9 ),
+ };
+ 
+ // -----------------------------------------------------------------------------
+@@ -71,74 +68,90 @@
+ /*! @brief Compresses a 4x4 block of pixels.
+ 
+ 	@param rgba		The rgba values of the 16 source pixels.
++	@param mask		The valid pixel mask.
+ 	@param block	Storage for the compressed DXT block.
+ 	@param flags	Compression flags.
++	@param metric	An optional perceptual metric.
+ 	
+ 	The source pixels should be presented as a contiguous array of 16 rgba
+ 	values, with each component as 1 byte each. In memory this should be:
+ 	
+ 		{ r1, g1, b1, a1, .... , r16, g16, b16, a16 }
++		
++	The mask parameter enables only certain pixels within the block. The lowest
++	bit enables the first pixel and so on up to the 16th bit. Bits beyond the
++	16th bit are ignored. Pixels that are not enabled are allowed to take
++	arbitrary colours in the output block. An example of how this can be used
++	is in the CompressImage function to disable pixels outside the bounds of
++	the image when the width or height is not divisible by 4.
+ 	
+ 	The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression, 
+ 	however, DXT1 will be used by default if none is specified. When using DXT1 
+ 	compression, 8 bytes of storage are required for the compressed DXT block. 
+ 	DXT3 and DXT5 compression require 16 bytes of storage per block.
+ 	
+-	The flags parameter can also specify a preferred colour compressor and 
+-	colour error metric to use when fitting the RGB components of the data. 
+-	Possible colour compressors are: kColourClusterFit (the default), 
+-	kColourRangeFit or kColourIterativeClusterFit. Possible colour error metrics 
+-	are: kColourMetricPerceptual (the default) or kColourMetricUniform. If no 
+-	flags are specified in any particular category then the default will be 
+-	used. Unknown flags are ignored.
+-	
+-	When using kColourClusterFit, an additional flag can be specified to
+-	weight the colour of each pixel by its alpha value. For images that are
+-	rendered using alpha blending, this can significantly increase the 
+-	perceived quality.
++	The flags parameter can also specify a preferred colour compressor to use 
++	when fitting the RGB components of the data. Possible colour compressors 
++	are: kColourClusterFit (the default), kColourRangeFit (very fast, low 
++	quality) or kColourIterativeClusterFit (slowest, best quality).
++		
++	When using kColourClusterFit or kColourIterativeClusterFit, an additional 
++	flag can be specified to weight the importance of each pixel by its alpha 
++	value. For images that are rendered using alpha blending, this can 
++	significantly increase the perceived quality.
++	
++	The metric parameter can be used to weight the relative importance of each
++	colour channel, or pass NULL to use the default uniform weight of 
++	{ 1.0f, 1.0f, 1.0f }. This replaces the previous flag-based control that 
++	allowed either uniform or "perceptual" weights with the fixed values
++	{ 0.2126f, 0.7152f, 0.0722f }. If non-NULL, the metric should point to a 
++	contiguous array of 3 floats.
+ */
+-void Compress( u8 const* rgba, void* block, int flags );
++void CompressMasked( u8 const* rgba, int mask, void* block, int flags, float* metric = 0 );
+ 
+ // -----------------------------------------------------------------------------
+ 
+ /*! @brief Compresses a 4x4 block of pixels.
+ 
+ 	@param rgba		The rgba values of the 16 source pixels.
+-	@param mask		The valid pixel mask.
+ 	@param block	Storage for the compressed DXT block.
+ 	@param flags	Compression flags.
++	@param metric	An optional perceptual metric.
+ 	
+ 	The source pixels should be presented as a contiguous array of 16 rgba
+ 	values, with each component as 1 byte each. In memory this should be:
+ 	
+ 		{ r1, g1, b1, a1, .... , r16, g16, b16, a16 }
+-		
+-	The mask parameter enables only certain pixels within the block. The lowest
+-	bit enables the first pixel and so on up to the 16th bit. Bits beyond the
+-	16th bit are ignored. Pixels that are not enabled are allowed to take
+-	arbitrary colours in the output block. An example of how this can be used
+-	is in the CompressImage function to disable pixels outside the bounds of
+-	the image when the width or height is not divisible by 4.
+ 	
+ 	The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression, 
+ 	however, DXT1 will be used by default if none is specified. When using DXT1 
+ 	compression, 8 bytes of storage are required for the compressed DXT block. 
+ 	DXT3 and DXT5 compression require 16 bytes of storage per block.
+ 	
+-	The flags parameter can also specify a preferred colour compressor and 
+-	colour error metric to use when fitting the RGB components of the data. 
+-	Possible colour compressors are: kColourClusterFit (the default), 
+-	kColourRangeFit or kColourIterativeClusterFit. Possible colour error metrics 
+-	are: kColourMetricPerceptual (the default) or kColourMetricUniform. If no 
+-	flags are specified in any particular category then the default will be 
+-	used. Unknown flags are ignored.
+-	
+-	When using kColourClusterFit, an additional flag can be specified to
+-	weight the colour of each pixel by its alpha value. For images that are
+-	rendered using alpha blending, this can significantly increase the 
+-	perceived quality.
+-*/
+-void CompressMasked( u8 const* rgba, int mask, void* block, int flags );
++	The flags parameter can also specify a preferred colour compressor to use 
++	when fitting the RGB components of the data. Possible colour compressors 
++	are: kColourClusterFit (the default), kColourRangeFit (very fast, low 
++	quality) or kColourIterativeClusterFit (slowest, best quality).
++		
++	When using kColourClusterFit or kColourIterativeClusterFit, an additional 
++	flag can be specified to weight the importance of each pixel by its alpha 
++	value. For images that are rendered using alpha blending, this can 
++	significantly increase the perceived quality.
++	
++	The metric parameter can be used to weight the relative importance of each
++	colour channel, or pass NULL to use the default uniform weight of 
++	{ 1.0f, 1.0f, 1.0f }. This replaces the previous flag-based control that 
++	allowed either uniform or "perceptual" weights with the fixed values
++	{ 0.2126f, 0.7152f, 0.0722f }. If non-NULL, the metric should point to a 
++	contiguous array of 3 floats.
++	
++	This method is an inline that calls CompressMasked with a mask of 0xffff, 
++	provided for compatibility with older versions of squish.
++*/
++inline void Compress( u8 const* rgba, void* block, int flags, float* metric = 0 )
++{
++	CompressMasked( rgba, 0xffff, block, flags, metric );
++}
+ 
+ // -----------------------------------------------------------------------------
+ 
+@@ -184,8 +197,10 @@
+ 	@param rgba		The pixels of the source.
+ 	@param width	The width of the source image.
+ 	@param height	The height of the source image.
++	@param pitch	The pitch of the source image.
+ 	@param blocks	Storage for the compressed output.
+ 	@param flags	Compression flags.
++	@param metric	An optional perceptual metric.
+ 	
+ 	The source pixels should be presented as a contiguous array of width*height
+ 	rgba values, with each component as 1 byte each. In memory this should be:
+@@ -197,24 +212,30 @@
+ 	compression, 8 bytes of storage are required for each compressed DXT block. 
+ 	DXT3 and DXT5 compression require 16 bytes of storage per block.
+ 	
+-	The flags parameter can also specify a preferred colour compressor and 
+-	colour error metric to use when fitting the RGB components of the data. 
+-	Possible colour compressors are: kColourClusterFit (the default), 
+-	kColourRangeFit or kColourIterativeClusterFit. Possible colour error metrics 
+-	are: kColourMetricPerceptual (the default) or kColourMetricUniform. If no 
+-	flags are specified in any particular category then the default will be 
+-	used. Unknown flags are ignored.
+-	
+-	When using kColourClusterFit, an additional flag can be specified to
+-	weight the colour of each pixel by its alpha value. For images that are
+-	rendered using alpha blending, this can significantly increase the 
+-	perceived quality.
+-	
+-	Internally this function calls squish::Compress for each block. To see how
+-	much memory is required in the compressed image, use
+-	squish::GetStorageRequirements.
++	The flags parameter can also specify a preferred colour compressor to use 
++	when fitting the RGB components of the data. Possible colour compressors 
++	are: kColourClusterFit (the default), kColourRangeFit (very fast, low 
++	quality) or kColourIterativeClusterFit (slowest, best quality).
++		
++	When using kColourClusterFit or kColourIterativeClusterFit, an additional 
++	flag can be specified to weight the importance of each pixel by its alpha 
++	value. For images that are rendered using alpha blending, this can 
++	significantly increase the perceived quality.
++	
++	The metric parameter can be used to weight the relative importance of each
++	colour channel, or pass NULL to use the default uniform weight of 
++	{ 1.0f, 1.0f, 1.0f }. This replaces the previous flag-based control that 
++	allowed either uniform or "perceptual" weights with the fixed values
++	{ 0.2126f, 0.7152f, 0.0722f }. If non-NULL, the metric should point to a 
++	contiguous array of 3 floats.
++	
++	Internally this function calls squish::CompressMasked for each block, which 
++	allows for pixels outside the image to take arbitrary values. The function 
++	squish::GetStorageRequirements can be called to compute the amount of memory
++	to allocate for the compressed output.
+ */
+-void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags );
++void CompressImage( u8 const* rgba, int width, int height, void* blocks, int flags, float* metric = 0 );
++void CompressImage( u8 const* rgba, int width, int height, int pitch, void* blocks, int flags, float* metric = 0 );
+ 
+ // -----------------------------------------------------------------------------
+ 
+@@ -223,6 +244,7 @@
+ 	@param rgba		Storage for the decompressed pixels.
+ 	@param width	The width of the source image.
+ 	@param height	The height of the source image.
++	@param pitch    The pitch of the decompressed pixels.
+ 	@param blocks	The compressed DXT blocks.
+ 	@param flags	Compression flags.
+ 	
+@@ -238,6 +260,32 @@
+ 	Internally this function calls squish::Decompress for each block.
+ */
+ void DecompressImage( u8* rgba, int width, int height, void const* blocks, int flags );
++void DecompressImage( u8* rgba, int width, int height, int pitch, void const* blocks, int flags );
++
++// -----------------------------------------------------------------------------
++
++/*! @brief Computes MSE of an compressed image in memory.
++
++	@param rgba		The original image pixels.
++	@param width	The width of the source image.
++	@param height	The height of the source image.
++	@param pitch  	The pitch of the source image.
++	@param dxt		The compressed dxt blocks
++	@param flags	Compression flags.
++	@param colourMSE	The MSE of the colour values.
++	@param alphaMSE	The MSE of the alpha values.
++	
++	The colour MSE and alpha MSE are computed across all pixels. The colour MSE is
++	averaged across all rgb values (i.e. colourMSE = sum sum_k ||dxt.k - rgba.k||/3)
++	
++	The flags parameter should specify either kDxt1, kDxt3 or kDxt5 compression, 
++	however, DXT1 will be used by default if none is specified. All other flags 
++	are ignored.
++
++	Internally this function calls squish::Decompress for each block.
++*/
++void ComputeMSE(u8 const *rgba, int width, int height, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
++void ComputeMSE(u8 const *rgba, int width, int height, int pitch, u8 const *dxt, int flags, double &colourMSE, double &alphaMSE);
+ 
+ // -----------------------------------------------------------------------------
+ 
+diff -urN squish-1.10/squish.pc.in libsquish-1.10-openelec/squish.pc.in
+--- squish-1.10/squish.pc.in	1970-01-01 01:00:00.000000000 +0100
++++ libsquish-1.10-openelec/squish.pc.in	2015-01-09 10:58:43.000000000 +0100
+@@ -0,0 +1,13 @@
++prefix=@PREFIX@
++exec_prefix=${prefix}
++libdir=${prefix}/lib
++sharedlibdir=${libdir}
++includedir=${prefix}/include
++
++Name: squish
++Description: squish DXT lib
++Version: 1.0.0-kodi
++
++Requires:
++Libs: -L${libdir} -L${sharedlibdir} -lsquish
++Cflags: -I${includedir}
+diff -urN squish-1.10/squish.xcodeproj/project.pbxproj libsquish-1.10-openelec/squish.xcodeproj/project.pbxproj
+--- squish-1.10/squish.xcodeproj/project.pbxproj	2006-11-22 14:02:51.000000000 +0100
++++ libsquish-1.10-openelec/squish.xcodeproj/project.pbxproj	1970-01-01 01:00:00.000000000 +0100
+@@ -1,702 +0,0 @@
+-// !$*UTF8*$!
+-{
+-	archiveVersion = 1;
+-	classes = {
+-	};
+-	objectVersion = 42;
+-	objects = {
+-
+-/* Begin PBXBuildFile section */
+-		1334278D0ACC58ED00F54FA3 /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 133FA0DB096A7B8E0050752E /* alpha.cpp */; };
+-		1334278E0ACC58ED00F54FA3 /* alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = 133FA0DA096A7B8E0050752E /* alpha.h */; settings = {ATTRIBUTES = (); }; };
+-		1334278F0ACC58ED00F54FA3 /* clusterfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D70B092AA857005EE038 /* clusterfit.cpp */; };
+-		133427900ACC58ED00F54FA3 /* clusterfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D70C092AA858005EE038 /* clusterfit.h */; settings = {ATTRIBUTES = (); }; };
+-		133427910ACC58ED00F54FA3 /* colourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13A7CCA30952BE63001C963A /* colourfit.cpp */; };
+-		133427920ACC58ED00F54FA3 /* colourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 13A7CCA20952BE63001C963A /* colourfit.h */; settings = {ATTRIBUTES = (); }; };
+-		133427930ACC58ED00F54FA3 /* colourset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13C4C7AB0941C18000AC5B89 /* colourset.cpp */; };
+-		133427940ACC58ED00F54FA3 /* colourset.h in Headers */ = {isa = PBXBuildFile; fileRef = 13C4C7AC0941C18000AC5B89 /* colourset.h */; settings = {ATTRIBUTES = (); }; };
+-		133427950ACC58ED00F54FA3 /* colourblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D70F092AA858005EE038 /* colourblock.cpp */; };
+-		133427960ACC58ED00F54FA3 /* colourblock.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D710092AA858005EE038 /* colourblock.h */; settings = {ATTRIBUTES = (); }; };
+-		133427970ACC58ED00F54FA3 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D711092AA858005EE038 /* config.h */; settings = {ATTRIBUTES = (); }; };
+-		133427980ACC58ED00F54FA3 /* maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D712092AA858005EE038 /* maths.cpp */; };
+-		133427990ACC58ED00F54FA3 /* maths.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D713092AA858005EE038 /* maths.h */; settings = {ATTRIBUTES = (); }; };
+-		1334279A0ACC58ED00F54FA3 /* rangefit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D716092AA858005EE038 /* rangefit.cpp */; };
+-		1334279B0ACC58ED00F54FA3 /* rangefit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D717092AA858005EE038 /* rangefit.h */; settings = {ATTRIBUTES = (); }; };
+-		1334279C0ACC58ED00F54FA3 /* simd.h in Headers */ = {isa = PBXBuildFile; fileRef = 13CD64C0092BCF8A00488C97 /* simd.h */; settings = {ATTRIBUTES = (); }; };
+-		1334279D0ACC58ED00F54FA3 /* simd_sse.h in Headers */ = {isa = PBXBuildFile; fileRef = 13D0DC960931F9D600909807 /* simd_sse.h */; settings = {ATTRIBUTES = (); }; };
+-		1334279E0ACC58ED00F54FA3 /* simd_ve.h in Headers */ = {isa = PBXBuildFile; fileRef = 13D0DC900931F93A00909807 /* simd_ve.h */; settings = {ATTRIBUTES = (); }; };
+-		1334279F0ACC58ED00F54FA3 /* singlecolourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 139C234E09B0602700A2500D /* singlecolourfit.cpp */; };
+-		133427A00ACC58ED00F54FA3 /* singlecolourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 139C234D09B0602700A2500D /* singlecolourfit.h */; settings = {ATTRIBUTES = (); }; };
+-		133427A20ACC58ED00F54FA3 /* squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D718092AA858005EE038 /* squish.cpp */; };
+-		133427A30ACC58ED00F54FA3 /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D719092AA858005EE038 /* squish.h */; settings = {ATTRIBUTES = (Public, ); }; };
+-		133FA0DC096A7B8E0050752E /* alpha.h in Headers */ = {isa = PBXBuildFile; fileRef = 133FA0DA096A7B8E0050752E /* alpha.h */; settings = {ATTRIBUTES = (); }; };
+-		133FA0DD096A7B8E0050752E /* alpha.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 133FA0DB096A7B8E0050752E /* alpha.cpp */; };
+-		1342B4160999DF1900152915 /* libsquish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC046055464E500DB518D /* libsquish.a */; };
+-		1342B41A0999DF7000152915 /* squishpng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1342B4190999DF7000152915 /* squishpng.cpp */; };
+-		1342B43F0999E0CC00152915 /* squishtest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1342B43E0999E0CC00152915 /* squishtest.cpp */; };
+-		1342B4420999E0EC00152915 /* libsquish.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2AAC046055464E500DB518D /* libsquish.a */; };
+-		1350D71A092AA858005EE038 /* clusterfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D70B092AA857005EE038 /* clusterfit.cpp */; };
+-		1350D71B092AA858005EE038 /* clusterfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D70C092AA858005EE038 /* clusterfit.h */; settings = {ATTRIBUTES = (); }; };
+-		1350D71E092AA858005EE038 /* colourblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D70F092AA858005EE038 /* colourblock.cpp */; };
+-		1350D71F092AA858005EE038 /* colourblock.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D710092AA858005EE038 /* colourblock.h */; settings = {ATTRIBUTES = (); }; };
+-		1350D720092AA858005EE038 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D711092AA858005EE038 /* config.h */; settings = {ATTRIBUTES = (); }; };
+-		1350D721092AA858005EE038 /* maths.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D712092AA858005EE038 /* maths.cpp */; };
+-		1350D722092AA858005EE038 /* maths.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D713092AA858005EE038 /* maths.h */; settings = {ATTRIBUTES = (); }; };
+-		1350D725092AA858005EE038 /* rangefit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D716092AA858005EE038 /* rangefit.cpp */; };
+-		1350D726092AA858005EE038 /* rangefit.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D717092AA858005EE038 /* rangefit.h */; settings = {ATTRIBUTES = (); }; };
+-		1350D727092AA858005EE038 /* squish.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1350D718092AA858005EE038 /* squish.cpp */; };
+-		1350D728092AA858005EE038 /* squish.h in Headers */ = {isa = PBXBuildFile; fileRef = 1350D719092AA858005EE038 /* squish.h */; settings = {ATTRIBUTES = (Public, ); }; };
+-		139C21CF09ADAB0800A2500D /* squishgen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 139C21CE09ADAB0800A2500D /* squishgen.cpp */; };
+-		139C234F09B0602700A2500D /* singlecolourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 139C234D09B0602700A2500D /* singlecolourfit.h */; settings = {ATTRIBUTES = (); }; };
+-		139C235009B0602700A2500D /* singlecolourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 139C234E09B0602700A2500D /* singlecolourfit.cpp */; };
+-		13A7CCA40952BE63001C963A /* colourfit.h in Headers */ = {isa = PBXBuildFile; fileRef = 13A7CCA20952BE63001C963A /* colourfit.h */; settings = {ATTRIBUTES = (); }; };
+-		13A7CCA50952BE63001C963A /* colourfit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13A7CCA30952BE63001C963A /* colourfit.cpp */; };
+-		13C4C7AD0941C18000AC5B89 /* colourset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 13C4C7AB0941C18000AC5B89 /* colourset.cpp */; };
+-		13C4C7AE0941C18000AC5B89 /* colourset.h in Headers */ = {isa = PBXBuildFile; fileRef = 13C4C7AC0941C18000AC5B89 /* colourset.h */; settings = {ATTRIBUTES = (); }; };
+-		13CD64C2092BCF8A00488C97 /* simd.h in Headers */ = {isa = PBXBuildFile; fileRef = 13CD64C0092BCF8A00488C97 /* simd.h */; settings = {ATTRIBUTES = (); }; };
+-		13D0DC910931F93A00909807 /* simd_ve.h in Headers */ = {isa = PBXBuildFile; fileRef = 13D0DC900931F93A00909807 /* simd_ve.h */; settings = {ATTRIBUTES = (); }; };
+-		13D0DC970931F9D600909807 /* simd_sse.h in Headers */ = {isa = PBXBuildFile; fileRef = 13D0DC960931F9D600909807 /* simd_sse.h */; settings = {ATTRIBUTES = (); }; };
+-/* End PBXBuildFile section */
+-
+-/* Begin PBXContainerItemProxy section */
+-		1342B52B099BF72F00152915 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+-			proxyType = 1;
+-			remoteGlobalIDString = D2AAC045055464E500DB518D;
+-			remoteInfo = squish;
+-		};
+-		1342B58E099BF93D00152915 /* PBXContainerItemProxy */ = {
+-			isa = PBXContainerItemProxy;
+-			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
+-			proxyType = 1;
+-			remoteGlobalIDString = D2AAC045055464E500DB518D;
+-			remoteInfo = squish;
+-		};
+-/* End PBXContainerItemProxy section */
+-
+-/* Begin PBXFileReference section */
+-		133427860ACC587F00F54FA3 /* squish.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = squish.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+-		133427870ACC587F00F54FA3 /* squish-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "squish-Info.plist"; sourceTree = "<group>"; };
+-		133FA0DA096A7B8E0050752E /* alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alpha.h; sourceTree = "<group>"; };
+-		133FA0DB096A7B8E0050752E /* alpha.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = alpha.cpp; sourceTree = "<group>"; };
+-		1342B4110999DE7F00152915 /* squishpng */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = squishpng; sourceTree = BUILT_PRODUCTS_DIR; };
+-		1342B4190999DF7000152915 /* squishpng.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = squishpng.cpp; path = extra/squishpng.cpp; sourceTree = "<group>"; };
+-		1342B4370999E07C00152915 /* squishtest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = squishtest; sourceTree = BUILT_PRODUCTS_DIR; };
+-		1342B43E0999E0CC00152915 /* squishtest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = squishtest.cpp; path = extra/squishtest.cpp; sourceTree = "<group>"; };
+-		1350D70B092AA857005EE038 /* clusterfit.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = clusterfit.cpp; sourceTree = "<group>"; };
+-		1350D70C092AA858005EE038 /* clusterfit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = clusterfit.h; sourceTree = "<group>"; };
+-		1350D70F092AA858005EE038 /* colourblock.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = colourblock.cpp; sourceTree = "<group>"; };
+-		1350D710092AA858005EE038 /* colourblock.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = colourblock.h; sourceTree = "<group>"; };
+-		1350D711092AA858005EE038 /* config.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+-		1350D712092AA858005EE038 /* maths.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = maths.cpp; sourceTree = "<group>"; };
+-		1350D713092AA858005EE038 /* maths.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = maths.h; sourceTree = "<group>"; };
+-		1350D716092AA858005EE038 /* rangefit.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = rangefit.cpp; sourceTree = "<group>"; };
+-		1350D717092AA858005EE038 /* rangefit.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = rangefit.h; sourceTree = "<group>"; };
+-		1350D718092AA858005EE038 /* squish.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = squish.cpp; sourceTree = "<group>"; };
+-		1350D719092AA858005EE038 /* squish.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = squish.h; sourceTree = "<group>"; };
+-		13906CE3096938880000A6A7 /* texture_compression_s3tc.txt */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text; path = texture_compression_s3tc.txt; sourceTree = "<group>"; };
+-		139C21C409ADAA7000A2500D /* squishgen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = squishgen; sourceTree = BUILT_PRODUCTS_DIR; };
+-		139C21CE09ADAB0800A2500D /* squishgen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = squishgen.cpp; path = extra/squishgen.cpp; sourceTree = "<group>"; };
+-		139C234D09B0602700A2500D /* singlecolourfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = singlecolourfit.h; sourceTree = "<group>"; };
+-		139C234E09B0602700A2500D /* singlecolourfit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = singlecolourfit.cpp; sourceTree = "<group>"; };
+-		139C236D09B060A900A2500D /* singlecolourlookup.inl */ = {isa = PBXFileReference; explicitFileType = text; fileEncoding = 30; path = singlecolourlookup.inl; sourceTree = "<group>"; };
+-		13A7CCA20952BE63001C963A /* colourfit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = colourfit.h; sourceTree = "<group>"; };
+-		13A7CCA30952BE63001C963A /* colourfit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = colourfit.cpp; sourceTree = "<group>"; };
+-		13C4C7AB0941C18000AC5B89 /* colourset.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = colourset.cpp; sourceTree = "<group>"; };
+-		13C4C7AC0941C18000AC5B89 /* colourset.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = colourset.h; sourceTree = "<group>"; };
+-		13CD64C0092BCF8A00488C97 /* simd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simd.h; sourceTree = "<group>"; };
+-		13D0DC900931F93A00909807 /* simd_ve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simd_ve.h; sourceTree = "<group>"; };
+-		13D0DC960931F9D600909807 /* simd_sse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simd_sse.h; sourceTree = "<group>"; };
+-		D2AAC046055464E500DB518D /* libsquish.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsquish.a; sourceTree = BUILT_PRODUCTS_DIR; };
+-/* End PBXFileReference section */
+-
+-/* Begin PBXFrameworksBuildPhase section */
+-		133427840ACC587F00F54FA3 /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		1342B40F0999DE7F00152915 /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1342B4160999DF1900152915 /* libsquish.a in Frameworks */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		1342B4350999E07C00152915 /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1342B4420999E0EC00152915 /* libsquish.a in Frameworks */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		139C21C209ADAA7000A2500D /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		D289987405E68DCB004EDB86 /* Frameworks */ = {
+-			isa = PBXFrameworksBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-/* End PBXFrameworksBuildPhase section */
+-
+-/* Begin PBXGroup section */
+-		08FB7794FE84155DC02AAC07 /* squish */ = {
+-			isa = PBXGroup;
+-			children = (
+-				08FB7795FE84155DC02AAC07 /* Source */,
+-				C6A0FF2B0290797F04C91782 /* Documentation */,
+-				1AB674ADFE9D54B511CA2CBB /* Products */,
+-				133427870ACC587F00F54FA3 /* squish-Info.plist */,
+-			);
+-			name = squish;
+-			sourceTree = "<group>";
+-		};
+-		08FB7795FE84155DC02AAC07 /* Source */ = {
+-			isa = PBXGroup;
+-			children = (
+-				133FA0DB096A7B8E0050752E /* alpha.cpp */,
+-				133FA0DA096A7B8E0050752E /* alpha.h */,
+-				1350D70B092AA857005EE038 /* clusterfit.cpp */,
+-				1350D70C092AA858005EE038 /* clusterfit.h */,
+-				13A7CCA30952BE63001C963A /* colourfit.cpp */,
+-				13A7CCA20952BE63001C963A /* colourfit.h */,
+-				13C4C7AB0941C18000AC5B89 /* colourset.cpp */,
+-				13C4C7AC0941C18000AC5B89 /* colourset.h */,
+-				1350D70F092AA858005EE038 /* colourblock.cpp */,
+-				1350D710092AA858005EE038 /* colourblock.h */,
+-				1350D711092AA858005EE038 /* config.h */,
+-				1350D712092AA858005EE038 /* maths.cpp */,
+-				1350D713092AA858005EE038 /* maths.h */,
+-				1350D716092AA858005EE038 /* rangefit.cpp */,
+-				1350D717092AA858005EE038 /* rangefit.h */,
+-				13CD64C0092BCF8A00488C97 /* simd.h */,
+-				13D0DC960931F9D600909807 /* simd_sse.h */,
+-				13D0DC900931F93A00909807 /* simd_ve.h */,
+-				139C234E09B0602700A2500D /* singlecolourfit.cpp */,
+-				139C234D09B0602700A2500D /* singlecolourfit.h */,
+-				139C236D09B060A900A2500D /* singlecolourlookup.inl */,
+-				1350D718092AA858005EE038 /* squish.cpp */,
+-				1350D719092AA858005EE038 /* squish.h */,
+-				139C21CE09ADAB0800A2500D /* squishgen.cpp */,
+-				1342B4190999DF7000152915 /* squishpng.cpp */,
+-				1342B43E0999E0CC00152915 /* squishtest.cpp */,
+-				13906CE3096938880000A6A7 /* texture_compression_s3tc.txt */,
+-			);
+-			name = Source;
+-			sourceTree = "<group>";
+-		};
+-		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+-			isa = PBXGroup;
+-			children = (
+-				D2AAC046055464E500DB518D /* libsquish.a */,
+-				1342B4110999DE7F00152915 /* squishpng */,
+-				1342B4370999E07C00152915 /* squishtest */,
+-				139C21C409ADAA7000A2500D /* squishgen */,
+-				133427860ACC587F00F54FA3 /* squish.framework */,
+-			);
+-			name = Products;
+-			sourceTree = "<group>";
+-		};
+-		C6A0FF2B0290797F04C91782 /* Documentation */ = {
+-			isa = PBXGroup;
+-			children = (
+-			);
+-			name = Documentation;
+-			sourceTree = "<group>";
+-		};
+-/* End PBXGroup section */
+-
+-/* Begin PBXHeadersBuildPhase section */
+-		133427810ACC587F00F54FA3 /* Headers */ = {
+-			isa = PBXHeadersBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1334278E0ACC58ED00F54FA3 /* alpha.h in Headers */,
+-				133427900ACC58ED00F54FA3 /* clusterfit.h in Headers */,
+-				133427920ACC58ED00F54FA3 /* colourfit.h in Headers */,
+-				133427940ACC58ED00F54FA3 /* colourset.h in Headers */,
+-				133427960ACC58ED00F54FA3 /* colourblock.h in Headers */,
+-				133427970ACC58ED00F54FA3 /* config.h in Headers */,
+-				133427990ACC58ED00F54FA3 /* maths.h in Headers */,
+-				1334279B0ACC58ED00F54FA3 /* rangefit.h in Headers */,
+-				1334279C0ACC58ED00F54FA3 /* simd.h in Headers */,
+-				1334279D0ACC58ED00F54FA3 /* simd_sse.h in Headers */,
+-				1334279E0ACC58ED00F54FA3 /* simd_ve.h in Headers */,
+-				133427A00ACC58ED00F54FA3 /* singlecolourfit.h in Headers */,
+-				133427A30ACC58ED00F54FA3 /* squish.h in Headers */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		D2AAC043055464E500DB518D /* Headers */ = {
+-			isa = PBXHeadersBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1350D71B092AA858005EE038 /* clusterfit.h in Headers */,
+-				1350D71F092AA858005EE038 /* colourblock.h in Headers */,
+-				1350D720092AA858005EE038 /* config.h in Headers */,
+-				1350D722092AA858005EE038 /* maths.h in Headers */,
+-				1350D726092AA858005EE038 /* rangefit.h in Headers */,
+-				1350D728092AA858005EE038 /* squish.h in Headers */,
+-				13CD64C2092BCF8A00488C97 /* simd.h in Headers */,
+-				13D0DC910931F93A00909807 /* simd_ve.h in Headers */,
+-				13D0DC970931F9D600909807 /* simd_sse.h in Headers */,
+-				13C4C7AE0941C18000AC5B89 /* colourset.h in Headers */,
+-				13A7CCA40952BE63001C963A /* colourfit.h in Headers */,
+-				133FA0DC096A7B8E0050752E /* alpha.h in Headers */,
+-				139C234F09B0602700A2500D /* singlecolourfit.h in Headers */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-/* End PBXHeadersBuildPhase section */
+-
+-/* Begin PBXNativeTarget section */
+-		133427850ACC587F00F54FA3 /* squish */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = 133427880ACC587F00F54FA3 /* Build configuration list for PBXNativeTarget "squish" */;
+-			buildPhases = (
+-				133427810ACC587F00F54FA3 /* Headers */,
+-				133427820ACC587F00F54FA3 /* Resources */,
+-				133427830ACC587F00F54FA3 /* Sources */,
+-				133427840ACC587F00F54FA3 /* Frameworks */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-			);
+-			name = squish;
+-			productName = squish;
+-			productReference = 133427860ACC587F00F54FA3 /* squish.framework */;
+-			productType = "com.apple.product-type.framework";
+-		};
+-		1342B4100999DE7F00152915 /* squishpng */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = 1342B4130999DE9F00152915 /* Build configuration list for PBXNativeTarget "squishpng" */;
+-			buildPhases = (
+-				1342B40E0999DE7F00152915 /* Sources */,
+-				1342B40F0999DE7F00152915 /* Frameworks */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-				1342B58F099BF93D00152915 /* PBXTargetDependency */,
+-			);
+-			name = squishpng;
+-			productName = squishpng;
+-			productReference = 1342B4110999DE7F00152915 /* squishpng */;
+-			productType = "com.apple.product-type.tool";
+-		};
+-		1342B4360999E07C00152915 /* squishtest */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = 1342B43B0999E0C000152915 /* Build configuration list for PBXNativeTarget "squishtest" */;
+-			buildPhases = (
+-				1342B4340999E07C00152915 /* Sources */,
+-				1342B4350999E07C00152915 /* Frameworks */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-				1342B52C099BF72F00152915 /* PBXTargetDependency */,
+-			);
+-			name = squishtest;
+-			productName = squishtest;
+-			productReference = 1342B4370999E07C00152915 /* squishtest */;
+-			productType = "com.apple.product-type.tool";
+-		};
+-		139C21C309ADAA7000A2500D /* squishgen */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = 139C21CB09ADAB0300A2500D /* Build configuration list for PBXNativeTarget "squishgen" */;
+-			buildPhases = (
+-				139C21C109ADAA7000A2500D /* Sources */,
+-				139C21C209ADAA7000A2500D /* Frameworks */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-			);
+-			name = squishgen;
+-			productName = squishgen;
+-			productReference = 139C21C409ADAA7000A2500D /* squishgen */;
+-			productType = "com.apple.product-type.tool";
+-		};
+-		D2AAC045055464E500DB518D /* libsquish */ = {
+-			isa = PBXNativeTarget;
+-			buildConfigurationList = 1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "libsquish" */;
+-			buildPhases = (
+-				D2AAC043055464E500DB518D /* Headers */,
+-				D2AAC044055464E500DB518D /* Sources */,
+-				D289987405E68DCB004EDB86 /* Frameworks */,
+-			);
+-			buildRules = (
+-			);
+-			dependencies = (
+-			);
+-			name = libsquish;
+-			productName = squish;
+-			productReference = D2AAC046055464E500DB518D /* libsquish.a */;
+-			productType = "com.apple.product-type.library.static";
+-		};
+-/* End PBXNativeTarget section */
+-
+-/* Begin PBXProject section */
+-		08FB7793FE84155DC02AAC07 /* Project object */ = {
+-			isa = PBXProject;
+-			buildConfigurationList = 1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "squish" */;
+-			hasScannedForEncodings = 1;
+-			mainGroup = 08FB7794FE84155DC02AAC07 /* squish */;
+-			projectDirPath = "";
+-			targets = (
+-				D2AAC045055464E500DB518D /* libsquish */,
+-				1342B4100999DE7F00152915 /* squishpng */,
+-				1342B4360999E07C00152915 /* squishtest */,
+-				139C21C309ADAA7000A2500D /* squishgen */,
+-				133427850ACC587F00F54FA3 /* squish */,
+-			);
+-		};
+-/* End PBXProject section */
+-
+-/* Begin PBXResourcesBuildPhase section */
+-		133427820ACC587F00F54FA3 /* Resources */ = {
+-			isa = PBXResourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-/* End PBXResourcesBuildPhase section */
+-
+-/* Begin PBXSourcesBuildPhase section */
+-		133427830ACC587F00F54FA3 /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1334278D0ACC58ED00F54FA3 /* alpha.cpp in Sources */,
+-				1334278F0ACC58ED00F54FA3 /* clusterfit.cpp in Sources */,
+-				133427910ACC58ED00F54FA3 /* colourfit.cpp in Sources */,
+-				133427930ACC58ED00F54FA3 /* colourset.cpp in Sources */,
+-				133427950ACC58ED00F54FA3 /* colourblock.cpp in Sources */,
+-				133427980ACC58ED00F54FA3 /* maths.cpp in Sources */,
+-				1334279A0ACC58ED00F54FA3 /* rangefit.cpp in Sources */,
+-				1334279F0ACC58ED00F54FA3 /* singlecolourfit.cpp in Sources */,
+-				133427A20ACC58ED00F54FA3 /* squish.cpp in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		1342B40E0999DE7F00152915 /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1342B41A0999DF7000152915 /* squishpng.cpp in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		1342B4340999E07C00152915 /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1342B43F0999E0CC00152915 /* squishtest.cpp in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		139C21C109ADAA7000A2500D /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				139C21CF09ADAB0800A2500D /* squishgen.cpp in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-		D2AAC044055464E500DB518D /* Sources */ = {
+-			isa = PBXSourcesBuildPhase;
+-			buildActionMask = 2147483647;
+-			files = (
+-				1350D71A092AA858005EE038 /* clusterfit.cpp in Sources */,
+-				1350D71E092AA858005EE038 /* colourblock.cpp in Sources */,
+-				1350D721092AA858005EE038 /* maths.cpp in Sources */,
+-				1350D725092AA858005EE038 /* rangefit.cpp in Sources */,
+-				1350D727092AA858005EE038 /* squish.cpp in Sources */,
+-				13C4C7AD0941C18000AC5B89 /* colourset.cpp in Sources */,
+-				13A7CCA50952BE63001C963A /* colourfit.cpp in Sources */,
+-				133FA0DD096A7B8E0050752E /* alpha.cpp in Sources */,
+-				139C235009B0602700A2500D /* singlecolourfit.cpp in Sources */,
+-			);
+-			runOnlyForDeploymentPostprocessing = 0;
+-		};
+-/* End PBXSourcesBuildPhase section */
+-
+-/* Begin PBXTargetDependency section */
+-		1342B52C099BF72F00152915 /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			target = D2AAC045055464E500DB518D /* libsquish */;
+-			targetProxy = 1342B52B099BF72F00152915 /* PBXContainerItemProxy */;
+-		};
+-		1342B58F099BF93D00152915 /* PBXTargetDependency */ = {
+-			isa = PBXTargetDependency;
+-			target = D2AAC045055464E500DB518D /* libsquish */;
+-			targetProxy = 1342B58E099BF93D00152915 /* PBXContainerItemProxy */;
+-		};
+-/* End PBXTargetDependency section */
+-
+-/* Begin XCBuildConfiguration section */
+-		133427890ACC587F00F54FA3 /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				ARCHS = (
+-					ppc,
+-					i386,
+-				);
+-				COPY_PHASE_STRIP = NO;
+-				DYLIB_COMPATIBILITY_VERSION = 1;
+-				DYLIB_CURRENT_VERSION = 1;
+-				FRAMEWORK_VERSION = A;
+-				GCC_DYNAMIC_NO_PIC = NO;
+-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+-				GCC_MODEL_TUNING = G5;
+-				GCC_PREPROCESSOR_DEFINITIONS = "$(SQUISH_CPP_$(CURRENT_ARCH))";
+-				INFOPLIST_FILE = "squish-Info.plist";
+-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+-				OTHER_CFLAGS = "$(SQUISH_CFLAGS_$(CURRENT_ARCH))";
+-				PRODUCT_NAME = squish;
+-				SQUISH_CFLAGS_i386 = "";
+-				SQUISH_CFLAGS_ppc = "-maltivec";
+-				SQUISH_CPP_i386 = "SQUISH_USE_SSE=2";
+-				SQUISH_CPP_ppc = "SQUISH_USE_ALTIVEC=1";
+-			};
+-			name = Debug;
+-		};
+-		1334278A0ACC587F00F54FA3 /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				ARCHS = (
+-					ppc,
+-					i386,
+-				);
+-				COPY_PHASE_STRIP = YES;
+-				DYLIB_COMPATIBILITY_VERSION = 1;
+-				DYLIB_CURRENT_VERSION = 1;
+-				FRAMEWORK_VERSION = A;
+-				GCC_DYNAMIC_NO_PIC = NO;
+-				GCC_PREPROCESSOR_DEFINITIONS = "$(SQUISH_CPP_$(CURRENT_ARCH))";
+-				INFOPLIST_FILE = "squish-Info.plist";
+-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+-				OTHER_CFLAGS = "$(SQUISH_CFLAGS_$(CURRENT_ARCH))";
+-				PRODUCT_NAME = squish;
+-				SQUISH_CFLAGS_i386 = "";
+-				SQUISH_CFLAGS_ppc = "-maltivec";
+-				SQUISH_CPP_i386 = "SQUISH_USE_SSE=2";
+-				SQUISH_CPP_ppc = "SQUISH_USE_ALTIVEC=1";
+-			};
+-			name = Release;
+-		};
+-		1342B4140999DE9F00152915 /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = (
+-					..,
+-					/usr/local/include,
+-				);
+-				INSTALL_PATH = "$(HOME)/bin";
+-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+-				OTHER_LDFLAGS = (
+-					"-lpng",
+-					"-lz",
+-				);
+-				PRODUCT_NAME = squishpng;
+-			};
+-			name = Debug;
+-		};
+-		1342B4150999DE9F00152915 /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = (
+-					..,
+-					/usr/local/include,
+-				);
+-				INSTALL_PATH = "$(HOME)/bin";
+-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+-				OTHER_LDFLAGS = (
+-					"-lpng",
+-					"-lz",
+-				);
+-				PRODUCT_NAME = squishpng;
+-			};
+-			name = Release;
+-		};
+-		1342B43C0999E0C000152915 /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = ..;
+-				INSTALL_PATH = "$(HOME)/bin";
+-				PRODUCT_NAME = squishtest;
+-			};
+-			name = Debug;
+-		};
+-		1342B43D0999E0C000152915 /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = ..;
+-				INSTALL_PATH = "$(HOME)/bin";
+-				PRODUCT_NAME = squishtest;
+-			};
+-			name = Release;
+-		};
+-		139C21CC09ADAB0300A2500D /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = ..;
+-				INSTALL_PATH = "$(HOME)/bin";
+-				PRODUCT_NAME = squishgen;
+-			};
+-			name = Debug;
+-		};
+-		139C21CD09ADAB0300A2500D /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				HEADER_SEARCH_PATHS = ..;
+-				INSTALL_PATH = "$(HOME)/bin";
+-				PRODUCT_NAME = squishgen;
+-			};
+-			name = Release;
+-		};
+-		1DEB91EC08733DB70010E9CD /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				COPY_PHASE_STRIP = NO;
+-				GCC_PREPROCESSOR_DEFINITIONS = "$(SQUISH_CPP_$(CURRENT_ARCH))";
+-				INSTALL_PATH = /usr/local/lib;
+-				OTHER_CFLAGS = "$(SQUISH_CFLAGS_$(CURRENT_ARCH))";
+-				PRODUCT_NAME = squish;
+-				SQUISH_CFLAGS_i386 = "";
+-				SQUISH_CFLAGS_ppc = "-maltivec";
+-				SQUISH_CPP_i386 = "SQUISH_USE_SSE=2";
+-				SQUISH_CPP_ppc = "SQUISH_USE_ALTIVEC=1";
+-				STRIP_INSTALLED_PRODUCT = NO;
+-			};
+-			name = Debug;
+-		};
+-		1DEB91ED08733DB70010E9CD /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				GCC_PREPROCESSOR_DEFINITIONS = "$(SQUISH_CPP_$(CURRENT_ARCH))";
+-				INSTALL_PATH = /usr/local/lib;
+-				OTHER_CFLAGS = "$(SQUISH_CFLAGS_$(CURRENT_ARCH))";
+-				PRODUCT_NAME = squish;
+-				SQUISH_CFLAGS_i386 = "";
+-				SQUISH_CFLAGS_ppc = "-maltivec";
+-				SQUISH_CPP_i386 = "SQUISH_USE_SSE=2";
+-				SQUISH_CPP_ppc = "SQUISH_USE_ALTIVEC=1";
+-				STRIP_INSTALLED_PRODUCT = YES;
+-			};
+-			name = Release;
+-		};
+-		1DEB91F008733DB70010E9CD /* Debug */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				GCC_DYNAMIC_NO_PIC = YES;
+-				GCC_OPTIMIZATION_LEVEL = 0;
+-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+-				GCC_WARN_PEDANTIC = YES;
+-				GCC_WARN_SHADOW = YES;
+-				GCC_WARN_SIGN_COMPARE = YES;
+-				GCC_WARN_UNUSED_PARAMETER = YES;
+-				GCC_WARN_UNUSED_VALUE = YES;
+-				GCC_WARN_UNUSED_VARIABLE = YES;
+-				PREBINDING = NO;
+-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+-			};
+-			name = Debug;
+-		};
+-		1DEB91F108733DB70010E9CD /* Release */ = {
+-			isa = XCBuildConfiguration;
+-			buildSettings = {
+-				GCC_DYNAMIC_NO_PIC = YES;
+-				GCC_OPTIMIZATION_LEVEL = 3;
+-				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+-				GCC_UNROLL_LOOPS = YES;
+-				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+-				GCC_WARN_PEDANTIC = YES;
+-				GCC_WARN_SHADOW = YES;
+-				GCC_WARN_SIGN_COMPARE = YES;
+-				GCC_WARN_UNUSED_PARAMETER = YES;
+-				GCC_WARN_UNUSED_VALUE = YES;
+-				GCC_WARN_UNUSED_VARIABLE = YES;
+-				PREBINDING = NO;
+-				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+-			};
+-			name = Release;
+-		};
+-/* End XCBuildConfiguration section */
+-
+-/* Begin XCConfigurationList section */
+-		133427880ACC587F00F54FA3 /* Build configuration list for PBXNativeTarget "squish" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				133427890ACC587F00F54FA3 /* Debug */,
+-				1334278A0ACC587F00F54FA3 /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-		1342B4130999DE9F00152915 /* Build configuration list for PBXNativeTarget "squishpng" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				1342B4140999DE9F00152915 /* Debug */,
+-				1342B4150999DE9F00152915 /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-		1342B43B0999E0C000152915 /* Build configuration list for PBXNativeTarget "squishtest" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				1342B43C0999E0C000152915 /* Debug */,
+-				1342B43D0999E0C000152915 /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-		139C21CB09ADAB0300A2500D /* Build configuration list for PBXNativeTarget "squishgen" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				139C21CC09ADAB0300A2500D /* Debug */,
+-				139C21CD09ADAB0300A2500D /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-		1DEB91EB08733DB70010E9CD /* Build configuration list for PBXNativeTarget "libsquish" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				1DEB91EC08733DB70010E9CD /* Debug */,
+-				1DEB91ED08733DB70010E9CD /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-		1DEB91EF08733DB70010E9CD /* Build configuration list for PBXProject "squish" */ = {
+-			isa = XCConfigurationList;
+-			buildConfigurations = (
+-				1DEB91F008733DB70010E9CD /* Debug */,
+-				1DEB91F108733DB70010E9CD /* Release */,
+-			);
+-			defaultConfigurationIsVisible = 0;
+-			defaultConfigurationName = Release;
+-		};
+-/* End XCConfigurationList section */
+-	};
+-	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+-}
+diff -urN squish-1.10/vs7/squish/squish_2010.vcxproj libsquish-1.10-openelec/vs7/squish/squish_2010.vcxproj
+--- squish-1.10/vs7/squish/squish_2010.vcxproj	1970-01-01 01:00:00.000000000 +0100
++++ libsquish-1.10-openelec/vs7/squish/squish_2010.vcxproj	2015-01-09 10:58:43.000000000 +0100
+@@ -0,0 +1,107 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup Label="ProjectConfigurations">
++    <ProjectConfiguration Include="Debug|Win32">
++      <Configuration>Debug</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++    <ProjectConfiguration Include="Release|Win32">
++      <Configuration>Release</Configuration>
++      <Platform>Win32</Platform>
++    </ProjectConfiguration>
++  </ItemGroup>
++  <PropertyGroup Label="Globals">
++    <ProjectName>squish</ProjectName>
++    <ProjectGuid>{6A8518C3-D81A-4428-BD7F-C37933088AC1}</ProjectGuid>
++    <Keyword>Win32Proj</Keyword>
++  </PropertyGroup>
++  <Import Project="$(SolutionDir)\XBMC.core-defaults.props" />
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseDebugLibraries>false</UseDebugLibraries>
++    <CharacterSet>MultiByte</CharacterSet>
++  </PropertyGroup>
++  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
++    <ConfigurationType>StaticLibrary</ConfigurationType>
++    <UseDebugLibraries>true</UseDebugLibraries>
++    <CharacterSet>MultiByte</CharacterSet>
++  </PropertyGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
++  <ImportGroup Label="ExtensionSettings">
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
++  </ImportGroup>
++  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
++    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
++    <Import Project="$(SolutionDir)\XBMC.defaults.props" />
++  </ImportGroup>
++  <PropertyGroup Label="UserMacros" />
++  <PropertyGroup>
++    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
++    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)libs\$(TargetName)\$(Configuration)\</OutDir>
++    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)objs\$(TargetName)\$(Configuration)\</IntDir>
++    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)d</TargetName>
++  </PropertyGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
++    <ClCompile>
++      <AdditionalIncludeDirectories>..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>_LIB;SQUISH_USE_SSE=2;_SECURE_SCL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <WarningLevel>Level4</WarningLevel>
++    </ClCompile>
++    <Lib>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
++    <ClCompile>
++      <AdditionalIncludeDirectories>..\..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
++      <PreprocessorDefinitions>_LIB;SQUISH_USE_SSE=2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
++      <WarningLevel>Level4</WarningLevel>
++    </ClCompile>
++    <Lib>
++      <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
++      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
++      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
++    </Lib>
++  </ItemDefinitionGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\alpha.cpp" />
++    <ClCompile Include="..\..\clusterfit.cpp" />
++    <ClCompile Include="..\..\colourblock.cpp" />
++    <ClCompile Include="..\..\colourfit.cpp" />
++    <ClCompile Include="..\..\colourset.cpp" />
++    <ClCompile Include="..\..\maths.cpp" />
++    <ClCompile Include="..\..\rangefit.cpp" />
++    <ClCompile Include="..\..\singlecolourfit.cpp" />
++    <ClCompile Include="..\..\squish.cpp" />
++  </ItemGroup>
++  <ItemGroup>
++    <ClInclude Include="..\..\alpha.h" />
++    <ClInclude Include="..\..\clusterfit.h" />
++    <ClInclude Include="..\..\colourblock.h" />
++    <ClInclude Include="..\..\colourfit.h" />
++    <ClInclude Include="..\..\colourset.h" />
++    <ClInclude Include="..\..\config.h" />
++    <ClInclude Include="..\..\maths.h" />
++    <ClInclude Include="..\..\rangefit.h" />
++    <ClInclude Include="..\..\simd.h" />
++    <ClInclude Include="..\..\simd_float.h" />
++    <ClInclude Include="..\..\simd_sse.h" />
++    <ClInclude Include="..\..\simd_ve.h" />
++    <ClInclude Include="..\..\singlecolourfit.h" />
++    <ClInclude Include="..\..\squish.h" />
++  </ItemGroup>
++  <ItemGroup>
++    <None Include="..\..\singlecolourlookup.inl" />
++    <None Include="..\..\texture_compression_s3tc.txt" />
++  </ItemGroup>
++  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
++  <ImportGroup Label="ExtensionTargets">
++  </ImportGroup>
++</Project>
+\ Manca newline alla fine del file
+diff -urN squish-1.10/vs7/squish/squish_2010.vcxproj.filters libsquish-1.10-openelec/vs7/squish/squish_2010.vcxproj.filters
+--- squish-1.10/vs7/squish/squish_2010.vcxproj.filters	1970-01-01 01:00:00.000000000 +0100
++++ libsquish-1.10-openelec/vs7/squish/squish_2010.vcxproj.filters	2015-01-09 10:58:43.000000000 +0100
+@@ -0,0 +1,98 @@
++﻿<?xml version="1.0" encoding="utf-8"?>
++<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
++  <ItemGroup>
++    <Filter Include="Source Files">
++      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
++      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
++    </Filter>
++    <Filter Include="Header Files">
++      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
++      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
++    </Filter>
++    <Filter Include="Resource Files">
++      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
++      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
++    </Filter>
++  </ItemGroup>
++  <ItemGroup>
++    <ClCompile Include="..\..\alpha.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\clusterfit.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\colourblock.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\colourfit.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\colourset.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\maths.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\rangefit.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\singlecolourfit.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++    <ClCompile Include="..\..\squish.cpp">
++      <Filter>Source Files</Filter>
++    </ClCompile>
++  </ItemGroup>
++  <ItemGroup>
++    <ClInclude Include="..\..\alpha.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\clusterfit.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\colourblock.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\colourfit.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\colourset.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\config.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\maths.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\rangefit.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\simd.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\simd_float.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\simd_sse.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\simd_ve.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\singlecolourfit.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++    <ClInclude Include="..\..\squish.h">
++      <Filter>Header Files</Filter>
++    </ClInclude>
++  </ItemGroup>
++  <ItemGroup>
++    <None Include="..\..\singlecolourlookup.inl">
++      <Filter>Header Files</Filter>
++    </None>
++    <None Include="..\..\texture_compression_s3tc.txt">
++      <Filter>Resource Files</Filter>
++    </None>
++  </ItemGroup>
++</Project>
+\ Manca newline alla fine del file
+diff -urN squish-1.10/vs7/squish/squish.vcproj libsquish-1.10-openelec/vs7/squish/squish.vcproj
+--- squish-1.10/vs7/squish/squish.vcproj	2007-03-21 20:31:51.000000000 +0100
++++ libsquish-1.10-openelec/vs7/squish/squish.vcproj	1970-01-01 01:00:00.000000000 +0100
+@@ -1,201 +0,0 @@
+-<?xml version="1.0" encoding="Windows-1252"?>
+-<VisualStudioProject
+-	ProjectType="Visual C++"
+-	Version="7.10"
+-	Name="squish"
+-	ProjectGUID="{6A8518C3-D81A-4428-BD7F-C37933088AC1}"
+-	Keyword="Win32Proj">
+-	<Platforms>
+-		<Platform
+-			Name="Win32"/>
+-	</Platforms>
+-	<Configurations>
+-		<Configuration
+-			Name="Debug|Win32"
+-			OutputDirectory="Debug"
+-			IntermediateDirectory="Debug"
+-			ConfigurationType="4"
+-			CharacterSet="2">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				Optimization="0"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;SQUISH_USE_SSE=2"
+-				MinimalRebuild="TRUE"
+-				BasicRuntimeChecks="3"
+-				RuntimeLibrary="3"
+-				EnableEnhancedInstructionSet="1"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLibrarianTool"
+-				OutputFile="../../lib/squishd.lib"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-		<Configuration
+-			Name="Release|Win32"
+-			OutputDirectory="Release"
+-			IntermediateDirectory="Release"
+-			ConfigurationType="4"
+-			CharacterSet="2"
+-			WholeProgramOptimization="TRUE">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				GlobalOptimizations="TRUE"
+-				InlineFunctionExpansion="2"
+-				FavorSizeOrSpeed="1"
+-				OmitFramePointers="TRUE"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;SQUISH_USE_SSE=2"
+-				RuntimeLibrary="2"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLibrarianTool"
+-				OutputFile="../../lib/squish.lib"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-	</Configurations>
+-	<References>
+-	</References>
+-	<Files>
+-		<Filter
+-			Name="Source Files"
+-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+-			<File
+-				RelativePath="..\..\alpha.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\clusterfit.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourblock.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourfit.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourset.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\maths.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\rangefit.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\singlecolourfit.cpp">
+-			</File>
+-			<File
+-				RelativePath="..\..\squish.cpp">
+-			</File>
+-		</Filter>
+-		<Filter
+-			Name="Header Files"
+-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+-			<File
+-				RelativePath="..\..\alpha.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\clusterfit.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourblock.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourfit.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\colourset.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\config.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\maths.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\rangefit.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\simd.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\simd_float.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\simd_sse.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\simd_ve.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\singlecolourfit.h">
+-			</File>
+-			<File
+-				RelativePath="..\..\singlecolourlookup.inl">
+-			</File>
+-			<File
+-				RelativePath="..\..\squish.h">
+-			</File>
+-		</Filter>
+-		<Filter
+-			Name="Resource Files"
+-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+-			<File
+-				RelativePath="..\..\texture_compression_s3tc.txt">
+-			</File>
+-		</Filter>
+-	</Files>
+-	<Globals>
+-	</Globals>
+-</VisualStudioProject>
+diff -urN squish-1.10/vs7/squishpng/squishpng.vcproj libsquish-1.10-openelec/vs7/squishpng/squishpng.vcproj
+--- squish-1.10/vs7/squishpng/squishpng.vcproj	2007-03-21 20:31:51.000000000 +0100
++++ libsquish-1.10-openelec/vs7/squishpng/squishpng.vcproj	2015-01-09 10:58:43.000000000 +0100
+@@ -1,140 +1,140 @@
+-<?xml version="1.0" encoding="Windows-1252"?>
+-<VisualStudioProject
+-	ProjectType="Visual C++"
+-	Version="7.10"
+-	Name="squishpng"
+-	ProjectGUID="{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}"
+-	Keyword="Win32Proj">
+-	<Platforms>
+-		<Platform
+-			Name="Win32"/>
+-	</Platforms>
+-	<Configurations>
+-		<Configuration
+-			Name="Debug|Win32"
+-			OutputDirectory="Debug"
+-			IntermediateDirectory="Debug"
+-			ConfigurationType="1"
+-			CharacterSet="2">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				Optimization="0"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+-				MinimalRebuild="TRUE"
+-				BasicRuntimeChecks="3"
+-				RuntimeLibrary="3"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLinkerTool"
+-				AdditionalDependencies="libpng13d.lib"
+-				OutputFile="../../bin/squishpngd.exe"
+-				LinkIncremental="2"
+-				GenerateDebugInformation="TRUE"
+-				ProgramDatabaseFile="$(OutDir)/squishpng.pdb"
+-				SubSystem="1"
+-				TargetMachine="1"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCWebDeploymentTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-		<Configuration
+-			Name="Release|Win32"
+-			OutputDirectory="Release"
+-			IntermediateDirectory="Release"
+-			ConfigurationType="1"
+-			CharacterSet="2">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+-				RuntimeLibrary="2"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLinkerTool"
+-				AdditionalDependencies="libpng.lib"
+-				OutputFile="../../bin/squishpng.exe"
+-				LinkIncremental="1"
+-				GenerateDebugInformation="TRUE"
+-				SubSystem="1"
+-				OptimizeReferences="2"
+-				EnableCOMDATFolding="2"
+-				TargetMachine="1"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCWebDeploymentTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-	</Configurations>
+-	<References>
+-	</References>
+-	<Files>
+-		<Filter
+-			Name="Source Files"
+-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+-			<File
+-				RelativePath="..\..\extra\squishpng.cpp">
+-			</File>
+-		</Filter>
+-		<Filter
+-			Name="Header Files"
+-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+-		</Filter>
+-		<Filter
+-			Name="Resource Files"
+-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+-		</Filter>
+-	</Files>
+-	<Globals>
+-	</Globals>
+-</VisualStudioProject>
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioProject
++	ProjectType="Visual C++"
++	Version="7.10"
++	Name="squishpng"
++	ProjectGUID="{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}"
++	Keyword="Win32Proj">
++	<Platforms>
++		<Platform
++			Name="Win32"/>
++	</Platforms>
++	<Configurations>
++		<Configuration
++			Name="Debug|Win32"
++			OutputDirectory="Debug"
++			IntermediateDirectory="Debug"
++			ConfigurationType="1"
++			CharacterSet="2">
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="0"
++				AdditionalIncludeDirectories="..\.."
++				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
++				MinimalRebuild="TRUE"
++				BasicRuntimeChecks="3"
++				RuntimeLibrary="3"
++				ForceConformanceInForLoopScope="TRUE"
++				UsePrecompiledHeader="0"
++				WarningLevel="4"
++				WarnAsError="TRUE"
++				Detect64BitPortabilityProblems="TRUE"
++				DebugInformationFormat="3"/>
++			<Tool
++				Name="VCCustomBuildTool"/>
++			<Tool
++				Name="VCLinkerTool"
++				AdditionalDependencies="libpng13d.lib"
++				OutputFile="../../bin/squishpngd.exe"
++				LinkIncremental="2"
++				GenerateDebugInformation="TRUE"
++				ProgramDatabaseFile="$(OutDir)/squishpng.pdb"
++				SubSystem="1"
++				TargetMachine="1"/>
++			<Tool
++				Name="VCMIDLTool"/>
++			<Tool
++				Name="VCPostBuildEventTool"/>
++			<Tool
++				Name="VCPreBuildEventTool"/>
++			<Tool
++				Name="VCPreLinkEventTool"/>
++			<Tool
++				Name="VCResourceCompilerTool"/>
++			<Tool
++				Name="VCWebServiceProxyGeneratorTool"/>
++			<Tool
++				Name="VCXMLDataGeneratorTool"/>
++			<Tool
++				Name="VCWebDeploymentTool"/>
++			<Tool
++				Name="VCManagedWrapperGeneratorTool"/>
++			<Tool
++				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
++		</Configuration>
++		<Configuration
++			Name="Release|Win32"
++			OutputDirectory="Release"
++			IntermediateDirectory="Release"
++			ConfigurationType="1"
++			CharacterSet="2">
++			<Tool
++				Name="VCCLCompilerTool"
++				AdditionalIncludeDirectories="..\.."
++				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
++				RuntimeLibrary="2"
++				ForceConformanceInForLoopScope="TRUE"
++				UsePrecompiledHeader="0"
++				WarningLevel="4"
++				WarnAsError="TRUE"
++				Detect64BitPortabilityProblems="TRUE"
++				DebugInformationFormat="3"/>
++			<Tool
++				Name="VCCustomBuildTool"/>
++			<Tool
++				Name="VCLinkerTool"
++				AdditionalDependencies="libpng.lib"
++				OutputFile="../../bin/squishpng.exe"
++				LinkIncremental="1"
++				GenerateDebugInformation="TRUE"
++				SubSystem="1"
++				OptimizeReferences="2"
++				EnableCOMDATFolding="2"
++				TargetMachine="1"/>
++			<Tool
++				Name="VCMIDLTool"/>
++			<Tool
++				Name="VCPostBuildEventTool"/>
++			<Tool
++				Name="VCPreBuildEventTool"/>
++			<Tool
++				Name="VCPreLinkEventTool"/>
++			<Tool
++				Name="VCResourceCompilerTool"/>
++			<Tool
++				Name="VCWebServiceProxyGeneratorTool"/>
++			<Tool
++				Name="VCXMLDataGeneratorTool"/>
++			<Tool
++				Name="VCWebDeploymentTool"/>
++			<Tool
++				Name="VCManagedWrapperGeneratorTool"/>
++			<Tool
++				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
++		</Configuration>
++	</Configurations>
++	<References>
++	</References>
++	<Files>
++		<Filter
++			Name="Source Files"
++			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
++			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
++			<File
++				RelativePath="..\..\extra\squishpng.cpp">
++			</File>
++		</Filter>
++		<Filter
++			Name="Header Files"
++			Filter="h;hpp;hxx;hm;inl;inc;xsd"
++			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
++		</Filter>
++		<Filter
++			Name="Resource Files"
++			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
++			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
++		</Filter>
++	</Files>
++	<Globals>
++	</Globals>
++</VisualStudioProject>
+diff -urN squish-1.10/vs7/squish.sln libsquish-1.10-openelec/vs7/squish.sln
+--- squish-1.10/vs7/squish.sln	2006-02-17 12:45:31.000000000 +0100
++++ libsquish-1.10-openelec/vs7/squish.sln	2015-01-09 10:58:43.000000000 +0100
+@@ -1,39 +1,39 @@
+-Microsoft Visual Studio Solution File, Format Version 8.00
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "squish\squish.vcproj", "{6A8518C3-D81A-4428-BD7F-C37933088AC1}"
+-	ProjectSection(ProjectDependencies) = postProject
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squishpng", "squishpng\squishpng.vcproj", "{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1} = {6A8518C3-D81A-4428-BD7F-C37933088AC1}
+-	EndProjectSection
+-EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squishtest", "squishtest\squishtest.vcproj", "{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1} = {6A8518C3-D81A-4428-BD7F-C37933088AC1}
+-	EndProjectSection
+-EndProject
+-Global
+-	GlobalSection(SolutionConfiguration) = preSolution
+-		Debug = Debug
+-		Release = Release
+-	EndGlobalSection
+-	GlobalSection(ProjectConfiguration) = postSolution
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug.ActiveCfg = Debug|Win32
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug.Build.0 = Debug|Win32
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release.ActiveCfg = Release|Win32
+-		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release.Build.0 = Release|Win32
+-		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Debug.ActiveCfg = Debug|Win32
+-		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Debug.Build.0 = Debug|Win32
+-		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Release.ActiveCfg = Release|Win32
+-		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Release.Build.0 = Release|Win32
+-		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Debug.ActiveCfg = Debug|Win32
+-		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Debug.Build.0 = Debug|Win32
+-		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Release.ActiveCfg = Release|Win32
+-		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Release.Build.0 = Release|Win32
+-	EndGlobalSection
+-	GlobalSection(ExtensibilityGlobals) = postSolution
+-	EndGlobalSection
+-	GlobalSection(ExtensibilityAddIns) = postSolution
+-	EndGlobalSection
+-EndGlobal
++Microsoft Visual Studio Solution File, Format Version 8.00
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squish", "squish\squish.vcproj", "{6A8518C3-D81A-4428-BD7F-C37933088AC1}"
++	ProjectSection(ProjectDependencies) = postProject
++	EndProjectSection
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squishpng", "squishpng\squishpng.vcproj", "{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}"
++	ProjectSection(ProjectDependencies) = postProject
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1} = {6A8518C3-D81A-4428-BD7F-C37933088AC1}
++	EndProjectSection
++EndProject
++Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "squishtest", "squishtest\squishtest.vcproj", "{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}"
++	ProjectSection(ProjectDependencies) = postProject
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1} = {6A8518C3-D81A-4428-BD7F-C37933088AC1}
++	EndProjectSection
++EndProject
++Global
++	GlobalSection(SolutionConfiguration) = preSolution
++		Debug = Debug
++		Release = Release
++	EndGlobalSection
++	GlobalSection(ProjectConfiguration) = postSolution
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug.ActiveCfg = Debug|Win32
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Debug.Build.0 = Debug|Win32
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release.ActiveCfg = Release|Win32
++		{6A8518C3-D81A-4428-BD7F-C37933088AC1}.Release.Build.0 = Release|Win32
++		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Debug.ActiveCfg = Debug|Win32
++		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Debug.Build.0 = Debug|Win32
++		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Release.ActiveCfg = Release|Win32
++		{3BC7CF47-F1C8-4BDA-BE30-92F17B21D2C7}.Release.Build.0 = Release|Win32
++		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Debug.ActiveCfg = Debug|Win32
++		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Debug.Build.0 = Debug|Win32
++		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Release.ActiveCfg = Release|Win32
++		{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}.Release.Build.0 = Release|Win32
++	EndGlobalSection
++	GlobalSection(ExtensibilityGlobals) = postSolution
++	EndGlobalSection
++	GlobalSection(ExtensibilityAddIns) = postSolution
++	EndGlobalSection
++EndGlobal
+diff -urN squish-1.10/vs7/squishtest/squishtest.vcproj libsquish-1.10-openelec/vs7/squishtest/squishtest.vcproj
+--- squish-1.10/vs7/squishtest/squishtest.vcproj	2006-10-04 21:56:50.000000000 +0200
++++ libsquish-1.10-openelec/vs7/squishtest/squishtest.vcproj	2015-01-09 10:58:43.000000000 +0100
+@@ -1,138 +1,138 @@
+-<?xml version="1.0" encoding="Windows-1252"?>
+-<VisualStudioProject
+-	ProjectType="Visual C++"
+-	Version="7.10"
+-	Name="squishtest"
+-	ProjectGUID="{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}"
+-	Keyword="Win32Proj">
+-	<Platforms>
+-		<Platform
+-			Name="Win32"/>
+-	</Platforms>
+-	<Configurations>
+-		<Configuration
+-			Name="Debug|Win32"
+-			OutputDirectory="Debug"
+-			IntermediateDirectory="Debug"
+-			ConfigurationType="1"
+-			CharacterSet="2">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				Optimization="0"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+-				MinimalRebuild="TRUE"
+-				BasicRuntimeChecks="3"
+-				RuntimeLibrary="3"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLinkerTool"
+-				OutputFile="../../bin/squishtestd.exe"
+-				LinkIncremental="2"
+-				GenerateDebugInformation="TRUE"
+-				ProgramDatabaseFile="$(OutDir)/squishtest.pdb"
+-				SubSystem="1"
+-				TargetMachine="1"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCWebDeploymentTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-		<Configuration
+-			Name="Release|Win32"
+-			OutputDirectory="Release"
+-			IntermediateDirectory="Release"
+-			ConfigurationType="1"
+-			CharacterSet="2">
+-			<Tool
+-				Name="VCCLCompilerTool"
+-				AdditionalIncludeDirectories="..\.."
+-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+-				RuntimeLibrary="2"
+-				ForceConformanceInForLoopScope="TRUE"
+-				UsePrecompiledHeader="0"
+-				WarningLevel="4"
+-				WarnAsError="TRUE"
+-				Detect64BitPortabilityProblems="TRUE"
+-				DebugInformationFormat="3"/>
+-			<Tool
+-				Name="VCCustomBuildTool"/>
+-			<Tool
+-				Name="VCLinkerTool"
+-				OutputFile="../../bin/squishtest.exe"
+-				LinkIncremental="1"
+-				GenerateDebugInformation="TRUE"
+-				SubSystem="1"
+-				OptimizeReferences="2"
+-				EnableCOMDATFolding="2"
+-				TargetMachine="1"/>
+-			<Tool
+-				Name="VCMIDLTool"/>
+-			<Tool
+-				Name="VCPostBuildEventTool"/>
+-			<Tool
+-				Name="VCPreBuildEventTool"/>
+-			<Tool
+-				Name="VCPreLinkEventTool"/>
+-			<Tool
+-				Name="VCResourceCompilerTool"/>
+-			<Tool
+-				Name="VCWebServiceProxyGeneratorTool"/>
+-			<Tool
+-				Name="VCXMLDataGeneratorTool"/>
+-			<Tool
+-				Name="VCWebDeploymentTool"/>
+-			<Tool
+-				Name="VCManagedWrapperGeneratorTool"/>
+-			<Tool
+-				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+-		</Configuration>
+-	</Configurations>
+-	<References>
+-	</References>
+-	<Files>
+-		<Filter
+-			Name="Source Files"
+-			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+-			<File
+-				RelativePath="..\..\extra\squishtest.cpp">
+-			</File>
+-		</Filter>
+-		<Filter
+-			Name="Header Files"
+-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+-		</Filter>
+-		<Filter
+-			Name="Resource Files"
+-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+-		</Filter>
+-	</Files>
+-	<Globals>
+-	</Globals>
+-</VisualStudioProject>
++<?xml version="1.0" encoding="Windows-1252"?>
++<VisualStudioProject
++	ProjectType="Visual C++"
++	Version="7.10"
++	Name="squishtest"
++	ProjectGUID="{77A3F26C-A1D6-4535-9E37-7D3DF34E4B4B}"
++	Keyword="Win32Proj">
++	<Platforms>
++		<Platform
++			Name="Win32"/>
++	</Platforms>
++	<Configurations>
++		<Configuration
++			Name="Debug|Win32"
++			OutputDirectory="Debug"
++			IntermediateDirectory="Debug"
++			ConfigurationType="1"
++			CharacterSet="2">
++			<Tool
++				Name="VCCLCompilerTool"
++				Optimization="0"
++				AdditionalIncludeDirectories="..\.."
++				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
++				MinimalRebuild="TRUE"
++				BasicRuntimeChecks="3"
++				RuntimeLibrary="3"
++				ForceConformanceInForLoopScope="TRUE"
++				UsePrecompiledHeader="0"
++				WarningLevel="4"
++				WarnAsError="TRUE"
++				Detect64BitPortabilityProblems="TRUE"
++				DebugInformationFormat="3"/>
++			<Tool
++				Name="VCCustomBuildTool"/>
++			<Tool
++				Name="VCLinkerTool"
++				OutputFile="../../bin/squishtestd.exe"
++				LinkIncremental="2"
++				GenerateDebugInformation="TRUE"
++				ProgramDatabaseFile="$(OutDir)/squishtest.pdb"
++				SubSystem="1"
++				TargetMachine="1"/>
++			<Tool
++				Name="VCMIDLTool"/>
++			<Tool
++				Name="VCPostBuildEventTool"/>
++			<Tool
++				Name="VCPreBuildEventTool"/>
++			<Tool
++				Name="VCPreLinkEventTool"/>
++			<Tool
++				Name="VCResourceCompilerTool"/>
++			<Tool
++				Name="VCWebServiceProxyGeneratorTool"/>
++			<Tool
++				Name="VCXMLDataGeneratorTool"/>
++			<Tool
++				Name="VCWebDeploymentTool"/>
++			<Tool
++				Name="VCManagedWrapperGeneratorTool"/>
++			<Tool
++				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
++		</Configuration>
++		<Configuration
++			Name="Release|Win32"
++			OutputDirectory="Release"
++			IntermediateDirectory="Release"
++			ConfigurationType="1"
++			CharacterSet="2">
++			<Tool
++				Name="VCCLCompilerTool"
++				AdditionalIncludeDirectories="..\.."
++				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
++				RuntimeLibrary="2"
++				ForceConformanceInForLoopScope="TRUE"
++				UsePrecompiledHeader="0"
++				WarningLevel="4"
++				WarnAsError="TRUE"
++				Detect64BitPortabilityProblems="TRUE"
++				DebugInformationFormat="3"/>
++			<Tool
++				Name="VCCustomBuildTool"/>
++			<Tool
++				Name="VCLinkerTool"
++				OutputFile="../../bin/squishtest.exe"
++				LinkIncremental="1"
++				GenerateDebugInformation="TRUE"
++				SubSystem="1"
++				OptimizeReferences="2"
++				EnableCOMDATFolding="2"
++				TargetMachine="1"/>
++			<Tool
++				Name="VCMIDLTool"/>
++			<Tool
++				Name="VCPostBuildEventTool"/>
++			<Tool
++				Name="VCPreBuildEventTool"/>
++			<Tool
++				Name="VCPreLinkEventTool"/>
++			<Tool
++				Name="VCResourceCompilerTool"/>
++			<Tool
++				Name="VCWebServiceProxyGeneratorTool"/>
++			<Tool
++				Name="VCXMLDataGeneratorTool"/>
++			<Tool
++				Name="VCWebDeploymentTool"/>
++			<Tool
++				Name="VCManagedWrapperGeneratorTool"/>
++			<Tool
++				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
++		</Configuration>
++	</Configurations>
++	<References>
++	</References>
++	<Files>
++		<Filter
++			Name="Source Files"
++			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
++			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
++			<File
++				RelativePath="..\..\extra\squishtest.cpp">
++			</File>
++		</Filter>
++		<Filter
++			Name="Header Files"
++			Filter="h;hpp;hxx;hm;inl;inc;xsd"
++			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
++		</Filter>
++		<Filter
++			Name="Resource Files"
++			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
++			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
++		</Filter>
++	</Files>
++	<Globals>
++	</Globals>
++</VisualStudioProject>

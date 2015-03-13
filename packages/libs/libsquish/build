@@ -1,0 +1,22 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+#export PREFIX=/usr 
+#export INSTALL_DIR=.install/usr
+
+
+make \
+     PREFIX="/usr" \
+     INSTALL_DIR="."
+
+#make_install
+mkdir -p .install/usr/include
+mkdir -p .install/usr/lib
+mkdir -p .install/usr/lib/pkgconfig
+cp squish.h .install/usr/include
+cp libsquish.a .install/usr/lib
+cp squish.pc .install/usr/lib/pkgconfig
