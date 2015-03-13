@@ -28,6 +28,8 @@ do_configure host \
   --enable-bz2	\
   --enable-zlib \
   --disable-ssl \
+  --with-threads \
+  --enable-unicode=ucs4
 
 export PYTHON_MODULES_INCLUDE="$ROOT/$TOOLCHAIN/include"
 export PYTHON_MODULES_LIB="$ROOT/$TOOLCHAIN/lib"
