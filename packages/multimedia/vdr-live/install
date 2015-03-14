@@ -9,7 +9,7 @@ cd $PKG_BUILD_DIR
 #mkdir -p $INSTALL/usr/share/vdr/plugins/live
 #mkdir -p $INSTALL/usr/share/vdr-plugin-live
 #cp -a lib$1*.so.* $INSTALL/usr/lib/vdr/plugins
-#cp -r live/* $INSTALL/usr/share/vdr/plugins/live
+##cp -r live/* $INSTALL/usr/share/vdr/plugins/live
 #cp -r live/* $INSTALL/usr/share/vdr-plugin-live
 
 #for loc in $INCLUDED_LOCALES; do
