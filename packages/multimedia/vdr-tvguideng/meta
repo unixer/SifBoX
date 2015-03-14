@@ -1,7 +1,7 @@
 PKG_NAME=vdr-tvguideng
-PKG_VERSION=0.0.1
+PKG_VERSION=0.0.2
 PKG_URL_PROTO=git
-PKG_URL_REV=3cc8e78
+PKG_URL_REV=439d3e3
 PKG_URL="git://projects.vdr-developer.org/vdr-plugin-tvguideng.git"
 PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC vdr"
