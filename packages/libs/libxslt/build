@@ -2,8 +2,8 @@
 
 . config/options
 
-cd $BUILD/$1*
-
+get_meta $1
+cd $PKG_BUILD_DIR
 do_configure host \
                  --without-crypto \
                  --without-python
@@ -15,6 +15,7 @@ mkdir -p objdir-host
 mv .install objdir-host
 make clean
 
+export ac_cv_path_XSLTPROC="$ROOT/$PKG_BUILD_DIR/objdir-host/.install/usr/bin/xsltproc"
 do_configure target \
             --without-crypto \
             --without-python
