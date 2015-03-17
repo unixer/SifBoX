@@ -74,7 +74,7 @@ if [ "$DL" = yes ]; then
 
   set_title "GET      $1"
 
-  WGET_OPT="--no-check-certificate --passive-ftp --dns-timeout=5 --connect-timeout=5 --read-timeout=5 --tries=1 -c"
+  WGET_OPT="--no-check-certificate --passive-ftp --dns-timeout=50 --connect-timeout=50 --read-timeout=50 --tries=1 -c"
   [ "$VERBOSE" != yes ] && WGET_OPT="$WGET_OPT -q"
 
   mkdir -p $SOURCES/$1
@@ -116,18 +116,33 @@ if [ "$DL" = yes ]; then
         case $PKG_URL_PROTO in
           svn)
             [ -n "$PKG_URL_REV" ] && SVNREV="-r $PKG_URL_REV"
-            #svn export $SVNREV $PKG_URL $SOURCES/$1/$REPO_BASENAME
-	    svn checkout $SVNREV $PKG_URL $SOURCES/$1/$REPO_BASENAME
+            svn export $SVNREV $PKG_URL $SOURCES/$1/$REPO_BASENAME
             tar cpjf $SOURCES/$1/$REPO_ARCHIVE -C $SOURCES/$1 $REPO_BASENAME
             ;;
           git)
             GITREV=HEAD
             [ -n "$PKG_URL_REV" ] && GITREV="$PKG_URL_REV"
-            CLONE_OPT=""
-            [ "$PKG_RECURSIVE" = yes ] && CLONE_OPT="--recursive"
-            git clone $CLONE_OPT $PKG_URL $SOURCES/$1/$REPO_BASENAME
+
+            if  [ `expr substr $PKG_URL 1 7` = "file://" ] ; then
+              WORK_PATH=`echo $PKG_URL | sed -e "s%.\{7\}%%" -e "s%~%$HOME%"`
+              ln -sf $WORK_PATH $SOURCES/$1/$REPO_BASENAME
+              cd $WORK_PATH; WORK_BRANCH=`git branch | grep '*' | cut -b3-`; cd -
+            else
+              CLONE_OPT=""
+              [ "$PKG_RECURSIVE" = yes ] && CLONE_OPT="--recursive"
+
+              if [ -n "$PKG_URL_BRANCH" ] ; then
+                CLONE_OPT="$CLONE_OPT --depth=1 -b $PKG_URL_BRANCH"
+              fi
+
+              git clone $CLONE_OPT $PKG_URL $SOURCES/$1/$REPO_BASENAME
+              WORK_BRANCH="(no branch)"
+            fi
+           
             git --git-dir=$SOURCES/$1/$REPO_BASENAME/.git --work-tree=$SOURCES/$1/$REPO_BASENAME checkout $GITREV
-            (cd $SOURCES/$1/$REPO_BASENAME; $ROOT/$SCRIPTS/git-archive-all --prefix $REPO_BASENAME/ --rev $GITREV | bzip2 > ../$REPO_ARCHIVE )
+            (REPO_ARCHIVE_FILE=$PWD/$SOURCES/$1/$REPO_ARCHIVE; cd $SOURCES/$1/$REPO_BASENAME; \
+             $ROOT/$SCRIPTS/git-archive-all --prefix $REPO_BASENAME/ --rev $GITREV | bzip2 > $REPO_ARCHIVE_FILE; \
+             [ ! "$WORK_BRANCH" = "(no branch)" ] && git checkout $WORK_BRANCH || true)
             ;;
           hg)
             [ -n "$PKG_URL_REV" ] && HGREV="-u $PKG_URL_REV"
