@@ -96,7 +96,7 @@ if [ "$TARGET_MACHINE" = cubox ] || \
    [ "$TARGET_PLATFORM" = a10 ] || \
    [ "$TARGET_MACHINE" = tbs2910 ]; then
   mkdir -p $INSTALL/etc/systemd/system
-  ln -s /dev/null $INSTALL/etc/systemd/system/systemd-journald.service
+  #ln -s /dev/null $INSTALL/etc/systemd/system/systemd-journald.service
   ln -s /dev/null $INSTALL/etc/systemd/system/syslog.socket
 fi
 
