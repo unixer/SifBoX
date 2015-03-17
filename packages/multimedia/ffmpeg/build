@@ -60,7 +60,7 @@ case "$TARGET_FPU" in
       FFMPEG_FPU="--enable-neon"
   ;;
   vfp*)
-      FFMPEG_FPU=""
+      FFMPEG_FPU="--disable-neon --enable-vfp --disable-decoder=hevc"
   ;;
   *)
       FFMPEG_FPU=""

@@ -1,5 +1,4 @@
 PKG_NAME=lame
-#PKG_VERSION=3.98.4
 PKG_VERSION=3.99.5
 PKG_URL="$SFNET_SRCS/lame/lame/$(version_strip_minor)/lame-${PKG_VERSION}.tar.gz"
 PKG_REV=1
