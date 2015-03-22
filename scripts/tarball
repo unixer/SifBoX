@@ -45,7 +45,7 @@ cat > $TARBALL_NAME.json << "EOF"
    "description": "Versione stabile",
    "kernel_version": "KERN_VER",
    "vdr_version": "VDR_VERSION",
-   "kodi_version": "KODI_VERSION",
+   "xbmc_version": "KODI_VERSION",
    "arch": "ARCH",
    "platform": "PLATFORM"
 }
