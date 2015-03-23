@@ -2,9 +2,8 @@
 
 . config/options
 
-$SCRIPTS/unpack Python
-
-cd $BUILD/Python-*
+get_meta $1
+cd $PKG_BUILD_DIR
 
 # Python needs itself and a "pgen" program to build itself, both being
 # provided in the Python sources. So in order to cross-compile Python,
@@ -12,7 +11,16 @@ cd $BUILD/Python-*
 # installed in the toolchain, as it is needed when cross-compiling
 # third-party Python modules.
 
+export BUILD_SYS=""
+export HOST_SYS=""
+export LIBC=""
+export STAGING_LIBDIR=$ROOT/$TOOLCHAIN/lib
+export STAGING_INCDIR=$ROOT/$TOOLCHAIN/include
+ 
+do_autoconf
+
 do_configure host \
+  --enable-static \
   --without-cxx-main \
   --disable-sqlite3 \
   --disable-tk \
@@ -29,10 +37,8 @@ do_configure host \
   --enable-zlib \
   --disable-ssl \
   --with-threads \
-  --enable-unicode=ucs4
-
-export PYTHON_MODULES_INCLUDE="$ROOT/$TOOLCHAIN/include"
-export PYTHON_MODULES_LIB="$ROOT/$TOOLCHAIN/lib"
+  --enable-unicode=ucs4 \
+  --disable-ossaudiodev
 
 make
 make_install toolchain
@@ -42,3 +48,5 @@ cp -P Parser/pgen .install/usr/bin/pgen
 
 sed -i "s:#!/usr/bin/python2.7:#!$ROOT/$TOOLCHAIN/bin/python2.7:" \
   .install/usr/bin/python2.7-config
+
+sed -i -e 's,^\(ENABLE_USER_SITE = \).*,\1False,' .install/usr/lib/python2.7/site.py
