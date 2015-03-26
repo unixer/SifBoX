@@ -48,7 +48,7 @@ do_configure \
 autoreconf -Wcross --verbose --install --force Modules/_ctypes/libffi 
  
 # regenerate platform specific files, because they depend on system headers 
-cd Lib/plat-linux2 
+cd Lib/plat-linux2
   include=$SYSROOT_PREFIX/usr/include $ROOT/$TOOLCHAIN/bin/python \
   $ROOT/$PKG_BUILD_DIR/Tools/scripts/h2py.py -i '(u_long)' \
   $SYSROOT_PREFIX/usr/include/dlfcn.h \
@@ -56,7 +56,7 @@ cd Lib/plat-linux2
   $SYSROOT_PREFIX/usr/include/netinet/in.h \
   $SYSROOT_PREFIX/usr/include/sys/types.h
   sed -e "s,$SYSROOT_PREFIX,,g" -i *.py
-cd - 
+cd -
  
 sed -i -e s,ccache\ ,'$(CCACHE) ', Makefile 
 
