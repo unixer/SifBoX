@@ -95,7 +95,7 @@ fi
 
 ./configure --prefix=/usr \
             --confdir=/etc/mplayer \
-            --extra-ldflags="$EXTRA_LIBDIR" \
+            --extra-ldflags="$EXTRA_LIBDIR -lcrypto -lssl" \
             --extra-cflags="$EXTRA_INCDIR" \
             $ARCH_CONFIG \
             $EXTRA_CONFIG \
