@@ -6,4 +6,7 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-python setup.py install --prefix /usr --root .install
+do_python_make_cross -O1 --prefix /usr --root .install
+
+do_python_strip
+
