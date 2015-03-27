@@ -8,5 +8,6 @@ cd $BUILD/libxml2-*/python
 
 setup_toolchain host
 sed -i "s%\"/usr/include\"%\"$ROOT/$TOOLCHAIN/include\"%" setup.py
-python setup.py build
-python setup.py install --prefix="$PWD/.install/usr"
+#python setup.py build
+#python setup.py install --prefix="$PWD/.install/usr"
+do_python_make_cross -O1 --prefix /usr --root .install
