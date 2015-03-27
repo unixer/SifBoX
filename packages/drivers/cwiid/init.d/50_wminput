@@ -2,7 +2,7 @@
 #
 # run the Wiimote input daemon
 #
-# runlevels: geexbox, debug
+# runlevels: sifbox, debug
 
 . /etc/wiimote
 
