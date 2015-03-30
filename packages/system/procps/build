@@ -9,6 +9,7 @@ cd $PKG_BUILD_DIR
 
 sed -i "s|CPPFLAGS     := -I/usr/include/ncurses|CPPFLAGS     := -I$SYSROOT_PREFIX/usr/local/include/ncursesw|" Makefile
 
+export DESTDIR=".install"
 #do_configure
 make
 #make lib=lib # m64=-m32
