@@ -237,6 +237,7 @@ fi
 #make skins
 make_install
 #do_strip bin .install/usr/lib/kodi/kodi.bin
+strip_bins .install/usr/lib/kodi/ $install_dir_debug/usr/lib/debug
 
 # ToDo: Check if this is still needed...
 if [ "$TARGET_ARCH" = arm ]; then

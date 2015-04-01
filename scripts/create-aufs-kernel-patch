@@ -16,7 +16,8 @@ cd /tmp/aufs$$
 
 # clone aufs git
 #git clone git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git aufs3-standalone.git
-git clone git://git.code.sf.net/p/aufs/aufs4-standalone  aufs4-standalone.git
+#git clone git://git.code.sf.net/p/aufs/aufs4-standalone  aufs4-standalone.git
+git clone https://github.com/sfjro/aufs4-standalone aufs4-standalone.git
 
 cd aufs4-standalone.git
 
