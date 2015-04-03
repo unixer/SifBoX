@@ -6,10 +6,9 @@ get_meta $1
 cd $PKG_BUILD_DIR
 
 if [ "$TARGET_ARCH" = "x86_64" ]; then
-   do_install lib64
-else
-   do_install lib
+   mv .install/lib64 .install/lib
 fi
+do_install lib
 do_install bin
 do_install sbin
 do_install usr/bin
