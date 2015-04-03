@@ -1,0 +1,11 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR/libskindesignerapi
+
+make
+make_install
+mv .install/usr/local/include .install/usr
+mv .install/usr/local/lib .install/usr
