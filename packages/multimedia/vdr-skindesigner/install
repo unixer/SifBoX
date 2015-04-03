@@ -27,5 +27,8 @@ if [ $VDRINS = "no" ]; then
 else
   do_install usr
   do_install etc
+  #cd libskindesignerapi
+  #do_install usr/local/lib/libskin*
+  #do_install usr/local/include
 fi
 
