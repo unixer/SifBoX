@@ -31,7 +31,7 @@ mkdir a b
 cp -r aufs4-standalone.git/fs b
 cp -r aufs4-standalone.git/Documentation b
 cp -r aufs4-standalone.git/include b
-#rm b/include/uapi/linux/Kbuild
+rm b/include/uapi/linux/Kbuild
 diff -rupN a/ b/ > $dest
 
 # add patches
