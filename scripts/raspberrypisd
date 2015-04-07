@@ -26,7 +26,7 @@ echo $DEVICE | grep -q mmc && OPT=p
 boot_part=${DEVICE}${OPT}1
 root_part=${DEVICE}${OPT}2
 mkfs.vfat -F 32 -n boot $boot_part
-mkfs.ext4 -L GEEXBOX $root_part
+mkfs.ext4 -L SIFBOX $root_part
 
 mountdir=`mktemp -d`
 mount $root_part $mountdir
@@ -37,9 +37,10 @@ echo "Copying files..."
 if [ -d "$ROOTFS" ]; then
   cp -PR $ROOTFS/* $mountdir
 else
-  tar --no-same-owner -xJf $ROOTFS -C $mountdir
+  tar --no-same-owner -xf $ROOTFS -C $mountdir
 fi
 
+sync
 umount $mountdir/boot
 umount $mountdir
 rmdir $mountdir
