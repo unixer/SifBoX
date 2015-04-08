@@ -1,0 +1,26 @@
+--- tbs-drivers-v150313/linux-tbs-drivers/linux/drivers/media/video/tuner-core.c.org	2015-04-08 11:11:17.061779621 +0200
++++ tbs-drivers-v150313/linux-tbs-drivers/linux/drivers/media/video/tuner-core.c	2015-04-08 11:11:38.945779997 +0200
+@@ -1320,8 +1320,8 @@
+ 	.probe		= tuner_probe,
+ 	.remove		= tuner_remove,
+ 	.command	= tuner_command,
+-	.suspend	= tuner_suspend,
+-	.resume		= tuner_resume,
++	//.suspend	= tuner_suspend,
++	//.resume		= tuner_resume,
+ 	.id_table	= tuner_id,
+ };
+ 
+--- tbs-drivers-v150313/linux-tbs-drivers/linux/drivers/media/video/msp3400-driver.c.org	2015-04-08 11:16:56.973785456 +0200
++++ tbs-drivers-v150313/linux-tbs-drivers/linux/drivers/media/video/msp3400-driver.c	2015-04-08 11:17:30.917786039 +0200
+@@ -856,8 +856,8 @@
+ 	},
+ 	.probe		= msp_probe,
+ 	.remove		= msp_remove,
+-	.suspend	= msp_suspend,
+-	.resume		= msp_resume,
++	//.suspend	= msp_suspend,
++	//.resume		= msp_resume,
+ 	.id_table	= msp_id,
+ };
+ 
