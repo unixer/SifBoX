@@ -61,7 +61,28 @@ if [ $PKG_VERSION = "isengard-15.0" ]; then
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/FEH.py $INSTALL/usr/share/kodi/FEH.py
 fi
 
+
+copy_config () {
+  for d in $MACHINE_PACKAGES $PLATFORM_PACKAGES $ROOT/$PACKAGES/$PKG_SECTION; do
+    found=0
+    for f in $d/$PKG_NAME/$1; do
+      if [ -e $f ]; then
+        cp -P $f $2
+        found=1
+      fi
+    done
+
+    [ $found = 1 ] && break
+  done
+}
+
+copy_config scripts/runkodi .install/usr/bin
+copy_config scripts/silent.sh .install/usr/bin
+copy_config scripts/setwakeup.sh .install/usr/bin
+copy_config config/*.xml .install/etc/kodi
+
 do_install usr/bin
 do_install usr/lib
 do_install usr/share
 do_install etc/kodi
+do_install srv
