@@ -1,8 +1,8 @@
 PKG_NAME=raspberrypi-userland
 PKG_URL_PROTO=git
-#PKG_URL_REV=c5341f0
-#PKG_VERSION=2015.02+${PKG_URL_REV}
-PKG_URL_REV=bb5b28f
+#PKG_URL_REV=bb5b28f
+#PKG_VERSION=2015.03+${PKG_URL_REV}
+PKG_URL_REV=7650bcb
 PKG_VERSION=2015.03+${PKG_URL_REV}
 PKG_URL="git://github.com/raspberrypi/userland.git"
 PKG_REV=1
