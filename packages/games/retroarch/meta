@@ -1,0 +1,12 @@
+PKG_NAME=retroarch
+PKG_URL_PROTO=git
+PKG_URL_REV=7781334
+PKG_VERSION=1.0.0.2
+PKG_URL="https://github.com/libretro/RetroArch"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC"
+PKG_BUILD_DEPENDS="toolchain"
+PKG_PRIORITY=optional
+PKG_SECTION=games
+PKG_SHORTDESC="RetroArch"
+PKG_LONGDESC="RetroArch is the reference frontend for the libretro API. Popular examples of implementations for this API includes videogame system emulators and game engines, but also more generalized 3D programs. These programs are instantiated as dynamic libraries. We refer to these as libretro cores."
