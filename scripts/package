@@ -166,8 +166,8 @@ add_control "Architecture" "$PKG_OPK_ARCH"
 add_control "Depends" "$PKG_OPK_DEPENDS"
 add_control "Priority" "$PKG_PRIORITY"
 add_control "Section" "$PKG_SECTION"
-add_control "Maintainer" "The Sifteam (http://forum.sifteam.eu)"
-add_control "Source" "http://code.google.com/p/sifbox-vdr/"
+add_control "Maintainer" "The Sifteam (http://www.sifteam.eu)"
+add_control "Source" "https://github.com/SifBoX/SifBoX"
 add_control "Description" "$PKG_SHORTDESC"
 
 if [ -n "$PKG_SHORTDESC" -a -n "$PKG_LONGDESC" ]; then
@@ -213,8 +213,8 @@ if [ -d "$DEBUGINFO" ]; then
   add_control "Depends" "$PKG_NAME"
   add_control "Priority" "extra"
   add_control "Section" "debug"
-  add_control "Maintainer" "The Sifteam (http://forum.sifteam.eu/)"
-  add_control "Source" "http://code.google.com/p/sifbox-vdr/"
+  add_control "Maintainer" "The Sifteam (http://www.sifteam.eu/)"
+  add_control "Source" "https://github.com/SifBoX/SifBoX"
   add_control "Description" "debug symbols for $PKG_NAME"
   echo "This package contains debug data of the $PKG_NAME package. Most people will not need this package. Please install it to produce useful stacktraces to help debugging $PKG_NAME." | fmt | sed 's/^/  /g' >> $INSTALL/CONTROL/control
 
@@ -232,8 +232,8 @@ if [ -d "$DEBUGINFO" ]; then
   add_control "Architecture" "`uname -m`"
   add_control "Priority" "extra"
   add_control "Section" "debug"
-  add_control "Maintainer" "The Sfiteam (http://forum.sifteam.eu)"
-  add_control "Source" "http://code.google.com/p/sifbox-vdr/"
+  add_control "Maintainer" "The Sfiteam (http://www.sifteam.eu)"
+  add_control "Source" "https://github.com/SifBoX/SifBoX"
   add_control "Description" "debug symbols for $PKG_NAME (devel version)"
 
   opkg-build -O -o root -g root $INSTALL $DEVPKGROOT >&$VERBOSE_OUT

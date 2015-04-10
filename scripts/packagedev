@@ -72,8 +72,8 @@ add_control "Architecture" "`uname -m`"
 add_control "Depends" "$PKG_OPK_DEV_DEPENDS"
 add_control "Priority" "extra"
 add_control "Section" "devel"
-add_control "Maintainer" "The Sifteam (http://forum.sifteam.eu)"
-add_control "Source" "http://code.google.com/p/sifbox-vdr/"
+add_control "Maintainer" "The Sifteam (http://www.sifteam.eu)"
+add_control "Source" "https://github.com/SifBoX/SifBoX"
 add_control "Description" "Devel files for ${PKG_NAME}"
 
 $SCRIPTS/build opkg-utils
