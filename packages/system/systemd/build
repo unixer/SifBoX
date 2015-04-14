@@ -88,7 +88,8 @@ do_configure               --disable-nls \
                            --with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
 			   --with-firmware-path=/firmware \
                            --with-rootprefix= \
-                           --with-rootlibdir=/lib
+                           --with-rootlibdir=/lib \
+			   --enable-introspection \
 
 export MAKEFLAGS=-j1
 make

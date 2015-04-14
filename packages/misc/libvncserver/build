@@ -1,0 +1,17 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+do_autoconf -vi
+do_configure \
+		--disable-shared \
+                --enable-static \
+                --with-sysroot=$SYSROOT_PREFIX \
+                --with-jpeg \
+                --with-png
+
+make
+make_install

@@ -8,7 +8,8 @@ else
    #PKG_VERSION=helix-14.2
    #PKG_URL_REV=7cc53a9
    PKG_VERSION=isengard-15.0
-   PKG_URL_REV=56af059
+   PKG_VERSION=cc252ce
+   #PKG_URL_REV=56af059
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
 PKG_REV=2
