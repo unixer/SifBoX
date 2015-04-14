@@ -49,7 +49,7 @@ ifndef PLUGIN # don't overwrite for plugins with old makefiles
 LIBDIR    = $(PREFIX)/lib/vdr/plugins
 endif
 HDRDIR       = $(CWD)/include
-SDNOTIFY = 1
+#SDNOTIFY = 1
 
 # Overrides for preset/legacy configurations:
 
@@ -111,6 +111,8 @@ WAREAGLEICON = 1
 YAEPG = 1
 LIVEBUFFER = 1
 #REMOTE_KBD = 1
+#NO_KBD = 0
+REMOTE=LIRC
 #REELVDR = 1
 #USEMYSQL = 1
 #USE_TINYXML=1

@@ -15,8 +15,7 @@ require_cxx $1
 #  fi
 #done
 cd $PKG_BUILD_DIR
-#cp $ROOT/$PACKAGES/$1/config/Make.config.$PKG_VERSION.bis Make.config
-cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/Make.config.$PKG_VERSION Make.config
+#cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/Make.config.$PKG_VERSION Make.config
 
 sed -i "s|#DVBDIR   =|DVBDIR=$SYSROOT_PREFIX/usr|" Make.config
 #sed -i "s|#INCDIR       =|INCDIR=$SYSROOT_PREFIX/usr/include|" Make.config
