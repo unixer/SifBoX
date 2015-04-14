@@ -16,7 +16,12 @@ cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/evmap/* $INSTALL/etc/eventlircd.d
 mkdir -p $INSTALL/etc/lirc
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/lircrc $INSTALL/etc/lirc
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/irexec $INSTALL/etc/lirc
-cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/98-eventlircd.rules $INSTALL/lib/udev/rules.d/
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/98-eventlircd.rules.rasp $INSTALL/lib/udev/rules.d/98-eventlircd.rules
+else
+   cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/98-eventlircd.rules $INSTALL/lib/udev/rules.d/
+fi
 #mkdir -p $INSTALL/etc/rc_keymaps
 #cp $ROOT/$PACKAGES/$PKG_SECTION/$1/remotes/imon* $INSTALL/etc/rc_keymaps
 mkdir -p $INSTALL/usr/bin
