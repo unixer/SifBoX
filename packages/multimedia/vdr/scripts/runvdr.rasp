@@ -11,7 +11,6 @@ if [ -f /lib/systemd/system/media-video.mount ]; then
   /usr/bin/systemctl restart media-video.mount
 fi
 
-chvt 1
 sync
 
 #/usr/bin/wait_fornet.sh
@@ -70,6 +69,9 @@ fi
 /bin/systemctl restart mixer.service                                            
 sleep 1       
 /usr/bin/ply-image /usr/share/plymouth/black.png 
+
+setterm -cursor off -blank 0 -powerdown 0 > /dev/tty1
+chvt 1
 
 eval vdr -g /tmp -L /usr/lib/vdr/plugins --log=3 -p 6419 --vfat --no-kbd $PLUGINS -v /media/video -c /etc/vdr -w 0 --lirc -s /usr/bin/vdrshutdown
  
