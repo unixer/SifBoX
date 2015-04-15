@@ -1,0 +1,15 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+#do_configure
+make \
+	NO_ARLIB=0 \
+	NO_SOLIB=1 \
+	LIBDIR=/lib \
+	USRLIBDIR=/usr/lib
+
+make_install
