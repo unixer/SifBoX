@@ -5,12 +5,15 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 
+   export MAKEFLAGS=-j1
+
 do_autoconf -vi
 do_configure \
 		--disable-shared \
                 --enable-static \
                 --with-sysroot=$SYSROOT_PREFIX \
                 --with-jpeg \
+	    	--without-libva \
                 --with-png
 
 make
