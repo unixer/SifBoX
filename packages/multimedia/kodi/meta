@@ -8,7 +8,7 @@ else
    #PKG_VERSION=helix-14.2
    #PKG_URL_REV=7cc53a9
    PKG_VERSION=isengard-15.0
-   PKG_VERSION=cc252ce
+   PKG_URL_REV=cc252ce
    #PKG_URL_REV=56af059
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
@@ -32,6 +32,7 @@ PKG_DEPENDS_vaapi="libva"
 PKG_DEPENDS_zeroconf="avahi"
 PKG_DEPENDS_crystalhd="crystalhd"
 PKG_DEPENDS_pulseaudio="pulseaudio"
+PKG_DEPENDS_joystick="SDL2"
 PKG_USE_DESC_nonfree="Enable Non-Free modules"
 PKG_DEPENDS_bluray="libbluray"
 PKG_USE_DESC_rtmp="Enable RTMP support"
