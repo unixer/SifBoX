@@ -1,0 +1,14 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+VER=`ls $ROOT/$BUILD/rootfs/lib/modules`
+
+mkdir -p $INSTALL/lib/modules/$VER/
+DIR=$INSTALL/lib/modules/$(kernel_version)/$PKG_NAME
+mkdir -p $DIR
+cp *.ko $INSTALL/lib/modules/$VER/$PKG_NAME/
+

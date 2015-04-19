@@ -1,0 +1,12 @@
+PKG_NAME=mt7601u
+PKG_URL_PROTO=git
+PKG_URL_REV=ba391b3
+PKG_VERSION=0.0.1
+PKG_URL="https://github.com/kuba-moo/mt7601u"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC"
+PKG_BUILD_DEPENDS="toolchain"
+PKG_PRIORITY=optional
+PKG_SECTION=drivers
+PKG_SHORTDESC="mt7601u linux 3.19+ driver"
+PKG_LONGDESC="mt7601u linux 3.19+ driver"
