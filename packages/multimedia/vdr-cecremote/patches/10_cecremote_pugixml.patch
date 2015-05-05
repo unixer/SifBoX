@@ -1,0 +1,12 @@
+--- cecremote/Makefile.orig	2015-02-20 16:56:27.000000000 +0100
++++ cecremote/Makefile	2015-03-13 14:11:12.703094033 +0100
+@@ -67,7 +67,8 @@
+ CXXFLAGS += $(shell pkg-config --cflags libcec)
+ 
+ # Flags for pugixml xml parser
+-LIBS += -lpugixml #$(shell pkg-config --libs xerces-c)
++CFLAGS += -I$(PUGIXML_PATH)
++CXXFLAGS += -I$(PUGIXML_PATH)
+ 
+ ### The object files (add further files here):
+ 

@@ -6,10 +6,12 @@ get_meta vdr
 verlte 1.7.36 $PKG_VERSION && VDRINS="no" || VDRINS="yes"
 
 get_meta $1
-
 cd $PKG_BUILD_DIR
-#mkdir -p $INSTALL/usr/lib/vdr/plugins
-#cp -a $BUILD/${PKG_NAME}-${PKG_VERSION}/lib$1*.so.* $INSTALL/usr/lib/vdr/plugins
+
+NAME=`echo $1 | sed s/vdr-//`
+mkdir -p $INSTALL/etc/vdr/plugins.d
+echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo "ENABLED=yes" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
 
 if [ $VDRINS = "no" ]; then
   mkdir -p $INSTALL/usr/lib/vdr/plugins
@@ -24,10 +26,4 @@ if [ $VDRINS = "no" ]; then
 else
   do_install usr
 fi
-
-NAME=`echo $1 | sed s/vdr-//`
-mkdir -p $INSTALL/etc/vdr/plugins.d
-echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
-echo "OPTIONS=\"-t /dev/tty1\"" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
-echo "ENABLED=yes" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
 

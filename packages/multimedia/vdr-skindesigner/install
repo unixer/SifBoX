@@ -8,6 +8,8 @@ verlte 1.7.36 $PKG_VERSION && VDRINS="no" || VDRINS="yes"
 get_meta $1
 cd $PKG_BUILD_DIR
 
+mkdir -p $INSTALL/usr/share/
+cp -r fonts $INSTALL/usr/share/
 NAME=`echo $1 | sed s/vdr-//`
 mkdir -p $INSTALL/etc/vdr/plugins.d
 echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
@@ -27,6 +29,7 @@ if [ $VDRINS = "no" ]; then
 else
   do_install usr
   do_install etc
+  #do_install var
   #cd libskindesignerapi
   #do_install usr/local/lib/libskin*
   #do_install usr/local/include

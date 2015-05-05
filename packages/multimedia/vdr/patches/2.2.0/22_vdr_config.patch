@@ -1,7 +1,7 @@
 diff -ruN 1.7.41_24/Make.config 1.7.41_25/Make.config
 --- 1.7.41_24/Make.config	1970-01-01 01:00:00.000000000 +0100
 +++ 1.7.41_25/Make.config	2013-03-18 22:53:05.000000000 +0100
-@@ -0,0 +1,82 @@
+@@ -0,0 +1,85 @@
 +#
 +# User defined Makefile options for the Video Disk Recorder
 +#
@@ -47,7 +47,9 @@ diff -ruN 1.7.41_24/Make.config 1.7.41_25/Make.config
 +VIDEODIR  = /media/video
 +CONFDIR   = /etc/vdr
 +CACHEDIR  = /var/cache/vdr
++ARGSDIR   = /etc/vdr/conf.d
 +LIBS += -lintl
++NO_KBD = 1
 +# Overrides for preset/legacy configurations:
 +
 +# Use 'make LCLBLD=1' to build locale and plugin files under the source directory:
@@ -64,6 +66,7 @@ diff -ruN 1.7.41_24/Make.config 1.7.41_25/Make.config
 +ifdef ONEDIR
 +VIDEODIR     = /data/tv
 +CACHEDIR     = $(VIDEODIR)
++ARGSDIR      = $(VIDEODIR)/conf.d
 +CONFDIR      = $(VIDEODIR)
 +RESDIR       = $(VIDEODIR)
 +endif
@@ -77,7 +80,7 @@ diff -ruN 1.7.41_24/Make.config 1.7.41_25/Make.config
 +LIRC_DEVICE = /var/run/lirc/lircd
 +
 +### Define if you want vdr to not run as root:
-+#VDR_USER = vdr
++VDR_USER = root
 +
 +### Fallback for plugins with old makefiles:
 +ifdef PLUGIN

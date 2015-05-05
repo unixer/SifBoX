@@ -5,9 +5,9 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 
-export LDFLAGS="$SYSROOT_PREFIX/lib"
+#export LDFLAGS="$SYSROOT_PREFIX/lib"
 
-export MAKEFLAGS=-j1
+#export MAKEFLAGS=-j1
 
 ## gyp files
 cp $ROOT/$PACKAGES/$PKG_SECTION/$1/config/component-build.gypi .

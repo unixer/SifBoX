@@ -1,0 +1,50 @@
+Description: Enable both static and shared library building
+ By default the upstream builds only static library if a
+ BUILD_SHARED_LIBS is not set and if it is set it only builds only
+ shared library. This patch allows building both static and shared
+ library.
+ .
+ Additionally when both shared and static libs were built there was
+ conflict of name as upstream was using same name for both. This patch
+ also handles this.
+ .
+ Upstream naming conventions for library and SONAME was not as
+ required by d-shlibs this patch also fixes it.
+Author: Vasudev Kamath <kamathvasudev@gmail.com>
+Forwarded: not-needed
+Last-Update: 2012-01-12
+
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -1,18 +1,24 @@
+ project(pugixml)
+ 
++set(PUGIXML_VERSION_MAJOR 1)
++set(PUGIXML_VERSION_MINOR 2)
++
++set(PUGIXML_VERSION "${PUGIXML_VERSION_MAJOR}.${PUGIXML_VERSION_MINOR}")
++
+ cmake_minimum_required(VERSION 2.6)
+ set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared instead of static library")
+ 
+ set(HEADERS ../src/pugixml.hpp ../src/pugiconfig.hpp)
+ set(SOURCES ${HEADERS} ../src/pugixml.cpp)
+ 
+-if(BUILD_SHARED_LIBS)
+-    add_library(pugixml SHARED ${SOURCES})
+-else()
+-    add_library(pugixml STATIC ${SOURCES})
+-endif()
++add_library(pugixml-static STATIC ${SOURCES})
++set_target_properties(pugixml-static PROPERTIES OUTPUT_NAME pugixml)
++set_target_properties(pugixml-static PROPERTIES LINKER_LANGUAGE CXX)
+ 
+-set_target_properties(pugixml PROPERTIES VERSION 1.2 SOVERSION 1.2)
++add_library(pugixml SHARED ${SOURCES})
++set_target_properties(pugixml PROPERTIES OUTPUT_NAME pugixml)
++set_target_properties(pugixml-static PROPERTIES LINKER_LANGUAGE CXX)
++set_target_properties(pugixml PROPERTIES VERSION ${PUGIXML_VERSION} SOVERSION ${PUGIXML_VERSION_MAJOR})
+ 
+-install(TARGETS pugixml LIBRARY DESTINATION lib ARCHIVE DESTINATION lib)
++install(TARGETS pugixml pugixml-static DESTINATION lib${LIB_SUFFIX})
+ install(FILES ${HEADERS} DESTINATION include)

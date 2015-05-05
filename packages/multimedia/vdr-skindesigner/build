@@ -46,3 +46,27 @@ else
   do_strip bin lib$1.so.*
 fi
 
+if [ -d shady ]; then
+   cd shady && git pull
+   cd ..
+else
+   git clone https://github.com/tomsax56/shady
+fi
+#mkdir -p .install/var/lib/vdr/themes
+#cp shady/themes/orange/shady-orange.theme .install/var/lib/vdr/themes
+#cp shady/themes/default/shady-default.theme .install/var/lib/vdr/themes
+mkdir -p .install/etc/vdr/themes
+mkdir -p .install/etc/vdr/plugins/skindesigner/skins
+cp shady/themes/orange/shady-orange.theme .install/etc/vdr/themes
+cp shady/themes/default/shady-default.theme .install/etc/vdr/themes
+cp -r shady .install/etc/vdr/plugins/skindesigner/skins
+
+if [ -d skindesigner_vectraskin ]; then
+   cd skindesigner_vectraskin && git pull
+   cd ..
+else
+  git clone https://github.com/Vectra130/skindesigner_vectraskin
+fi
+#cp -r skindesigner_vectraskin/themes/* .install/var/lib/vdr/themes
+cp -r skindesigner_vectraskin .install/etc/vdr/plugins/skindesigner/skins
+cp -r skindesigner_vectraskin/themes/* .install/etc/vdr/themes

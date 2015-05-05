@@ -1,6 +1,6 @@
-diff -Naur NVIDIA-Linux-x86_64-340.76-no-compat32/kernel/nv-pat.c NVIDIA-Linux-x86_64-340.76-no-compat32.patch/kernel/nv-pat.c
---- NVIDIA-Linux-x86_64-340.76-no-compat32/kernel/nv-pat.c	2015-01-22 20:01:16.000000000 +0100
-+++ NVIDIA-Linux-x86_64-340.76-no-compat32.patch/kernel/nv-pat.c	2015-04-04 19:16:01.931219988 +0200
+diff -Naur NVIDIA-Linux-x86_64-340.76-no-compat32/./usr/src/nv/nv.c NVIDIA-Linux-x86_64-340.76-no-compat32.patch/./usr/src/nv/nv.c
+--- NVIDIA-Linux-x86_64-340.76-no-compat32/./usr/src/nv/nv.c	2015-01-22 20:01:16.000000000 +0100
++++ NVIDIA-Linux-x86_64-340.76-no-compat32.patch/./usr/src/nv/nv.c	2015-04-04 19:16:01.931219988 +0200
 @@ -35,8 +35,13 @@
      unsigned long cr0 = read_cr0();
      write_cr0(((cr0 & (0xdfffffff)) | 0x40000000));

@@ -1,0 +1,11 @@
+--- cecremote/contrib/cecremote.xml.orig	2015-03-22 10:35:25.428513374 +0100
++++ cecremote/contrib/cecremote.xml	2015-03-30 10:49:15.764977326 +0200
+@@ -37,7 +37,7 @@
+ 			<poweron>player</poweron>
+ 			<makeinactive />
+ 		</onstart>
+-		<player file="/video/conf/plugins/cecremote/blueray.mpg">
++		<player file="/etc/vdr/plugins/cecremote/blueray.mpg">
+ 		<!--  <keymaps cec="default" vdr="default" /> -->
+ 			<stop>Back</stop>
+ 			<stop>Menu</stop>
