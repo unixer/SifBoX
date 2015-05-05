@@ -6,6 +6,9 @@
 get_meta vdr
 VDR_VERSION=$PKG_VERSION
 
+./scripts/clean libskindesignerapi
+./scripts/packagedev libskindesignerapi
+./scripts/installdev libskindesignerapi
 get_meta linux
 verlte 3.6.11 $PKG_VERSION && INSDVB="yes" || INSDVB="no"
 if [ $INSDVB = "no" ]; then
