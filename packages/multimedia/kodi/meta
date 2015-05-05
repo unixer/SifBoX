@@ -8,11 +8,11 @@ else
    #PKG_VERSION=helix-14.2
    #PKG_URL_REV=7cc53a9
    PKG_VERSION=isengard-15.0
-   PKG_URL_REV=cc252ce
-   #PKG_URL_REV=56af059
+   #PKG_URL_REV=cc252ce
+   PKG_URL_REV=d1a2c33
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
-PKG_REV=2
+PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC Python boost zlib bzip2 lzo pcre libssh libass enca curl dbus fontconfig fribidi libjpeg-turbo libpng tiff freetype jasper libmad libsamplerate libogg libvorbis libcdio libmms libmodplug faad2 flac wavpack libmpeg2 sqlite alsa yajl libplist openssl python-simplejson tinyxml systemd taglib libshairplay libxslt" ## libsquish"
 #PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release libid3tag"
 PKG_RUN_DEPENDS="libmysqlclient libsmbclient python-lsb-release"
