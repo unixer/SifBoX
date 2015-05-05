@@ -6,5 +6,10 @@ get_meta $1
 cd $PKG_BUILD_DIR
 
 #do_configure
-make
-make_install
+#make
+make 
+mkdir -p .install/include
+cp src/pugiconfig.hpp .install/include
+cp src/pugixml.hpp .install/include 
+cp src/* .install/include
+#make_install
