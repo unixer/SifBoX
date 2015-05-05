@@ -7,5 +7,9 @@ cd $PKG_BUILD_DIR/libskindesignerapi
 
 make
 make_install
-mv .install/usr/local/include .install/usr
-mv .install/usr/local/lib .install/usr
+cp -r .install/usr/local/include .install/usr
+cp -r .install/usr/local/lib .install/usr
+#cd .install/usr 
+ln -s libskindesignerapi.so.0.0.1 .install/usr/lib/libskindesignerapi.so.0
+ln -s libskindesignerapi.so.0.0.1 .install/usr/local/lib/libskindesignerapi.so.0
+
