@@ -12,6 +12,12 @@ else
   XORG_MESA="--disable-glx --disable-dri"
 fi
 
+if pkg_uses $1 glamor; then
+  XORG_GLAMOR="--enable-glamor"
+else
+  XORG_GLAMOR="--disable-glamor"
+fi
+
 cd $PKG_BUILD_DIR
 
 do_autoconf
@@ -81,7 +87,8 @@ do_configure \
             --with-fontrootdir=$XORG_PATH_FONTS \
             --with-default-font-path="$XORG_PATH_FONTS/misc,built-ins" \
             --with-sha1=libgcrypt \
-            $XORG_MESA
+            $XORG_MESA \
+	    $XORG_GLAMOR
 
 make V=1
 make_install
