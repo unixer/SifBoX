@@ -7,7 +7,7 @@ cd $PKG_BUILD_DIR
 
 #do_configure
 #make
-make 
+#make 
 mkdir -p .install/include
 cp src/pugiconfig.hpp .install/include
 cp src/pugixml.hpp .install/include 
