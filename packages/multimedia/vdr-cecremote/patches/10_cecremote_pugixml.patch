@@ -5,8 +5,8 @@
  
  # Flags for pugixml xml parser
 -LIBS += -lpugixml #$(shell pkg-config --libs xerces-c)
-+CFLAGS += -I$(SYSROOT_PREFIX)/usr/local/include
-+CXXFLAGS += -I$(SYSROOT_PREFIX)/usr/local/include
++CFLAGS += -I$(SYSROOT_PREFIX)/usr/local/include 
++CXXFLAGS += -I$(SYSROOT_PREFIX)/usr/local/include 
  
  ### The object files (add further files here):
  

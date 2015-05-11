@@ -13,7 +13,13 @@ get_meta $1
 VDR_DIR=`basename $BUILD/vdr-$VDR_VERSION`
 
 cd $PKG_BUILD_DIR
+#git clone https://github.com/zeux/pugixml.git
+#wget http://github.com/zeux/pugixml/releases/download/v1.5/pugixml-1.5.tar.gz
+#tar zxvf pugixml-1.5.tar.gz
+#mv pugixml-1.5 pugixml
+#patch -p1 < /
 
+#export PUGIXML_PATH=./pugixml/src
 make all \
   VDRDIR="../$VDR_DIR" \
   DVBDIR=$DVB_DIR \
