@@ -1,11 +1,10 @@
 PKG_NAME=libcec
 PKG_URL_PROTO=git
-#PKG_URL_REV=260df18a
-PKG_URL_REV=d340966
-PKG_VERSION=2.2.0
+#PKG_URL_REV=d340966
+#PKG_VERSION=2.2.0
+PKG_URL_REV=e67f44f
+PKG_VERSION=3.0.0
 PKG_URL="https://github.com/Pulse-Eight/${PKG_NAME}.git"
-#PKG_VERSION="2.1.4-2"
-#PKG_URL="http://packages.pulse-eight.net/pulse/sources/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.gz"
 PKG_REV=1
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_DEPENDS="systemd liblockdev"
@@ -14,7 +13,7 @@ if [ "$TARGET_MACHINE" = raspberrypi ] || \
   PKG_DEPENDS="$PKG_DEPENDS raspberrypi-userland"
   PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS raspberrypi-userland"
 fi
-PKG_BUILD_DEPENDS="toolchain systemd liblockdev"
+PKG_BUILD_DEPENDS="toolchain systemd liblockdev platform"
 PKG_PRIORITY=optional
 PKG_SECTION=libs
 PKG_SHORTDESC="library designed for communicating with the Pulse-Eight USB - HDMI CEC Adaptor"
