@@ -5,26 +5,22 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-#do_autoconf
-
 if [ "$TARGET_MACHINE" = cubox ]; then
-  CUBOX_FLAGS="--enable-cubox --with-tda995x-toolkit-path=$(kernel_path)/drivers/video/dovefb/nxp_hdmi"
+   EXTRA_CMAKE_OPTS="-DHAVE_IMX_API=1"
 else
-  CUBOX_FLAGS="--disable-cubox"
+   EXTRA_CMAKE_OPTS="-DHAVE_IMX_API=0"
 fi
 
 if [ "$TARGET_MACHINE" = raspberrypi ] || \
    [ "$TARGET_MACHINE" = raspberrypi2 ]; then
-  RPI_FLAGS="--enable-rpi --with-rpi-include-path=$LIB_PREFIX/include --with-rpi-lib-path=$LIB_PREFIX/lib"
-  local_cxxflags="-I$LIB_PREFIX/include/interface/vcos/pthreads -I$LIB_PREFIX/include/interface/vmcs_host/linux"
-else
-  RPI_FLAGS="--disable-rpi"
+   export CXXFLAGS="$CXXFLAGS \
+   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vcos/pthreads/ \
+   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vmcs_host/linux \
+   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vchiq_arm"
+
+   # detecting RPi support fails without -lvchiq_arm
+   #export LDFLAGS="$LDFLAGS -lvchiq_arm"
 fi
-
-#do_configure \
-#  $CUBOX_FLAGS \
-#  $RPI_FLAGS \
-
 mkdir build || true && cd build
 cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
       -DBUILD_SHARED_LIBS=1 \
