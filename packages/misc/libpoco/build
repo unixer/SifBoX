@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+unset PROJECT_BASE
+export PROJECT_BASE=i386
+export MAKEFLAGS=-j1
+
+./configure --config=Linux 
+make
+make_install
