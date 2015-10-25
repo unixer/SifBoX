@@ -1,19 +1,22 @@
 PKG_NAME=libcec
-PKG_URL_PROTO=git
-#PKG_URL_REV=d340966
-#PKG_VERSION=2.2.0
-PKG_URL_REV=e67f44f
+#PKG_URL_PROTO=git
+#PKG_URL_REV=e8506b3
 PKG_VERSION=3.0.0
-PKG_URL="https://github.com/Pulse-Eight/${PKG_NAME}.git"
+PKG_URL="http://mirrors.xbmc.org/build-deps/sources/$PKG_NAME-$PKG_VERSION-6.tar.gz"
+
+#PKG_VERSION=3.0.1+r${PKG_URL_REV}
+#PKG_URL="https://github.com/Pulse-Eight/libcec.git"
+PKG_USE="xrandr"
+PKG_USE_DESC_xrandr="Use libXrandr for EDID retrieval (Pulse-Eight USB adapter only)"
 PKG_REV=1
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_DEPENDS="systemd liblockdev"
 if [ "$TARGET_MACHINE" = raspberrypi ] || \
    [ "$TARGET_MACHINE" = raspberrypi2 ]; then
-  PKG_DEPENDS="$PKG_DEPENDS raspberrypi-userland"
-  PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS raspberrypi-userland"
+   PKG_DEPENDS="$PKG_DEPENDS raspberrypi-userland"
+   PKG_BUILD_DEPENDS="$PKG_BUILD_DEPENDS raspberrypi-userland"
 fi
-PKG_BUILD_DEPENDS="toolchain systemd liblockdev platform"
+PKG_BUILD_DEPENDS="toolchain cmake Python swig platform"
 PKG_PRIORITY=optional
 PKG_SECTION=libs
 PKG_SHORTDESC="library designed for communicating with the Pulse-Eight USB - HDMI CEC Adaptor"

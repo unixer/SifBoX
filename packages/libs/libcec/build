@@ -3,35 +3,58 @@
 . config/options
 get_meta $1
 
+
+case $TARGET_PLATFORM in
+  armada5xx)
+    $SCRIPTS/unpack linux
+    EXTRA_CONFIG="-DHAVE_TDA995X_API=1"
+    EXTRA_INCLUDES="-I$(kernel_path)/drivers/video/dovefb/nxp_hdmi -I$(kernel_path)/drivers/video/dovefb/nxp_hdmi/inc"
+    ;;
+
+  bcm270*)
+    EXTRA_CONFIG="-DHAVE_RPI_API=1"
+    EXTRA_INCLUDES="-I$LIB_PREFIX/include/interface/vcos/pthreads -I$LIB_PREFIX/include/interface/vmcs_host/linux"
+    CXXFLAGS="$CXXFLAGS \
+   -I$SYSROOT_PREFIX/usr/local/include/interface/vcos/pthreads/ \
+   -I$SYSROOT_PREFIX/usr/local/include/interface/vmcs_host/linux \
+   -I$SYSROOT_PREFIX/usr/local/include/interface/vchiq_arm"
+    ;;
+    
+  exynos5)
+    EXTRA_CONFIG="-DHAVE_EXYNOS_API=1"
+    EXTRA_INCLUDES=""
+    ;;
+                           
+  imx6)
+    EXTRA_CONFIG="-DHAVE_IMX6_API=1"
+    EXTRA_INCLUDES=""
+    ;;
+esac
+
+
 cd $PKG_BUILD_DIR
+INSTALL_PREFIX=$PWD/.install/usr
 
-if [ "$TARGET_MACHINE" = cubox ]; then
-   EXTRA_CMAKE_OPTS="-DHAVE_IMX_API=1"
-else
-   EXTRA_CMAKE_OPTS="-DHAVE_IMX_API=0"
-fi
-
-if [ "$TARGET_MACHINE" = raspberrypi ] || \
-   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
-   export CXXFLAGS="$CXXFLAGS \
-   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vcos/pthreads/ \
-   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vmcs_host/linux \
-   -I$SYSROOT_PREFIX/sysroot/usr/local/include/interface/vchiq_arm"
-
-   # detecting RPi support fails without -lvchiq_arm
-   #export LDFLAGS="$LDFLAGS -lvchiq_arm"
-fi
-mkdir build || true && cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
-      -DBUILD_SHARED_LIBS=1 \
+mkdir -p .build
+cd .build
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
+      -DCMAKE_FIND_ROOT_PATH=$LIB_PREFIX \
+      -DSWIG_DIR=$TOOLCHAIN/bin \
       -DSKIP_PYTHON_WRAPPER:STRING=1 \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-      -DCMAKE_INSTALL_LIBDIR_NOARCH=/usr/lib \
-      -DCMAKE_INSTALL_PREFIX_TOOLCHAIN=$SYSROOT_PREFIX/sysroot/usr \
-      -DCMAKE_PREFIX_PATH=$SYSROOT_PREFIX/sysroot/usr \
-      $EXTRA_CMAKE_OPTS \
+      -DBUILD_SHARED_LIBS=1 \
+      $EXTRA_CONFIG \
+      -DCMAKE_CXX_FLAGS="$EXTRA_INCLUDES" \
+      -DCMAKE_PREFIX_PATH=$SYSROOT_PREFIX/usr \
+      -DPYTHON_LIBRARY="$LIB_PREFIX" \
+      -DPYTHON_INCLUDE_DIR="$LIB_PREFIX/include/python2.7" \
       ..
-
 make
-make_install
+make install
+cd ..
+
+strip_bins $INSTALL_PREFIX/bin
+strip_libs $INSTALL_PREFIX/lib
+
+sed -e "s%$INSTALL_PREFIX%$LIB_PREFIX%g" \
+    -e "s%Requires:.*%%" \
+    -i $INSTALL_PREFIX/lib/pkgconfig/*.pc
