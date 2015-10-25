@@ -1,11 +1,21 @@
 #!/bin/sh
 
 . config/options
+get_meta $1
 
-cd $BUILD/$1*
-sh autogen.sh
-do_configure
-make 
-make dist-zip
+cd $PKG_BUILD_DIR
+INSTALL_PREFIX=$PWD/.install/usr
 
-make_install
+mkdir -p .build
+cd .build
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
+      -DCMAKE_FIND_ROOT_PATH=$LIB_PREFIX \
+      -DCMAKE_MODULE_PATH=$LIB_PREFIX/lib/kodi \
+      -DCMAKE_MODULE_PATH=$SYSROOT_PREFIX/usr/lib/kodi \
+      -DCMAKE_PREFIX_PATH=$SYSROOT_PREFIX/usr \
+      -DOVERRIDE_PATHS=1 ..
+make
+make install
+cd ..
+
+strip_libs $INSTALL_PREFIX/lib

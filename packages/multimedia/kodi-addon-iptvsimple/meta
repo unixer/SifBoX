@@ -1,13 +1,16 @@
-PKG_NAME=kodi-addon-iptvsimple
-PKG_VERSION=1.9.3
+ADDON_ID="pvr.iptvsimple"
+ADDON_REV="1.11.5"
+PKG_URL_REV=23defeb
+
+#PKG_NAME="kodi-addon-$ADDON_ID"
+PKG_NAME="kodi-addon-iptvsimple"
 PKG_URL_PROTO=git
-PKG_URL_REV=11af729
-PKG_URL="https://github.com/afedchin/xbmc-addon-iptvsimple"
-PKG_REV=1
-PKG_DEPENDS="$TARGET_LIBC"
-PKG_BUILD_DEPENDS="toolchain"
-PKG_RUN_DEPENDS="$TARGET_LIBC kodi"
+PKG_VERSION="${ADDON_REV}+${PKG_URL_REV}"
+PKG_URL="https://github.com/kodi-pvr/${ADDON_ID}.git"
+PKG_REV=2
+PKG_BUILD_DEPENDS="toolchain cmake kodi-platform"
+PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_PRIORITY=optional
 PKG_SECTION=multimedia
-PKG_SHORTDESC="kodi addon iptvsimple"
-PKG_LONGDESC="This is a PVR add-on for KODI. It add support for Live TV watching and EPG TV Guide through IPTV provided by the Internet providers in exUSSR countries."
+PKG_SHORTDESC="Kodi's IPTV Simple client addon"
+PKG_LONGDESC="Kodi's IPTV Simple client addon"
