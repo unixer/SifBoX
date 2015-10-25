@@ -7,9 +7,14 @@ if [ "$TARGET_MACHINE" = cubieboard2 ]; then
 else 
    #PKG_VERSION=helix-14.2
    #PKG_URL_REV=7cc53a9
-   PKG_VERSION=isengard-15.0
-   #PKG_URL_REV=6e5ede3
-   PKG_URL_REV=f635d85
+   #PKG_VERSION=isengard-15.0
+   #PKG_URL_REV=f635d85
+   #PKG_VERSION=isengard-15.1
+   #PKG_URL_REV=f4dda26
+   PKG_VERSION=isengard-15.2
+   PKG_URL_REV=02e7013
+   #PKG_VERSION=isengard-15.3
+   #PKG_URL_REV=9efd358
 fi
 PKG_URL="https://github.com/xbmc/xbmc.git"
 PKG_REV=1
