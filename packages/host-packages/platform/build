@@ -5,15 +5,23 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 
-mkdir build || true && cd build
-cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
-      -DCMAKE_INSTALL_PREFIX=/usr \
-      -DCMAKE_INSTALL_LIBDIR=/usr/lib \
-      -DCMAKE_INSTALL_LIBDIR_NOARCH=/usr/lib \
-      -DCMAKE_INSTALL_PREFIX_TOOLCHAIN=$SYSROOT_PREFIX/sysroot/usr \
-      -DCMAKE_PREFIX_PATH=$SYSROOT_PREFIX/sysroot/usr \
-      -DBUILD_SHARED_LIBS=0 \
-      ..
+#mkdir build || true && cd build
+#cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
+#      -DCMAKE_INSTALL_PREFIX=/usr \
+#      -DCMAKE_INSTALL_LIBDIR=/usr/lib \
+#      -DCMAKE_INSTALL_LIBDIR_NOARCH=/usr/lib \
+#      -DCMAKE_INSTALL_PREFIX_TOOLCHAIN=$SYSROOT_PREFIX/usr \
+#      -DCMAKE_PREFIX_PATH=$SYSROOT_PREFIX/usr \
+#      -DBUILD_SHARED_LIBS=0 \
+#      ..
+INSTALL_PREFIX=$PWD/.install/usr
 
+mkdir -p .build
+cd .build
+cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
+      -DCMAKE_FIND_ROOT_PATH=$LIB_PREFIX \
+      ..
 make
-make_install
+make install
+
+

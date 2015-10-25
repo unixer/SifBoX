@@ -36,10 +36,16 @@ else
   OPENGL_CONFIG="--disable-opengl"
 fi
 
+if pkg_uses $1 libcec; then
+  CEC_CONFIG="--enable-libcec"
+else
+  CEC_CONFIG="--disable-libcec"
+fi
 ./configure \
            $FB_CONFIG \
            $XORG_CONFIG \
            $OPENGL_CONFIG \
+	   $CEC_CONFIG \
            --enable-vdr \
            --enable-libxine \
            --enable-libjpeg \

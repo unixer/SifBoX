@@ -1,9 +1,6 @@
-http://patchwork.linuxtv.org/patch/10575/
-modified for 3.7.10
-
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop-common.h linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-common.h
---- linux-3.4-r1/drivers/media/common/b2c2/flexcop-common.h	2012-04-03 15:23:44.824143495 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-common.h	2012-04-03 15:26:40.756140116 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/common/b2c2/flexcop-common.h drivers/media/common/b2c2/flexcop-common.h
+--- linux/drivers/media/common/b2c2/flexcop-common.h	2012-04-03 15:23:44.824143495 +0400
++++ linux/drivers/media/common/b2c2/flexcop-common.h	2012-04-03 15:26:40.756140116 +0400
 @@ -91,6 +91,8 @@ 
  	int feedcount;
  	int pid_filtering;
@@ -22,9 +19,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop
  void flexcop_smc_ctrl(struct flexcop_device *fc, int onoff);
  
  void flexcop_set_mac_filter(struct flexcop_device *fc, u8 mac[6]);
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop-fe-tuner.c linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-fe-tuner.c
---- linux-3.4-r1/drivers/media/common/b2c2/flexcop-fe-tuner.c	2012-04-03 15:23:44.828143388 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-fe-tuner.c	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/common/b2c2/flexcop-fe-tuner.c drivers/media/common/b2c2/flexcop-fe-tuner.c
+--- linux/drivers/media/common/b2c2/flexcop-fe-tuner.c	2012-04-03 15:23:44.828143388 +0400
++++ linux/drivers/media/common/b2c2/flexcop-fe-tuner.c	2012-04-03 15:26:40.760141513 +0400
 @@ -12,6 +12,7 @@ 
  #include "cx24113.h"
  #include "cx24123.h"
@@ -104,9 +101,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop
  	{ FC_SKY_REV27, skystar2_rev27_attach },
  	{ FC_SKY_REV28, skystar2_rev28_attach },
  	{ FC_SKY_REV26, skystar2_rev26_attach },
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop-hw-filter.c linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-hw-filter.c
---- linux-3.4-r1/drivers/media/common/b2c2/flexcop-hw-filter.c	2012-04-03 15:23:44.828143388 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-hw-filter.c	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/common/b2c2/flexcop-hw-filter.c drivers/media/common/b2c2/flexcop-hw-filter.c
+--- linux/drivers/media/common/b2c2/flexcop-hw-filter.c	2012-04-03 15:23:44.828143388 +0400
++++ linux/drivers/media/common/b2c2/flexcop-hw-filter.c	2012-04-03 15:26:40.760141513 +0400
 @@ -11,6 +11,12 @@ 
  	deb_ts("rcv_data is now: '%s'\n", onoff ? "on" : "off");
  }
@@ -128,9 +125,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop
  		flexcop_rcv_data_ctrl(fc, onoff);
  		if (fc->stream_control) /* device specific stream control */
  			fc->stream_control(fc, onoff);
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop-misc.c linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-misc.c
---- linux-3.4-r1/drivers/media/common/b2c2/flexcop-misc.c	2012-04-03 15:23:44.832143280 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-misc.c	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw drivers/media/common/b2c2/flexcop-misc.c drivers/media/common/b2c2/flexcop-misc.c
+--- linux/drivers/media/common/b2c2/flexcop-misc.c	2012-04-03 15:23:44.832143280 +0400
++++ linux/drivers/media/common/b2c2/flexcop-misc.c	2012-04-03 15:26:40.760141513 +0400
 @@ -56,6 +56,7 @@ 
  	[FC_SKY_REV26]	= "Sky2PC/SkyStar 2 DVB-S rev 2.6",
  	[FC_SKY_REV27]	= "Sky2PC/SkyStar 2 DVB-S rev 2.7a/u",
@@ -139,9 +136,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop
  };
  
  static const char *flexcop_bus_names[] = {
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop-reg.h linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-reg.h
---- linux-3.4-r1/drivers/media/common/b2c2/flexcop-reg.h	2012-04-03 15:23:44.832143280 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/flexcop-reg.h	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/common/b2c2/flexcop-reg.h drivers/media/common/b2c2/flexcop-reg.h
+--- linux/drivers/media/common/b2c2/flexcop-reg.h	2012-04-03 15:23:44.832143280 +0400
++++ linux/drivers/media/common/b2c2/flexcop-reg.h	2012-04-03 15:26:40.760141513 +0400
 @@ -24,6 +24,7 @@ 
  	FC_SKY_REV26,
  	FC_SKY_REV27,
@@ -150,9 +147,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/flexcop
  } flexcop_device_type_t;
  
  typedef enum {
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/Kconfig linux-3.4-r1-S2/drivers/media/common/b2c2/Kconfig
---- linux-3.4-r1/drivers/media/common/b2c2/Kconfig	2012-04-03 15:23:44.824143495 +0400
-+++ linux-3.4-r1-S2/drivers/media/common/b2c2/Kconfig	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/common/b2c2/Kconfig drivers/media/common/b2c2/Kconfig
+--- linux/drivers/media/common/b2c2/Kconfig	2012-04-03 15:23:44.824143495 +0400
++++ linux/drivers/media/common/b2c2/Kconfig	2012-04-03 15:26:40.760141513 +0400
 @@ -3,6 +3,7 @@
  	depends on DVB_CORE && I2C
  	depends on DVB_B2C2_FLEXCOP_PCI || DVB_B2C2_FLEXCOP_USB
@@ -161,9 +158,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/common/b2c2/Kconfig
  	select DVB_PLL if MEDIA_SUBDRV_AUTOSELECT
  	select DVB_STV0299 if MEDIA_SUBDRV_AUTOSELECT
  	select DVB_MT352 if MEDIA_SUBDRV_AUTOSELECT
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx24120.c linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120.c
---- linux-3.4-r1/drivers/media/dvb-frontends/cx24120.c	1970-01-01 03:00:00.000000000 +0300
-+++ linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120.c	2012-04-03 16:10:59.000000000 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/dvb-frontends/cx24120.c drivers/media/dvb-frontends/cx24120.c
+--- linux/drivers/media/dvb-frontends/cx24120.c	1970-01-01 03:00:00.000000000 +0300
++++ linux/drivers/media/dvb-frontends/cx24120.c	2012-04-03 16:10:59.000000000 +0400
 @@ -0,0 +1,1053 @@ 
 +/*	
 +    Conexant cx24120/cx24118 - DVBS/S2 Satellite demod/tuner driver
@@ -1168,7 +1165,7 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx241
 +// ########################################################################################
 +static struct dvb_frontend_ops cx24120_ops = {
 +
-+	.delsys = { SYS_DVBS2 },
++	.delsys = { SYS_DVBS, SYS_DVBS2 },
 +	.info = {
 +		.name = "Conexant CX24120/CX24118",
 +		.frequency_min = 950000,
@@ -1218,9 +1215,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx241
 +MODULE_PARM_DESC(cx24120_debug, "prints some verbose debugging information (default:0)");
 +MODULE_AUTHOR("Sergey Tyurin");
 +MODULE_LICENSE("GPL");
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx24120_const.h linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120_const.h
---- linux-3.4-r1/drivers/media/dvb-frontends/cx24120_const.h	1970-01-01 03:00:00.000000000 +0300
-+++ linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120_const.h	2012-04-03 16:37:20.684139905 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/dvb-frontends/cx24120_const.h drivers/media/dvb-frontends/cx24120_const.h
+--- linux/drivers/media/dvb-frontends/cx24120_const.h	1970-01-01 03:00:00.000000000 +0300
++++ linux/drivers/media/dvb-frontends/cx24120_const.h	2012-04-03 16:37:20.684139905 +0400
 @@ -0,0 +1,259 @@ 
 +/*
 + * Conexant CX24120/CX24118 - DVB-S/S2 demod/tuner driver
@@ -1481,9 +1478,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx241
 +{	4	,	0	,	5	,	762960	,	457776	,	427	},
 +{	4	,	0	,	7	,	1068144	,	610368	,	448	},
 +};
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx24120.h linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120.h
---- linux-3.4-r1/drivers/media/dvb-frontends/cx24120.h	1970-01-01 03:00:00.000000000 +0300
-+++ linux-3.4-r1-S2/drivers/media/dvb-frontends/cx24120.h	2012-04-03 10:27:59.000000000 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/dvb-frontends/cx24120.h drivers/media/dvb-frontends/cx24120.h
+--- linux/drivers/media/dvb-frontends/cx24120.h	1970-01-01 03:00:00.000000000 +0300
++++ linux/drivers/media/dvb-frontends/cx24120.h	2012-04-03 10:27:59.000000000 +0400
 @@ -0,0 +1,59 @@ 
 +/*
 + * Conexant CX24120/CX24118 - DVB-S/S2 demod/tuner driver
@@ -1544,9 +1541,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/cx241
 +#endif
 +
 +#endif
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/Kconfig linux-3.4-r1-S2/drivers/media/dvb-frontends/Kconfig
---- linux-3.4-r1/drivers/media/dvb-frontends/Kconfig	2012-04-03 15:23:44.976143444 +0400
-+++ linux-3.4-r1-S2/drivers/media/dvb-frontends/Kconfig	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/dvb-frontends/Kconfig drivers/media/dvb-frontends/Kconfig
+--- linux/drivers/media/dvb-frontends/Kconfig	2012-04-03 15:23:44.976143444 +0400
++++ linux/drivers/media/dvb-frontends/Kconfig	2012-04-03 15:26:40.760141513 +0400
 @@ -4,6 +4,13 @@
  comment "Multistandard (satellite) frontends"
  	depends on DVB_CORE
@@ -1561,9 +1558,9 @@ diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/Kconf
  config DVB_STB0899
  	tristate "STB0899 based"
  	depends on DVB_CORE && I2C
-diff -NurEbBw --strip-trailing-cr linux-3.4-r1/drivers/media/dvb-frontends/Makefile linux-3.4-r1-S2/drivers/media/dvb-frontends/Makefile
---- linux-3.4-r1/drivers/media/dvb-frontends/Makefile	2012-04-03 15:23:44.976143444 +0400
-+++ linux-3.4-r1-S2/drivers/media/dvb-frontends/Makefile	2012-04-03 15:26:40.760141513 +0400
+diff -NurEbBw --strip-trailing-cr drivers/media/dvb-frontends/Makefile drivers/media/dvb-frontends/Makefile
+--- linux/drivers/media/dvb-frontends/Makefile	2012-04-03 15:23:44.976143444 +0400
++++ linux/drivers/media/dvb-frontends/Makefile	2012-04-03 15:26:40.760141513 +0400
 @@ -19,6 +19,10 @@
  obj-$(CONFIG_DVB_CX22700) += cx22700.o
  obj-$(CONFIG_DVB_S5H1432) += s5h1432.o

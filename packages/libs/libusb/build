@@ -9,10 +9,13 @@ cd $PKG_BUILD_DIR
 mkdir -p objdir-target
 cd objdir-target
 
+export MAKEFLAGS=-j1
+
 do_configure \
             --disable-log \
             --disable-debug-log \
             --disable-examples-build \
+	    --enable-udev
 
 make
 make_install

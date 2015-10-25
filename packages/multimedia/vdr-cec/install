@@ -28,6 +28,6 @@ fi
 NAME=`echo $1 | sed s/vdr-//`
 mkdir -p $INSTALL/etc/vdr/plugins.d
 echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
-echo "OPTIONS=\"-i /dev/input/libcec-daemon\" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo "OPTIONS=\"-i /dev/input/libcec-daemon\"" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
 echo "ENABLED=yes" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
 

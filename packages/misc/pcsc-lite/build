@@ -11,8 +11,8 @@ do_configure \
 	    --enable-daemon \
             --enable-shared \
             --disable-static \
+	    --enable-libusb \
             --disable-libudev \
-            --enable-libusb \
 	    --with-systemdsystemunitdir=/lib/systemd/system \
             --enable-usbdropdir=/usr/lib/pcsc/drivers
 
