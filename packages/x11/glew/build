@@ -15,5 +15,5 @@ make \
   GLEW_DEST="$LIB_PREFIX" \
   CFLAGS="$TARGET_CFLAGS -Iinclude"
 
-export GLEW_DEST=.install/usr
+#export GLEW_DEST=.install/usr
 make_install
