@@ -1,8 +1,7 @@
 PKG_NAME=libcec
-#PKG_URL_PROTO=git
-#PKG_URL_REV=e8506b3
-PKG_VERSION=3.0.0
-PKG_URL="http://mirrors.xbmc.org/build-deps/sources/$PKG_NAME-$PKG_VERSION-6.tar.gz"
+PKG_VERSION=3.0.1
+#PKG_URL="http://mirrors.xbmc.org/build-deps/sources/$PKG_NAME-$PKG_VERSION-6.tar.gz"
+PKG_URL="https://github.com/Pulse-Eight/libcec/archive/$PKG_NAME-$PKG_VERSION.tar.gz"
 
 #PKG_VERSION=3.0.1+r${PKG_URL_REV}
 #PKG_URL="https://github.com/Pulse-Eight/libcec.git"
