@@ -62,7 +62,7 @@ VERS_ISO=`cat $ROOT/VERSION`
 VDR_VERSION=`grep -E '^PKG_VERSION' $ROOT/packages/multimedia/vdr/meta | cut -f1 |cut -f 2 -d=`
 KERN_VER=`grep -E '^PKG_VERSION' $ROOT/packages/system/linux/meta | cut -f1 |cut -f 2 -d=`
 get_meta kodi
-KODI_VERSION=`echo $PKG_VERSION |tr helix Helix |tr frodo Frodo |tr isengard Isengard`
+KODI_VERSION=`echo $PKG_VERSION |tr helix Helix |tr frodo Frodo |tr isengard Isengard |tr jarvis Jarvis`
 
 sed -i "s|\"DATE\"|\"$DATE\"|" $ISO.json
 sed -i "s|\"VERS_ISO\"|\"$VERS_ISO\"|" $ISO.json

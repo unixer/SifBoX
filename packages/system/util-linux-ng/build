@@ -24,6 +24,8 @@ do_configure host \
             --disable-more \
 	    --disable-static \
             --enable-shared \
+	    --enable-libblkid \
+	    --enable-libmount-force-mountinfo \
             --without-python
             
 
@@ -63,6 +65,8 @@ do_configure target \
 	    --disable-pg \
             --disable-static \
             --enable-shared \
+	    --enable-libblkid \
+	    --enable-libmount-force-mountinfo \
             --without-python
 
 make

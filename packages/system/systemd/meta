@@ -1,7 +1,8 @@
 PKG_NAME=systemd
-#PKG_VERSION=212
-PKG_VERSION=219
-PKG_URL="http://www.freedesktop.org/software/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
+#PKG_VERSION=219
+PKG_VERSION=228
+#PKG_URL="http://www.freedesktop.org/software/${PKG_NAME}/${PKG_NAME}-${PKG_VERSION}.tar.xz"
+PKG_URL="https://github.com/systemd/systemd/archive/v$PKG_VERSION.tar.gz"
 PKG_REV=1
 PKG_RUN_DEPENDS="$TARGET_LIBC pciids usbutils"
 #PKG_DEPENDS="libcap kmod util-linux-ng GLib usbutils libffi gettext libgcrypt"

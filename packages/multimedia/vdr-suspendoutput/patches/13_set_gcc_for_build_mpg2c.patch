@@ -1,0 +1,11 @@
+--- vdr-suspendoutput-2.0.0/Makefile.org	2016-02-16 16:57:28.233756599 +0100
++++ vdr-suspendoutput-2.0.0/Makefile	2016-02-16 16:57:46.373756243 +0100
+@@ -109,7 +109,7 @@
+ ### Targets:
+ 
+ mpg2c: mpg2c.c
+-	$(CC) mpg2c.c -o $@
++	gcc mpg2c.c -o $@
+ 
+ $(SOFILE): $(OBJS) $(OBJS_MPG)
+ 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) $(OBJS_MPG) -o $@

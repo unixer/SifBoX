@@ -1,0 +1,10 @@
+--- libgudev-230/docs/Makefile.am.org	2015-06-02 12:44:05.000000000 +0200
++++ libgudev-230/docs/Makefile.am	2015-12-18 16:44:31.406152098 +0100
+@@ -99,7 +99,6 @@
+ 
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += version.xml.in
+ 
+ # Files not to distribute
+ # for --rebuild-types in $(SCAN_OPTIONS), e.g. $(DOC_MODULE).types

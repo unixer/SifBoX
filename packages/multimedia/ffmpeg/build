@@ -60,14 +60,19 @@ case "$TARGET_FPU" in
       FFMPEG_FPU="--enable-neon"
   ;;
   vfp*)
-      FFMPEG_FPU="--disable-neon --enable-vfp --disable-decoder=hevc"
+      #FFMPEG_FPU="--disable-neon --enable-vfp --disable-decoder=hevc"
+      FFMPEG_FPU=""
   ;;
   *)
       FFMPEG_FPU=""
   ;;
 esac
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+   export CFLAGS="-I$SYSROOT_PREFIX/usr/include/interface/vcos/pthreads -I$SYSROOT_PREFIX/usr/include/interface/vmcs_host/linux -DRPI=1 $CFLAGS" 
+   export FFMPEG_LIBS="-lbcm_host -lvcos -lvchiq_arm -lmmal -lmmal_core -lmmal_util -lvcsm"
+fi
 
-#export LIBRARY_PATH=$XORG_PREFIX/lib
 sed -i 's/-lflite"/-lflite -lasound"/' configure &&
 ./configure --prefix=/usr \
               --cpu=$TARGET_CPU \
@@ -88,8 +93,8 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               --host-ldflags="$HOST_LDFLAGS" \
               --host-libs="-lm" \
               --extra-cflags="$CFLAGS" \
-              --extra-ldflags="$LDFLAGS" \
-              --extra-libs="" \
+              --extra-ldflags="$LDFLAGS -fPIC" \
+              --extra-libs="$FFMPEG_LIBS" \
               --extra-version="" \
               --build-suffix="" \
               --disable-static \
@@ -102,7 +107,6 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               $FFMPEG_DEBUG \
               $FFMPEG_PIC \
               --enable-optimizations \
-              --disable-armv5te --disable-armv6t2 \
               --disable-extra-warnings \
               --disable-ffprobe \
               --disable-ffplay \
@@ -119,7 +123,7 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               --disable-w32threads \
               --disable-x11grab \
               --enable-network \
-              --disable-gnutls --enable-libressl \
+              --disable-gnutls \
               --disable-gray \
               --enable-swscale-alpha \
               $FFMPEG_OPTIM \
@@ -182,7 +186,12 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               $FFMPEG_CPU \
               $FFMPEG_FPU \
               --enable-yasm \
-              --disable-symver
+              --disable-symver \
+	      --enable-encoder=ac3 \
+              --enable-encoder=aac \
+              --enable-encoder=wmav2 \
+              --enable-encoder=mjpeg \
+              --enable-encoder=png \
 
 [ $TARGET_LIBC = "uclibc" ] && ! pkg_uses $1 ipv6 && \
   sed "s%#define HAVE_STRUCT_IPV6_MREQ.*%#define HAVE_STRUCT_IPV6_MREQ 0%" -i config.h

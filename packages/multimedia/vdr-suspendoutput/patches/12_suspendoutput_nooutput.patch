@@ -1,0 +1,63 @@
+--- suspendoutput/suspendoutput.c.orig	2015-03-24 17:22:00.000000000 +0100
++++ suspendoutput/suspendoutput.c	2015-03-27 12:21:28.466040176 +0100
+@@ -184,6 +184,7 @@
+     "  -p        --paused       Allow suspend when replay is paused\n"
+     "  -l        --logo         Show VDR logo when suspended\n"
+     "  -b        --blank        Blank screen when suspended\n"
++    "  -n        --nooutput     No output when blank screen\n"
+     ;
+ 
+   return CmdLineHelp;
+@@ -199,11 +200,12 @@
+     { "paused",   no_argument,       NULL, 'p' },
+     { "logo",     no_argument,       NULL, 'l' },
+     { "blank",    no_argument,       NULL, 'b' },
++    { "nooutput", no_argument,       NULL, 'n' },
+     { NULL }
+   };
+ 
+   int c;
+-  while ((c = getopt_long(argc, argv, "mMt:T", long_options, NULL)) != -1) {
++  while ((c = getopt_long(argc, argv, "mMt:Tplbn", long_options, NULL)) != -1) {
+     switch (c) {
+     case 'm': m_bMenu = true;
+               isyslog("suspendoutput: main menu entry enabled");
+@@ -231,6 +233,9 @@
+     case 'b': cDummyPlayerControl::UseBlankImage = true;
+ 	      SetupStore("ShowLogo", 0);
+               break;
++    case 'n': cDummyPlayerControl::NoOutputImage = true;
++	      SetupStore("ShowLogo", 0);
++              break;
+     default:  return false;
+     }
+   }
+--- suspendoutput/dummy_player.c.orig	2012-04-16 08:48:05.000000000 +0200
++++ suspendoutput/dummy_player.c	2015-03-27 12:18:17.627282274 +0100
+@@ -41,7 +41,7 @@
+     {
+       if(! cDummyPlayerControl::UseBlankImage)
+ 	DeviceStillPicture(v_mpg_vdrlogo, v_mpg_vdrlogo_length);
+-      else
++      else if (! cDummyPlayerControl::NoOutputImage)
+ 	DeviceStillPicture(v_mpg_black, v_mpg_black_length);
+       //DeviceStillPicture(v_mpg_nosignal, v_mpg_nosignal_length);
+       return true;
+@@ -61,6 +61,7 @@
+ cDummyPlayer *cDummyPlayerControl::m_Player = NULL;
+ cMutex cDummyPlayerControl::m_Lock;
+ bool cDummyPlayerControl::UseBlankImage = false;
++bool cDummyPlayerControl::NoOutputImage = false;
+ 
+ cDummyPlayerControl::cDummyPlayerControl(void) :
+   cControl(OpenPlayer())
+--- suspendoutput/dummy_player.h.orig	2015-03-27 12:30:04.412681196 +0100
++++ suspendoutput/dummy_player.h	2015-03-27 12:29:38.062852771 +0100
+@@ -32,6 +32,7 @@
+   static bool IsOpen(void) { return m_Player != NULL; }
+ 
+   static bool UseBlankImage;
++  static bool NoOutputImage;
+ };
+ 
+ #endif //__DUMMY_PLAYER_H

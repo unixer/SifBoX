@@ -1,0 +1,59 @@
+--- suspendoutput/suspendoutput.c.orig	2015-03-05 21:19:59.000000000 +0100
++++ suspendoutput/suspendoutput.c	2015-03-24 17:22:00.977977393 +0100
+@@ -128,6 +128,8 @@
+     virtual const char *Version(void) { return VERSION; }
+     virtual const char *Description(void) { return DESCRIPTION; }
+     virtual const char *CommandLineHelp(void);
++    virtual const char **SVDRPHelpPages(void);
++    virtual cString SVDRPCommand(const char *Command, const char *Option, int &ReplyCode);
+     virtual bool ProcessArgs(int argc, char *argv[]);
+     virtual bool Initialize(void) {return true;};
+     virtual bool Start(void);
+@@ -235,6 +237,47 @@
+   return true;
+ }
+ 
++const char **cPluginSuspendoutput::SVDRPHelpPages(void)
++{
++	static const char *HelpPages[] = {
++		"SUSP\n"
++		"    Suspend video output.\n",
++		"RESU\n"
++		"    Resume video output.\n",
++		NULL
++	};
++	return HelpPages;
++}
++
++cString cPluginSuspendoutput::SVDRPCommand(const char *Command, const char *Option, int &ReplyCode)
++{
++	if (strcasecmp(Command, "SUSP") == 0) {
++	  m_Lock.Lock();
++	  m_bPlayerLaunchedByTimer = false;
++	  if(! cDummyPlayerControl::IsOpen()) {
++	    isyslog("suspendoutput: output suspended by svdrp");
++	    cControl::Launch(new cDummyPlayerControl);
++	  }
++	  m_Lock.Unlock();
++
++	  ReplyCode = 250;
++	  return cString::sprintf("Suspend output");
++	}
++	if (strcasecmp(Command, "RESU") == 0) {
++	  m_Lock.Lock();
++	  m_bPlayerLaunchedByTimer = false;
++	  if(cDummyPlayerControl::IsOpen()) {
++	    isyslog("suspendoutput: output resumed by svdrp");
++	    cDummyPlayerControl::Close();
++	  }
++	  m_Lock.Unlock();
++
++	  ReplyCode = 250;
++	  return cString::sprintf("Resume output");
++	}
++	return NULL;
++}
++
+ 
+ bool cPluginSuspendoutput::SetupParse(const char *Name, const char *Value)
+ {

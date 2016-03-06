@@ -1,0 +1,20 @@
+--- libgudev-230/docs/Makefile.am.org	2015-12-18 16:48:42.722156412 +0100
++++ libgudev-230/docs/Makefile.am	2015-12-18 16:49:46.202157502 +0100
+@@ -28,7 +28,7 @@
+ 
+ # Extra options to supply to gtkdoc-scan.
+ # e.g. SCAN_OPTIONS=--deprecated-guards="GTK_DISABLE_DEPRECATED"
+-SCAN_OPTIONS=
++SCAN_OPTIONS="--deprecated-guards="GTK_DISABLE_DEPRECATED"
+ 
+ # Extra options to supply to gtkdoc-mkdb.
+ # e.g. MKDB_OPTIONS=--sgml-mode --output-format=xml
+@@ -95,7 +95,7 @@
+ 	$(top_builddir)/libgudev-1.0.la
+ 
+ # This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
++# include $(top_srcdir)/gtk-doc.make
+ 
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in

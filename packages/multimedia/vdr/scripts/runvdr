@@ -74,6 +74,10 @@ elif dmesg | tail -n 250 | grep -i "dvb_usb_af9035: probe of 1-2:1.0 failed with
    rmmod dvb-usb-af9035
    modprobe dvb-usb-af9035
    sleep 1
+elif lsusb | grep -i "a867" > /dev/hull; then
+   rmmod dvb-usb-af9035
+   modprobe dvb-usb-af9035
+   sleep 1
 fi
 /bin/systemctl restart mixer.service                                            
 sleep 1       

@@ -1,5 +1,7 @@
 PKG_NAME=chromium
-PKG_VERSION="37.0.2062.94"
+#PKG_VERSION="37.0.2062.94"
+#PKG_VERSION="39.0.2166.2"
+PKG_VERSION="40.0.2214.115"
 PKG_URL="http://gsdview.appspot.com/chromium-browser-official/${PKG_NAME}-${PKG_VERSION}.tar.xz"
 PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC pciutils cairo gconf nss libexif pango libdrm gtk-2 openssl pulseaudio"

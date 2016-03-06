@@ -4,7 +4,7 @@
 
 $SCRIPTS/build vdr
 
-VDR_DIR=`basename $BUILD/vdr-1*`
+VDR_DIR=`basename $BUILD/vdr-2*`
 
 cd $BUILD/$1*
 make all \

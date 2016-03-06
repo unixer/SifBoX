@@ -1,0 +1,216 @@
+#!/bin/sh
+
+. config/options
+get_meta $1
+
+cd $PKG_BUILD_DIR
+
+rm -f docs/gtk-doc.make
+echo 'EXTRA_DIST =' > docs/gtk-doc.make
+[ -x configure ] || do_autoconf
+do_autoconf
+export ac_cv_func_malloc_0_nonnull=yes
+export ac_cv_have_decl_IFLA_BOND_AD_INFO=no \ac_cv_have_decl_IFLA_BOND_AD_INFO=no
+export ac_cv_path_KMOD="/usr/bin/kmod"
+GCC_NO_LTO=1 GCC_NO_GOLD=1 \
+do_configure               --disable-nls \
+                           --disable-gtk-doc \
+                           --disable-gtk-doc-html \
+                           --disable-gtk-doc-pdf \
+                           --disable-python-devel \
+                           --disable-dbus \
+                           --disable-utmp \
+                           --disable-compat-libs \
+                           --disable-coverage \
+                           --enable-kmod \
+                           --disable-xkbcommon \
+                           --enable-blkid \
+                           --disable-seccomp \
+                           --disable-ima \
+                           --disable-chkconfig \
+                           --disable-selinux \
+                           --disable-apparmor \
+                           --disable-xz \
+		           --disable-zlib \
+                           --disable-bzip2 \
+                           --disable-lz4 \
+                           --disable-pam \
+                           --disable-acl \
+                           --disable-smack \
+                           --disable-gcrypt \
+                           --disable-audit \
+                           --disable-elfutils \
+                           --disable-libcryptsetup \
+                           --disable-qrencode \
+                           --disable-microhttpd \
+                           --disable-gnutls \
+                           --disable-libcurl \
+                           --disable-libidn \
+                           --disable-binfmt \
+                           --disable-vconsole \
+                           --disable-bootchart \
+                           --disable-quotacheck \
+                           --enable-tmpfiles \
+                           --disable-sysusers \
+                           --disable-firstboot \
+                           --disable-randomseed \
+                           --disable-backlight \
+                           --disable-rfkill \
+                           --enable-logind \
+                           --disable-machined \
+			   --disable-importd \
+                           --disable-hostnamed \
+                           --disable-timedated \
+                           --disable-timesyncd \
+                           --disable-localed \
+                           --disable-coredump \
+                           --disable-polkit \
+                           --disable-resolved \
+                           --disable-networkd \
+                           --disable-efi \
+                           --disable-terminal \
+                           --disable-kdbus \
+                           --disable-myhostname \
+                           --enable-gudev \
+			   --enable-hwdb \
+                           --disable-manpages \
+                           --disable-hibernate \
+                           --disable-ldconfig \
+                           --enable-split-usr \
+                           --disable-tests \
+                           --without-python \
+                           --with-sysvinit-path= \
+                           --with-sysvrcnd-path= \
+                           --with-tty-gid=5 \
+                           --with-dbuspolicydir=/etc/dbus-1/system.d \
+                           --with-dbussessionservicedir=/usr/share/dbus-1/services \
+                           --with-dbussystemservicedir=/usr/share/dbus-1/system-services \
+                           --with-dbusinterfacedir=/usr/share/dbus-1/interfaces \
+			   --with-firmware-path=/firmware \
+                           --with-rootprefix= \
+                           --with-rootlibdir=/lib \
+			   --enable-introspection \
+
+export MAKEFLAGS=-j1
+make
+make_install
+SYSTEMD=.install/lib/systemd
+SYSUNITS=$SYSTEMD/system
+
+# we don't care about utmp (it's not even supported by our libc)
+rm -f $SYSTEMD/systemd-update-utmp
+rm -f $SYSUNITS/systemd-update-utmp.service
+rm -f $SYSUNITS/sysinit.target.wants/systemd-update-utmp.service
+rm -f $SYSUNITS/systemd-update-utmp-runlevel.service
+rm -f $SYSUNITS/systemd-update-utmp-shutdown.service
+rm -f $SYSUNITS/shutdown.target.wants/systemd-update-utmp-shutdown.service
+rm -f $SYSUNITS/runlevel?.target.wants/systemd-update-utmp-runlevel.service
+
+# boot to multi-user.target as fallback default
+#ln -sf multi-user.target $SYSUNITS/default.target
+
+# udev
+#for i in systemd-daemon systemd-id128 systemd-journal; do
+#  ln -sf ../../../lib/lib${i}.so.0 .install/usr/lib/lib${i}.so
+#done
+
+#ln -sf ../../../lib/libsystemd.so.0.5.1 .install/usr/lib/libsystemd.so
+ln -sf ../../../lib/libsystemd.so.0.6.0 .install/usr/lib/libsystemd.so
+ln -sf ../../../lib/libudev.so.1 .install/usr/lib/libudev.so
+#sed -i -e 's/, *GROUP=\"[^\"]*\"//g' .install/lib/udev/rules.d/*
+
+#Necessario per riconfigurare la rete in eth0
+  rm .install/lib/udev/rules.d/75-net-description.rules
+
+#Eliminazione Syslog che rea errore nella splash iniziale
+#  rm .install/lib/systemd/system/syslog.socket
+   ln -sf rsyslog.service .install/lib/systemd/system/syslog.service
+
+#Da Openelec
+  # remove unneeded stuff
+  rm -rf .install/etc/xdg
+  rm  -f .install/usr/bin/kernel-install
+  rm -rf .install/usr/lib/kernel/install.d
+  rm -rf .install/usr/lib/rpm
+  rm -rf .install/usr/lib/systemd/user
+  rm -rf .install/usr/lib/tmpfiles.d/etc.conf
+  rm -rf .install/usr/share/factory
+  rm -rf .install/usr/share/zsh
+
+  # clean up hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-OUI.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-acpi-vendor.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-bluetooth-vendor-product.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-net-ifname.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-sdio-classes.hwdb
+  rm -f .install/usr/lib/udev/hwdb.d/20-sdio-vendor-model.hwdb
+
+  # remove Network adaper renaming rule, this is confusing
+  rm -rf .install/usr/lib/udev/rules.d/80-net-setup-link.rules
+
+  # remove debug-shell.service, we install our own
+  rm -rf .install/usr/lib/systemd/system/debug-shell.service
+
+  # remove getty units, we dont want a console
+  rm -rf .install/usr/lib/systemd/system/autovt@.service
+  rm -rf .install/usr/lib/systemd/system/console-getty.service
+  rm -rf .install/usr/lib/systemd/system/console-shell.service
+  rm -rf .install/usr/lib/systemd/system/container-getty@.service
+  rm -rf .install/usr/lib/systemd/system/getty.target
+  rm -rf .install/usr/lib/systemd/system/getty@.service
+  rm -rf .install/usr/lib/systemd/system/serial-getty@.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/getty.target
+
+  # remove other notused or nonsense stuff (our /etc is ro)
+  rm -rf .install/usr/lib/systemd/systemd-update-done
+  rm -rf .install/usr/lib/systemd/system/systemd-update-done.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-update-done.service
+
+  # remove systemd-udev-hwdb-update. we have own hwdb.service
+  rm -rf .install/usr/lib/systemd/system/systemd-udev-hwdb-update.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-udev-hwdb-update.service
+
+  # remove nspawn
+  rm -rf .install/usr/bin/systemd-nspawn
+  rm -rf .install/usr/lib/systemd/system/systemd-nspawn@.service
+
+  # remove genetators/catalog
+  rm -rf .install/usr/lib/systemd/system-generators
+  rm -rf .install/usr/lib/systemd/catalog
+
+  # meh presets
+  rm -rf .install/usr/lib/systemd/system-preset
+
+  # remove networkd
+  rm -rf .install/usr/lib/systemd/network
+
+  # tune journald.conf
+  sed -e "s,^.*Compress=.*$,Compress=no,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*SplitMode=.*$,SplitMode=none,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*MaxRetentionSec=.*$,MaxRetentionSec=1day,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*RuntimeMaxUse=.*$,RuntimeMaxUse=2M,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*RuntimeMaxFileSize=.*$,RuntimeMaxFileSize=128K,g" -i .install/etc/systemd/journald.conf
+  sed -e "s,^.*SystemMaxUse=.*$,SystemMaxUse=10M,g" -i .install/etc/systemd/journald.conf
+
+  # tune logind.conf
+  sed -e "s,^.*HandleLidSwitch=.*$,HandleLidSwitch=ignore,g" -i .install/etc/systemd/logind.conf
+
+  # replace systemd-machine-id-setup with ours
+  rm -rf .install/usr/lib/systemd/systemd-machine-id-commit
+  rm -rf .install/usr/lib/systemd/system/systemd-machine-id-commit.service
+  rm -rf .install/usr/lib/systemd/system/*.target.wants/systemd-machine-id-commit.service
+  rm -rf .install/usr/bin/systemd-machine-id-setup
+  mkdir -p .install/usr/bin
+  cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/scripts/systemd-machine-id-setup .install/usr/bin
+
+  # provide 'halt', 'shutdown', 'reboot' & co.
+  mkdir -p .install/usr/sbin
+  ln -sf /usr/bin/systemctl .install/usr/sbin/halt
+  ln -sf /usr/bin/systemctl .install/usr/sbin/poweroff
+  ln -sf /usr/bin/systemctl .install/usr/sbin/reboot
+  ln -sf /usr/bin/systemctl .install/usr/sbin/runlevel
+  ln -sf /usr/bin/systemctl .install/usr/sbin/shutdown
+  ln -sf /usr/bin/systemctl .install/usr/sbin/telinit
+
+  mkdir -p .install/usr/config
+  cp -PR $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/* .install/usr/config

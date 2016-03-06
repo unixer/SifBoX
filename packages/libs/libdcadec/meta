@@ -1,0 +1,13 @@
+PKG_NAME=libdcadec
+PKG_VERSION=0.1.0
+PKG_URL_PROTO=git
+#PKG_URL_REV=37d8e68
+PKG_URL_REV=8a75986
+PKG_URL="https://github.com/foo86/dcadec.git"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC"
+PKG_BUILD_DEPENDS="toolchain"
+PKG_PRIORITY=optional
+PKG_SECTION=libs
+PKG_SHORTDESC="DTS Coherent Acoustics decoder with support for HD extensions"
+PKG_LONGDESC="DTS Coherent Acoustics decoder with support for HD extensions"

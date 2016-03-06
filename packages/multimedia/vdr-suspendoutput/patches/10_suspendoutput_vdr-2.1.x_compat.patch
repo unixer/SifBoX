@@ -1,0 +1,14 @@
+--- a/suspendoutput.c
++++ b/suspendoutput.c
+@@ -312,7 +312,11 @@
+   if(cDummyPlayerControl::IsOpen()) {
+ 
+     if ( !cRecordControls::Active() && 
++#if APIVERSNUM > 20101
++	 !RecordingsHandler.Active() && 
++#else
+ 	 !cCutter::Active() && 
++#endif
+ 	 !Interface->HasSVDRPConnection()) {
+ 
+ #define ACTIVITYTIMEOUT 600   // 10 min

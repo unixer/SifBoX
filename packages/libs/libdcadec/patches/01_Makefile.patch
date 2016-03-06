@@ -1,0 +1,11 @@
+--- libdcadec-0.1.0/Makefile.org	2015-12-20 19:57:06.645316687 +0100
++++ libdcadec-0.1.0/Makefile	2015-12-20 19:57:14.753316828 +0100
+@@ -6,7 +6,7 @@
+ 
+ CFLAGS := -std=gnu99 -D_FILE_OFFSET_BITS=64 -Wall -Wextra -O3 -ffast-math -g -MMD $(CFLAGS)
+ 
+-PREFIX ?= /usr/local
++PREFIX ?= /usr
+ BINDIR ?= $(PREFIX)/bin
+ LIBDIR ?= $(PREFIX)/lib
+ INCLUDEDIR ?= $(PREFIX)/include

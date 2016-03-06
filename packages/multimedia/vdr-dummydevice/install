@@ -15,5 +15,7 @@ done
 
 NAME=`echo $1 | sed s/vdr-//`
 mkdir -p $INSTALL/etc/vdr/plugins.d
-echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
-echo "ENABLED=no" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo ". /etc/pvr.conf " > $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo "PLUGIN=${NAME}" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
+#echo "ENABLED=no" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo "[ \"\$BACKEND\" != vdr ] && ENABLED=yes || ENABLED=no" >> $INSTALL/etc/vdr/plugins.d/50_$NAME

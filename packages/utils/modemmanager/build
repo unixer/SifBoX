@@ -2,16 +2,24 @@
 
 . config/options
 get_meta $1
-export UNINSTALLED_GLIB_SRCDIR=$ROOT/$BUILD/GLib-2.37.7
-
+export UNINSTALLED_GLIB_SRCDIR=$ROOT/$BUILD/GLib-2.40.2
 cd $PKG_BUILD_DIR
-autoreconf --install --force
-intltoolize --force
-autoreconf
+#autoreconf --install --force
+#./autogen.sh \
+#		--without-mbim \
+#		--without-qmi \
+
+#intltoolize --force
+
+#autoreconf
+#do_autoconf
 do_configure \
 	     --without-mbm \
              --without-qmi \
-	     --without-mbim \
+	     --without-mbim
+
+
+#	     --with-udev-base-dir=/root/SifBoX/build/build.kbb.eglibc/toolchain/x86_64-openbricks-linux-gnu/sysroot/usr/local/lib/
              
              
 make

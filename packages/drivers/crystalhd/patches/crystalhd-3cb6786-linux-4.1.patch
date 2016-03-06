@@ -1,0 +1,232 @@
+diff -urN crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_cmds.c crystalhd/driver/linux/crystalhd_cmds.c
+--- crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_cmds.c	2015-11-04 10:09:57.854437844 +0100
++++ crystalhd/driver/linux/crystalhd_cmds.c	2015-11-04 09:47:51.446415073 +0100
+@@ -85,7 +85,7 @@
+ 		return BC_STS_ERR_USAGE;
+ 	}
+ 
+-	if ((idata->udata.u.NotifyMode.Mode && 0xFF) == DTS_MONITOR_MODE) {
++	if ((idata->udata.u.NotifyMode.Mode & 0xFF) == DTS_MONITOR_MODE) {
+ 		ctx->user[idata->u_id].mode = idata->udata.u.NotifyMode.Mode;
+ 		return BC_STS_SUCCESS;
+ 	}
+diff -urN crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_linkfuncs.c crystalhd/driver/linux/crystalhd_linkfuncs.c
+--- crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_linkfuncs.c	2012-11-05 20:25:34.000000000 +0100
++++ crystalhd/driver/linux/crystalhd_linkfuncs.c	2015-11-04 09:47:51.454415074 +0100
+@@ -553,16 +553,11 @@
+ {
+ 	uint32_t PicInfoLineNum = 0;
+ 
+-	if (dio->uinfo.b422mode == MODE422_YUY2) {
++	if (dio->uinfo.b422mode) {
+ 		PicInfoLineNum = ((uint32_t)(*(base + 6)) & 0xff)
+ 			| (((uint32_t)(*(base + 4)) << 8)  & 0x0000ff00)
+ 			| (((uint32_t)(*(base + 2)) << 16) & 0x00ff0000)
+ 			| (((uint32_t)(*(base + 0)) << 24) & 0xff000000);
+-	} else if (dio->uinfo.b422mode == MODE422_UYVY) {
+-		PicInfoLineNum = ((uint32_t)(*(base + 7)) & 0xff)
+-			| (((uint32_t)(*(base + 5)) << 8)  & 0x0000ff00)
+-			| (((uint32_t)(*(base + 3)) << 16) & 0x00ff0000)
+-			| (((uint32_t)(*(base + 1)) << 24) & 0xff000000);
+ 	} else {
+ 		PicInfoLineNum = ((uint32_t)(*(base + 3)) & 0xff)
+ 			| (((uint32_t)(*(base + 2)) << 8)  & 0x0000ff00)
+@@ -588,14 +583,10 @@
+ 	else
+ 		offset = 0;
+ 
+-	if (dio->uinfo.b422mode == MODE422_YUY2) {
++	if (dio->uinfo.b422mode) {
+ 		for (i = 0; i < 4; i++)
+ 			((uint8_t*)tmp)[i] =
+ 				((uint8_t*)pPicInfoLine)[(offset + i) * 2];
+-	} else if (dio->uinfo.b422mode == MODE422_UYVY) {
+-		for (i = 0; i < 4; i++)
+-			((uint8_t*)tmp)[i] =
+-				((uint8_t*)pPicInfoLine)[(offset + i) * 2 + 1];
+ 	}
+ 
+ 	return val;
+@@ -742,12 +733,9 @@
+ 	if (res != 0)
+ 		goto getpictureinfo_err;
+ 
+-	if (dio->uinfo.b422mode == MODE422_YUY2) {
++	if (dio->uinfo.b422mode) {
+ 		for (i = 0; i < 4; i++)
+ 			((uint8_t *)tmp)[i] = ((uint8_t *)dio->pib_va)[i * 2];
+-	} else if (dio->uinfo.b422mode == MODE422_UYVY) {
+-		for (i = 0; i < 4; i++)
+-			((uint8_t *)tmp)[i] = ((uint8_t *)dio->pib_va)[(i * 2) + 1];
+ 	} else
+ 		pic_number = *(uint32_t *)(dio->pib_va);
+ 
+diff -urN crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_lnx.c crystalhd/driver/linux/crystalhd_lnx.c
+--- crystalhd-3.9.0-r3cb6786/driver/linux/crystalhd_lnx.c	2015-11-04 10:09:57.854437844 +0100
++++ crystalhd/driver/linux/crystalhd_lnx.c	2015-11-04 09:47:51.454415074 +0100
+@@ -538,34 +538,10 @@
+ 	        bar0, i2o_len, bar2, mem_len);
+ 
+ 	/* bar-0 */
+-	rc = check_mem_region(bar0, i2o_len);
+-	if (rc) {
+-		printk(KERN_ERR "No valid mem region...\n");
+-		return -ENOMEM;
+-	}
+-
+-	pinfo->i2o_addr = ioremap_nocache(bar0, i2o_len);
+-	if (!pinfo->i2o_addr) {
+-		printk(KERN_ERR "Failed to remap i2o region...\n");
+-		return -ENOMEM;
+-	}
+-
+ 	pinfo->pci_i2o_start = bar0;
+ 	pinfo->pci_i2o_len   = i2o_len;
+ 
+ 	/* bar-2 */
+-	rc = check_mem_region(bar2, mem_len);
+-	if (rc) {
+-		printk(KERN_ERR "No valid mem region...\n");
+-		return -ENOMEM;
+-	}
+-
+-	pinfo->mem_addr = ioremap_nocache(bar2, mem_len);
+-	if (!pinfo->mem_addr) {
+-		printk(KERN_ERR "Failed to remap mem region...\n");
+-		return -ENOMEM;
+-	}
+-
+ 	pinfo->pci_mem_start = bar2;
+ 	pinfo->pci_mem_len   = mem_len;
+ 
+@@ -575,6 +551,18 @@
+ 		printk(KERN_ERR "Region request failed: %d\n", rc);
+ 		return rc;
+ 	}
++	
++	pinfo->i2o_addr = pci_ioremap_bar(pinfo->pdev, 0);
++	if (!pinfo->i2o_addr) {
++		printk(KERN_ERR "Failed to remap i2o region...\n");
++		return -ENOMEM;
++	}
++	
++	pinfo->mem_addr = pci_ioremap_bar(pinfo->pdev, 2);
++	if (!pinfo->mem_addr) {
++		printk(KERN_ERR "Failed to remap mem region...\n");
++		return -ENOMEM;
++	}
+ 
+ 	dev_dbg(dev, "i2o_addr:0x%08lx   Mapped addr:0x%08lx  \n",
+ 	        (unsigned long)pinfo->i2o_addr, (unsigned long)pinfo->mem_addr);
+diff -urN crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/libcrystalhd_fwdiag_if.cpp crystalhd/linux_lib/libcrystalhd/libcrystalhd_fwdiag_if.cpp
+--- crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/libcrystalhd_fwdiag_if.cpp	2015-11-04 10:10:30.702438405 +0100
++++ crystalhd/linux_lib/libcrystalhd/libcrystalhd_fwdiag_if.cpp	2015-11-04 09:47:51.546415076 +0100
+@@ -233,7 +233,7 @@
+ 
+ 		}
+ 		else
+-			DebugLog_Trace(LDIL_DBG,"Uart Set Successfully\n");
++			DebugLog_Trace(LDIL_DBG,"Uart Set Sucessfully\n");
+ 
+ 		//START_PROCESSOR bit in DCI_CMD.
+ 		RegVal = 0;
+diff -urN crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/libcrystalhd_if.h crystalhd/linux_lib/libcrystalhd/libcrystalhd_if.h
+--- crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/libcrystalhd_if.h	2012-11-05 20:25:34.000000000 +0100
++++ crystalhd/linux_lib/libcrystalhd/libcrystalhd_if.h	2015-11-04 09:47:51.550415076 +0100
+@@ -26,6 +26,8 @@
+  *
+  ****************************************************************************/
+ 
++#include <stdint.h>
++
+ #ifndef _BCM_LDIL_IF_H_
+ #define _BCM_LDIL_IF_H_
+ 
+diff -urN crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/Makefile crystalhd/linux_lib/libcrystalhd/Makefile
+--- crystalhd-3.9.0-r3cb6786/linux_lib/libcrystalhd/Makefile	2015-11-04 10:10:17.030438170 +0100
++++ crystalhd/linux_lib/libcrystalhd/Makefile	2015-11-04 09:47:51.546415076 +0100
+@@ -15,7 +15,7 @@
+ 
+ ROOTDIR = ../..
+ 
+-INCLUDES = -I./ -I$(ROOTDIR)/include
++INCLUDES = -I./ -I/usr/include -I$(ROOTDIR)/include
+ INCLUDES += -I$(ROOTDIR)/include/link
+ 
+ 
+diff -urN crystalhd-3.9.0-r3cb6786/README.md crystalhd/README.md
+--- crystalhd-3.9.0-r3cb6786/README.md	1970-01-01 01:00:00.000000000 +0100
++++ crystalhd/README.md	2015-11-04 09:47:51.442415072 +0100
+@@ -0,0 +1,72 @@
++# Crystal HD Hardware Decoder Driver on Ubuntu 13.04 Linux kernel 3.8.0-25
++## Broadcom BCM70012 & BCM70015
++
++After a lot a retries to get the rigth experience with the Crystal HD on Ubuntu, 
++
++**1. Install required files**
++
++    sudo apt-get install checkinstall git-core autoconf build-essential subversion dpkg-dev fakeroot pbuilder build-essential dh-make debhelper devscripts patchutils quilt git-buildpackage pristine-tar git yasm zlib1g-dev zlib-bin libzip-dev libx11-dev libx11-dev libxv-dev vstream-client-dev libgtk2.0-dev libpulse-dev libxxf86dga-dev x11proto-xf86dga-dev git libgstreamermm-0.10-dev libgstreamer0.10-dev automake libtool python-appindicator 
++    
++**2. Ge the source**
++
++Get the driver source code from the git repository.
++
++    git clone https://github.com/yeradis/crystalhd.git   
++
++_The original repo source is available at git://git.linuxtv.org/jarod/crystalhd.git_
++    
++**3. Compile driver, install libraries, and load driver**
++
++Use make command to compile driver. If you have multiple core processor then use the “-j2″ or “-j4″ option (2 or 4 is the number of cores). This will speed up the make process.
++
++    cd crystalhd/driver/linux
++    autoconf
++    ./configure
++    make -j2
++    sudo make install
++    
++**4. Install the libraries.**
++
++    cd ../../linux_lib/libcrystalhd/
++    make -j2
++    sudo make install 
++    
++**5. Load the driver.**
++
++    sudo modprobe crystalhd
++    
++**6. Reboot your system** , then check if 'crystalhd' is listed in the output of the following commands.
++
++    lsmod
++    dmesg | grep crystalhd
++    
++ Then you should see something like this:
++ 
++    [    4.349765] Loading crystalhd v3.10.0
++    [    4.349823] crystalhd 0000:02:00.0: Starting Device:0x1615
++    [    4.351848] crystalhd 0000:02:00.0: irq 43 for MSI/MSI-X
++    [  108.512135] crystalhd 0000:02:00.0: Opening new user[0] handle
++    [  258.976583] crystalhd 0000:02:00.0: Closing user[0] handle via ioctl with mode 10200
++
++Now is time to enjoy our FullHD content. 
++
++I'm using XMBC , VLC (2.1.0), Mplayer2, GStreamer because they are using (they should) the Crystal HD decoder libraries.
++
++For example , lets try VLC :
++
++    vlc --codec=crystalhd ourgreatfullhdmedia.mkv
++    
++Now runs smoothly rigth ?
++
++# After kernel update
++
++Reinstall the driver.
++
++    cd crystalhd/driver/linux
++    sudo make install
++
++
++Btw this instructions referred to http://knowledge.evot.biz/documentation/how-to-compile-and-install-the-broadcom-crystal-hd-hardware-decoder-bcm70012-70015-driver-on-ubuntu and fixed some issues appeared using a patch from M25 user at https://bbs.archlinux.org/viewtopic.php?pid=1253622#p1253622
++
++So, the sources on this repository are updated with the fixes and patches in order to make your life easier.
++

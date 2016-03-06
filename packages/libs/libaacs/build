@@ -5,10 +5,15 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
-do_configure
+do_configure --disable-werror \
+                           --disable-extra-warnings \
+                           --disable-optimizations \
+                           --with-gnu-ld
 
-sed -i -e 's/-Werror=implicit-function-declaration//g' Makefile
-sed -i -e 's/-Werror=implicit-function-declaration//g' src/Makefile
+#sed -i -e 's/-Werror=implicit-function-declaration//g' Makefile
+#sed -i -e 's/-Werror=implicit-function-declaration//g' src/Makefile
 
 make
 make_install
+mkdir -p .install/usr/config/aacs
+cp -P KEYDB.cfg .install/usr/config/aacs

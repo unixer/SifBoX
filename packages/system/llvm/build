@@ -25,7 +25,6 @@ do_configure --enable-polly \
              --disable-profiling \
              --disable-assertions \
              --disable-expensive-checks \
-             --enable-experimental-targets=R600 \
              --disable-debug-runtime \
              --enable-keep-symbols \
              --enable-jit \

@@ -1,0 +1,10 @@
+PKG_NAME=vdr-suspendoutput
+PKG_VERSION=2.0.0
+PKG_URL="http://phivdr.dyndns.org/vdr/vdr-suspendoutput/vdr-suspendoutput-${PKG_VERSION}.tgz"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC vdr"
+PKG_BUILD_DEPENDS="toolchain vdr"
+PKG_PRIORITY=optional
+PKG_SECTION=multimedia
+PKG_SHORTDESC="vdr-suspendoutput Suspend vdr output (display still image instead of live video)."
+PKG_LONGDESC="Suspending live TV releases current channel (DVB card) for recording(s) and saves some CPU time with software decoders." 

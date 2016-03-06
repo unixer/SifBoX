@@ -43,8 +43,6 @@ users:x:100:
 crontab:x:102:
 netdev:x:110:
 lpadmin:x:112:
-systemd-journal:x:190
-systemd-network:x:193
 input:x:199:
 avahi:x:495:
 netdev:x:497:

@@ -1,0 +1,22 @@
+--- libgudev-230/Makefile.am.org	2015-06-02 12:44:05.000000000 +0200
++++ libgudev-230/Makefile.am	2015-12-18 16:40:41.634148154 +0100
+@@ -1,7 +1,7 @@
+ # ------------------------------------------------------------------------------
+ # Common variables
+ 
+-ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
++#ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
+ AUTOMAKE_OPTIONS = color-tests parallel-tests
+ DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+ SUBDIRS = .
+@@ -182,10 +182,6 @@
+ # ------------------------------------------------------------------------------
+ # docs
+ 
+-if ENABLE_GTK_DOC
+-SUBDIRS += docs
+-endif
+-
+ #docs/html:
+ #	$(AM_V_at)$(MKDIR_P) $(dir $@)
+ #	$(AM_V_LN)$(LN_S) -f ../gudev/html $@

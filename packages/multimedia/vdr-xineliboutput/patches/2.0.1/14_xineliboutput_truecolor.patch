@@ -1,0 +1,127 @@
+diff -Naur master.org/config.c master/config.c
+--- master.org/config.c	2014-06-23 14:21:11.000000000 +0200
++++ master/config.c	2014-06-23 21:16:08.000000000 +0200
+@@ -741,7 +741,7 @@
+
+ bool config_t::ProcessArgs(int argc, char *argv[])
+ {
+-  static const char short_options[] = "fDw:h:l:mr:A:V:d:P:C:pc";
++  static const char short_options[] = "fDw:h:l:mr:A:V:d:P:C:pct";
+
+   static const struct option long_options[] = {
+       { "fullscreen",   no_argument,       NULL, 'f' },
+@@ -764,6 +764,7 @@
+       { "config",       required_argument, NULL, 'C' },
+       { "primary",      no_argument,       NULL, 'p' },
+       { "exit-on-close",no_argument,       NULL, 'c' },
++      { "truecolor",    no_argument,       NULL, 't' },
+       { NULL,           no_argument,       NULL,  0  }
+     };
+
+@@ -781,6 +782,8 @@
+               break;
+     case 'f': ProcessArg("Fullscreen", "1");
+               break;
++    case 't': ProcessArg("truecoloreverytime", "1");
++	       break;
+     case 'D': ProcessArg("X11.HUDOSD", "1");
+               if (optarg && strstr(optarg, "xshape")) {
+                 ProcessArg("XShapeHUDOSD", "1");
+@@ -899,6 +902,7 @@
+   else if (!strcasecmp(Name, "X11.OpenglAlways")) opengl = atoi(Value);
+   else if (!strcasecmp(Name, "X11.OpenglHUDOSD")) hud_osd |= (atoi(Value) ? HUD_OPENGL : 0);
+   else if (!strcasecmp(Name, "X11.XShapeHUDOSD")) hud_osd |= (atoi(Value) ? HUD_XSHAPE : 0);
++  else if (!strcasecmp(Name, "truecoloreverytime")) truecoloreverytime = atoi(Value);
+
+   else if (!strcasecmp(Name, "Audio.Driver")) STRN0CPY(audio_driver, Value);
+   else if (!strcasecmp(Name, "Audio.Port"))   STRN0CPY(audio_port, Value);
+diff -Naur master.org/config.h master/config.h
+--- master.org/config.h	2014-06-23 14:21:11.000000000 +0200
++++ master/config.h	2014-06-23 21:17:25.000000000 +0200
+@@ -294,6 +294,7 @@
+     int  window_id;        // use existing X11 window
+     int  hud_osd;          // head up display OSD
+     int  opengl;           // use opengl acceleration for video and HUD OSD
++    int  truecoloreverytime;
+
+     // Audio settings
+     int  speaker_type;
+diff -Naur master.org/device.c master/device.c
+--- master.org/device.c	2014-06-23 14:21:11.000000000 +0200
++++ master/device.c	2014-06-23 22:55:30.000000000 +0200
+@@ -42,6 +42,7 @@
+ #include "frontend_svr.h"
+
+ #include "device.h"
++#include "tools/osd_command.h"
+
+ #define STILLPICTURE_REPEAT_COUNT 3
+ #define LOCAL_INIT_TIMEOUT        20  // seconds
+@@ -1523,12 +1524,14 @@
+   return Rect;
+ }
+
+-void cXinelibDevice::ScaleVideo(const cRect &Rect)
+-{
+-  if (m_VideoWindow != Rect) {
+-    m_VideoWindow = Rect;
+-    cXinelibOsdProvider::RefreshOsd();
+-  }
++void cXinelibDevice::ScaleVideo(const cRect &Rect) {
++    osd_command_t osdcmd = {0};
++    osdcmd.cmd = OSD_VideoWindow;
++    osdcmd.x = Rect.X();
++    osdcmd.y = Rect.Y();
++    osdcmd.w = Rect.Width();
++    osdcmd.h = Rect.Height();
++    OsdCmd((void*) &osdcmd);
+ }
+
+ //
+diff -Naur master.org/frontend_svr.c master/frontend_svr.c
+--- master.org/frontend_svr.c	2014-06-23 14:21:11.000000000 +0200
++++ master/frontend_svr.c	2014-06-23 21:24:00.000000000 +0200
+@@ -783,7 +783,7 @@
+         has_clients++;
+     }
+
+-  return has_clients ? 1 : -1;
++  return has_clients || xc.truecoloreverytime ? 1 : -1;
+ }
+
+ int cXinelibServer::PlayFileCtrl(const char *Cmd, int TimeoutMs)
+diff -Naur master.org/xineliboutput.c master/xineliboutput.c
+--- master.org/xineliboutput.c	2014-06-23 14:21:11.000000000 +0200
++++ master/xineliboutput.c	2014-06-23 21:25:23.000000000 +0200
+@@ -160,6 +160,7 @@
+ "                           there are active frontend(s)\n"
+ "  -c        --exit-on-close  Exit vdr when local frontend window is closed\n"
+ "  -C        --config=file  Use xine-lib config file\n"
++"  -t        --truecolor    Support True Color OSD if no client is connected\n"
+ ;
+
+ const char *cPluginXinelibOutput::CommandLineHelp(void)
+diff -Naur master.org/xine_sxfe_frontend.c master/xine_sxfe_frontend.c
+--- master.org/xine_sxfe_frontend.c	2014-06-23 14:21:11.000000000 +0200
++++ master/xine_sxfe_frontend.c	2014-06-23 21:28:33.000000000 +0200
+@@ -636,6 +636,20 @@
+   int w = cmd->w;
+   int h = cmd->h;
+
++  if ((w == 0) || (h == 0)) {
++    pthread_mutex_lock(&this->video_win_mutex);
++    if (this->video_win_active) {
++      this->video_win_changed = 1;
++      this->video_win_active = 0;
++    }
++    this->video_win_x = x;
++    this->video_win_y = y;
++    this->video_win_w = w;
++    this->video_win_h = h;
++    pthread_mutex_unlock(&this->video_win_mutex);
++    return;
++  }
++
+   x = (int)ceil((double)(x>0 ? x-1 : 0) * scale_x);
+   y = (int)ceil((double)(y>0 ? y-1 : 0) * scale_y);
+   w = (int)floor((double)(w+2) * scale_x);

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+. config/options
+
+get_meta $1
+cd $PKG_BUILD_DIR
+
+#do_installdev usr/include
+mkdir -p $SYSROOT_PREFIX/usr/lib/
+cp libcrossguid.a $SYSROOT_PREFIX/usr/lib/
+mkdir -p $SYSROOT_PREFIX/usr/include/
+cp guid.h $SYSROOT_PREFIX/usr/include
+#do_installdev usr/lib

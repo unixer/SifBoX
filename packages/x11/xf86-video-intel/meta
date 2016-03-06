@@ -1,9 +1,10 @@
 PKG_NAME=xf86-video-intel
-#PKG_URL_PROTO=git
-#PKG_URL_REV="72c041e57b9"
+#PKG_VERSION="2.99.916"
 #PKG_VERSION="2.99.912+$PKG_URL_REV"
-PKG_VERSION="2.99.916"
-PKG_URL="$XORG_SRCS/driver/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+#PKG_VERSION="2.99.912+$PKG_URL_REV"
+PKG_VERSION=300319e
+#PKG_URL="$XORG_SRCS/driver/${PKG_NAME}-${PKG_VERSION}.tar.bz2"
+PKG_URL="http://sources.openelec.tv/devel/xf86-video-intel-300319e.tar.xz"
 #PKG_URL="git://anongit.freedesktop.org/xorg/driver/xf86-video-intel"
 PKG_REV=1
 PKG_ARCH="i386 x86_64"

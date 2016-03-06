@@ -10,6 +10,7 @@ if [ ! -d .install/etc/kodi ]; then
    mkdir -p .install/etc/kodi
 fi
 
+mkdir -p .install/usr/sbin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/silent.sh .install/usr/bin
 #cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/setwakeup.sh .install/usr/bin
@@ -17,11 +18,11 @@ cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/menuorg-appswitcher .install/usr/b
 #cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/RssFeeds.xml .install/usr/share/kodi/userdata
 if [ "$TARGET_MACHINE" = raspberrypi ] || \
    [ "$TARGET_MACHINE" = raspberrypi2 ]; then
-   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin/kodi
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/sbin/kodi
 elif [ "$TARGET_MACHINE" = tbs2910 ]; then
-   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/bin/kodi
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/runkodi .install/usr/sbin/kodi
 else
-   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/kodi .install/usr/bin
+   cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/kodi .install/usr/sbin
 fi
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/cputemp .install/usr/bin
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/gputemp .install/usr/bin
@@ -57,10 +58,10 @@ fi
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/advancedsettings.xml $INSTALL/root/.kodi/userdata/
 cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/config/*.xml .install/etc/kodi
 
-if [ $PKG_VERSION = "isengard-15.0" ]; then
+#if [ $PKG_VERSION = "isengard-15.0" ]; then
    mkdir -p $INSTALL/usr/share/kodi
    cp -P $ROOT/$PACKAGES/$PKG_SECTION/$1/scripts/FEH.py $INSTALL/usr/share/kodi/FEH.py
-fi
+#fi
 
 
 copy_config () {
@@ -77,7 +78,7 @@ copy_config () {
   done
 }
 
-copy_config scripts/runkodi .install/usr/bin
+copy_config scripts/runkodi .install/usr/sbin
 copy_config scripts/silent.sh .install/usr/bin
 copy_config scripts/setwakeup.sh .install/usr/bin
 copy_config config/*.xml .install/etc/kodi
@@ -87,3 +88,4 @@ do_install usr/lib
 do_install usr/share
 do_install etc/kodi
 do_install srv
+do_install usr/sbin

@@ -93,6 +93,11 @@ else
   CFG_CEDARX="--disable-cedar"
 fi
 
+if [ "$TARGET_MACHINE" = raspberrypi ] || \
+   [ "$TARGET_MACHINE" = raspberrypi2 ]; then
+  CFG_OPENMAX="--enable-rpi-omxil --disable-ogg --disable-mux_ogg"
+fi
+
 get_meta $1
 cd $PKG_BUILD_DIR
 
