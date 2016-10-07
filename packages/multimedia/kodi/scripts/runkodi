@@ -1,32 +1,49 @@
 #!/bin/sh
 
-pre_umount () {
-  [ -f /lib/systemd/system/automounter-nfs.service ] && systemctl stop automounter-nfs.service
-  [ -f /lib/systemd/system/automounter-smb.service ] && systemctl stop automounter-smb.service
+set_cursor_mode () {
+  [ -w /sys/class/graphics/fbcon/cursor_blink ] && \
+    echo "$1" > /sys/class/graphics/fbcon/cursor_blink
 }
+
 killall -9 libcec-daemon && /bin/systemctl stop libcec-daemon.service --force
 killall -9 vdr && /bin/systemctl stop vdr.service --force
-[ -n "$LOGFILE" ] || LOGFILE="/dev/null"
+
+prepare_shutdown () {
+  [ -f /lib/systemd/system/automounter-nfs.service ] && systemctl stop automounter-nfs.service
+  [ -f /lib/systemd/system/automounter-smb.service ] && systemctl stop automounter-smb.service
+  [ -n "$1" ] && systemctl "$1"
+}
+
+set_cursor_mode 0
+/usr/bin/ply-image /usr/share/kodi/media/Splash.png || true
+if [ "$BACKEND" = vdr ]; then
+   /usr/bin/vdr --terminal=/var/log/vdr.log -g /tmp -L /usr/lib/vdr/plugins --log=3 -p 6419 --vfat --no-kbd -Pdvbapi -Pvnsiserver -P"live --port=8008 --ip=0.0.0.0 --log=INFO --epgimages=/var/cache/vdr/epgimages/" -v /media/video -c /etc/vdr -w 0 --lirc -s /usr/bin/vdrshutdown &
+fi
 /usr/lib/kodi/kodi.bin $@
 EXIT_CODE=$?
 
+[ -n "$LOGFILE" ] || LOGFILE="/dev/null"
 case "$EXIT_CODE" in
   64) # 64=powerdown
     echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Shutting down..." >>$LOGFILE
-    pre_umount
-    systemctl poweroff
+    prepare_shutdown poweroff
     exit 0
   ;;
   66) # 66=reboot
     echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Rebooting..." >>$LOGFILE
-    pre_umount
-    systemctl reboot
+    prepare_shutdown reboot
     exit 0
   ;;
-  *) # 0=quit, 65=restart-app; let systemd restart the service
-    echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Returning -1 to systemd..." >>$LOGFILE
-    /bin/systemctl start libcec-daemon.service
-    /bin/systemctl start vdr.service
-    /bin/systemctl stop kodi.service --force
+  0) # 0=quit
+    echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Stopping..." >>$LOGFILE
+    prepare_shutdown
+    set_cursor_mode 1
+    killall -9 vdr
+    /usr/bin/systemctl start vdr
+    exit 0
+  ;;
+  *) # 65=restart-app; let systemd restart the service
+    echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Returning 1 to systemd..." >>$LOGFILE
+    set_cursor_mode 1
     exit 1
 esac

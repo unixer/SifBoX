@@ -1,7 +1,6 @@
 PKG_NAME=gst-plugins-base-010
-#PKG_URL_PROTO=git
 #PKG_URL_REV=13e9528b46802
-#PKG_VERSION=0.10.36-r${PKG_URL_REV}
+#PKG_VERSION=0.10.36
 #PKG_URL="git://anongit.freedesktop.org/gstreamer-sdk/gst-plugins-base"
 PKG_VERSION=0.10.36-r13e9528b46802
 PKG_URL="$DISTRO_SRCS/$PKG_NAME-$PKG_VERSION.tar.xz"

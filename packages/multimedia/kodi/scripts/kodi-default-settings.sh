@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #############################################################################
-# Setup default KODI settings files                                         #
+# Setup default XBMC settings files                                         #
 # See http://wiki.kodi.org/index.php?title=Advancedsettings.xml for details #
 #############################################################################
 
@@ -19,8 +19,8 @@ set_system_prefix () {
   if   grep -q "OMAP4 Panda board" /proc/cpuinfo; then SYS_PREFIX="panda"
   elif grep -q "Snowball" /proc/cpuinfo;          then SYS_PREFIX="snowball"
   elif grep -q "SolidRun CuBox" /proc/cpuinfo;    then SYS_PREFIX="cubox"
-  elif grep -q "BCM2708" /proc/cpuinfo;           then SYS_PREFIX="rpi"
-  elif grep -q "sun4i" /proc/cpuinfo;             then SYS_PREFIX="a10"
+  elif grep -q "BCM270[8|9]" /proc/cpuinfo;       then SYS_PREFIX="rpi"
+  elif grep -q "sun[4-7]i" /proc/cpuinfo;         then SYS_PREFIX="a10"
   elif grep -q "CM-FX6" /proc/cpuinfo;            then SYS_PREFIX="utilite"
   elif grep -q "i.MX6" /proc/cpuinfo;             then SYS_PREFIX="cuboxi"
   else                                            SYS_PREFIX="generic"     
@@ -63,7 +63,25 @@ if [ ! -f "$GUI_SETTINGS" ] ; then
   [ -n "$TZ_COUNTRY_CODE" ] && \
     TZ_COUNTRY=`grep $TZ_COUNTRY_CODE ${ZONEINFO}iso3166.tab | cut -f2 | head -1`
 
-  sed -i -e "s,TZ_COUNTRY,$TZ_COUNTRY," -e "s,TZ,$TZ," $GUI_SETTINGS
+  GUI_LIMIT="1080"
+  if [ "$SYS_PREFIX" = "rpi" ] ; then
+    MEMSIZE=`vcgencmd get_mem gpu | grep -o "[0-9]*"`
+    [ $MEMSIZE -le 256 ] && GUI_LIMIT="720"
+  fi
+    
+  sed -i $GUI_SETTINGS \
+      -e "s,GUI_LIMIT,$GUI_LIMIT," \
+      -e "s,TZ_COUNTRY,$TZ_COUNTRY," -e "s,TZ,$TZ,"
+  
+  case "$SYS_PREFIX" in
+       rpi) CECCONFIG="rpi_2708_1001.xml" ;;
+    cubox*) CECCONFIG="cec_0471_1001.xml" ;;
+  esac
+  if [ -n "$CECCONFIG" ]; then
+    mkdir -p $USERDATA/peripheral_data
+    copy_if_present /etc/kodi/$SYS_PREFIX-cecdefaults.xml $USERDATA/peripheral_data/$CECCONFIG
+    copy_if_missing /etc/kodi/generic-cecdefaults.xml $USERDATA/peripheral_data/$CECCONFIG
+  fi
 fi
 
 # set default sources.xml

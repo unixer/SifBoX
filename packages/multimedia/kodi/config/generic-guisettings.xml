@@ -6,7 +6,7 @@
   <services>
     <airplay>false</airplay>
     <airplaypassword></airplaypassword>
-    <devicename>KODI</devicename>
+    <devicename>XBMC</devicename>
     <esallinterfaces>true</esallinterfaces>
     <escontinuousdelay>25</escontinuousdelay>
     <esenabled>true</esenabled>

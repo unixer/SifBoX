@@ -1,6 +1,6 @@
 PKG_NAME=enigma2pc-skin-metropolishd
 PKG_URL_REV=b269350
-PKG_VERSION=20140117+${PKG_URL_REV}
+PKG_VERSION=20140117
 PKG_URL_PROTO=git
 PKG_URL="https://github.com/Franc1/Enigma2-Skin-MetropolisHD"
 PKG_REV=1

@@ -173,7 +173,6 @@ sed -i 's/-lflite"/-lflite -lasound"/' configure &&
               --disable-libschroedinger \
               --disable-libspeex \
               --disable-libtheora \
-              --disable-libvo-aacenc \
               --disable-libvo-amrwbenc \
               --enable-libvorbis --enable-muxer=ogg --enable-encoder=libvorbis \
               --disable-libvpx \

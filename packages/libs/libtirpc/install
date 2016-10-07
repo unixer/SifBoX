@@ -7,5 +7,5 @@ cd $PKG_BUILD_DIR
 
 do_install usr/lib/*.so*
 mkdir -p $INSTALL/etc
-  cp doc/etc_netconfig $INSTALL/etc/netconfig
+#  cp doc/etc_netconfig $INSTALL/etc/netconfig
 

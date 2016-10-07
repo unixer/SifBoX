@@ -1,6 +1,9 @@
 PKG_NAME=dvb3221-driver
 PKG_VERSION=131120
 PKG_URL="$SFNET_SRCS/openpctv/sources/dvb3221-3.10-source.tar.gz"
+#PKG_VERSION=3.17
+#PKG_URL="http://download2.polytechnic.edu.na/pub4/sourceforge/o/op/openpctv/sources/dvb3221-driver-20140714.tar.gz"
+
 PKG_REV=1
 PKG_PRIORITY=optional
 PKG_SECTION=drivers

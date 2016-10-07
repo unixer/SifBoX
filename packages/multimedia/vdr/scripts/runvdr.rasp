@@ -4,8 +4,10 @@
 
 #Accendi il televisore
 killall -9 libcec-daemon && systemctl stop libcec-daemon.service --force
-echo 'on 0' | cec-client -s
-systemctl start libcec-daemon.service
+if [ "$BACKEND" = vdr ]; then
+   echo 'on 0' | cec-client -s
+   systemctl start libcec-daemon.service
+fi
 
 if [ -f /lib/systemd/system/media-video.mount ]; then
   /usr/bin/systemctl restart media-video.mount
@@ -77,8 +79,12 @@ elif lsusb | grep -i "a867" > /dev/hull; then
    rmmod dvb-usb-af9035
    modprobe dvb-usb-af9035
    sleep 1
+elif dmesg | tail -n 250 | grep -i "failed with error -110" > /dev/null; then
+   rmmod dvb-usb-af9035                       
+   modprobe dvb-usb-af9035                                                
+   sleep 1
 fi
-/bin/systemctl restart mixer.service                                            
+#/bin/systemctl restart mixer.service
 sleep 1       
 #/usr/bin/ply-image /usr/share/plymouth/black.png 
 

@@ -9,29 +9,22 @@ KODI_BUILD_DIR=$ROOT/$PKG_BUILD_DIR
 
 get_meta $1
 cd $PKG_BUILD_DIR
+
 INSTALL_PREFIX=$PWD/.install/usr
 
 # Copy *.cmake and header files for use by addons 
 mkdir -p $INSTALL_PREFIX/lib/kodi $INSTALL_PREFIX/include/kodi
 cp $KODI_BUILD_DIR/.install/usr/lib/kodi/*.cmake $INSTALL_PREFIX/lib/kodi
-cp $KODI_BUILD_DIR/.install/usr/include/kodi/* $INSTALL_PREFIX/include/kodi
+cp -R $KODI_BUILD_DIR/.install/usr/include/kodi/* $INSTALL_PREFIX/include/kodi
 
 # Set paths to our toolchain
-sed -e "s%/usr/%$LIB_PREFIX/%" \
-    -i $INSTALL_PREFIX/lib/kodi/kodi-config.cmake
+sed -e "s%/usr/%$LIB_PREFIX/%g" \
+    -i $INSTALL_PREFIX/lib/kodi/KodiConfig.cmake
 
+# Hack to fix build of some older addons
+ln -sf KodiConfig.cmake $INSTALL_PREFIX/lib/kodi/kodi-config.cmake
 
-mkdir -p .build
-cd .build
-cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
-      -DCMAKE_FIND_ROOT_PATH=$LIB_PREFIX \
-      -Dkodi_DIR=$INSTALL_PREFIX/lib/kodi \
-      -DCMAKE_MODULE_PATH=$INSTALL_PREFIX/lib/kodi \
-      -DBUILD_SHARED_LIBS=0 \
-      ..
-make
-make install
-cd ..
-
-strip_libs $INSTALL_PREFIX/lib
-
+do_cmake_build \
+  -DBUILD_SHARED_LIBS=0 \
+  -DKodi_DIR=$INSTALL_PREFIX/lib/kodi \
+  -DCMAKE_MODULE_PATH=$INSTALL_PREFIX/lib/kodi

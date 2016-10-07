@@ -1,6 +1,7 @@
 PKG_NAME=mt7601u
 PKG_URL_PROTO=git
-PKG_URL_REV=ba391b3
+#PKG_URL_REV=ba391b3
+PKG_URL_REV=13fa644
 PKG_VERSION=0.0.1
 PKG_URL="https://github.com/kuba-moo/mt7601u"
 PKG_REV=1

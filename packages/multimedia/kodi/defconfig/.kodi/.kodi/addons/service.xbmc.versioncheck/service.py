@@ -22,32 +22,27 @@ import xbmc
 import lib.common
 from lib.common import log, dialog_yesno
 from lib.common import upgrade_message as _upgrademessage
+from lib.common import upgrade_message2 as _upgrademessage2
 
-__addon__        = lib.common.__addon__
-__addonversion__ = lib.common.__addonversion__
-__addonname__    = lib.common.__addonname__
-__addonpath__    = lib.common.__addonpath__
-__icon__         = lib.common.__icon__
+ADDON        = lib.common.ADDON
+ADDONVERSION = lib.common.ADDONVERSION
+ADDONNAME    = lib.common.ADDONNAME
+ADDONPATH    = lib.common.ADDONPATH
+ICON         = lib.common.ICON
 oldversion = False
 
 class Main:
     def __init__(self):
         linux = False
         packages = []
-        if not xbmc.getCondVisibility('System.HasAddon(os.openelec.tv)'):
-            if not sys.argv[0]:
-                xbmc.executebuiltin('XBMC.AlarmClock(CheckAtBoot,XBMC.RunScript(service.xbmc.versioncheck, started),00:00:30,silent)')
-                xbmc.executebuiltin('XBMC.AlarmClock(CheckWhileRunning,XBMC.RunScript(service.xbmc.versioncheck, started),24:00:00,silent,loop)')
-            elif sys.argv[0] and sys.argv[1] == 'started':
-                if xbmc.getCondVisibility('System.Platform.Linux') and __addon__.getSetting("upgrade_apt") == 'true':
-                    packages = ['xbmc']
-                    _versionchecklinux(packages)
-                else:
-                    oldversion, msg = _versioncheck()
-                    if oldversion:
-                        _upgrademessage(msg, oldversion, False)
-            else:
-                pass
+        xbmc.sleep(5000)
+        if xbmc.getCondVisibility('System.Platform.Linux') and ADDON.getSetting("upgrade_apt") == 'true':
+            packages = ['kodi']
+            _versionchecklinux(packages)
+        else:
+            oldversion, version_installed, version_available, version_stable = _versioncheck()
+            if oldversion:
+                _upgrademessage2( version_installed, version_available, version_stable, oldversion, False)
                 
 def _versioncheck():
     # initial vars
@@ -58,8 +53,8 @@ def _versioncheck():
     # retrieve version installed
     version_installed = get_installedversion()
     # copmpare installed and available
-    oldversion, msg = compare_version(version_installed, versionlist)
-    return oldversion, msg
+    oldversion, version_installed, version_available, version_stable = compare_version(version_installed, versionlist)
+    return oldversion, version_installed, version_available, version_stable
 
 
 def _versionchecklinux(packages):
@@ -80,13 +75,13 @@ def _versionchecklinux(packages):
                 pass
             elif dialog_yesno(32009, 32010):
                 log("disabling addon by user request")
-                __addon__.setSetting("versioncheck_enable", 'false')
+                ADDON.setSetting("versioncheck_enable", 'false')
                 return
 
         if handler:
             if handler.check_upgrade_available(packages[0]):
                 if _upgrademessage(32012, oldversion, True):
-                    if __addon__.getSetting("upgrade_system") == "false":
+                    if ADDON.getSetting("upgrade_system") == "false":
                         result = handler.upgrade_package(packages[0])
                     else:
                         result = handler.upgrade_system()
@@ -105,5 +100,5 @@ def _versionchecklinux(packages):
 
 
 if (__name__ == "__main__"):
-    log('Version %s started' % __addonversion__)
+    log('Version %s started' % ADDONVERSION)
     Main()

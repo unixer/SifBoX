@@ -6,7 +6,7 @@ PKG_VERSION=3.9.422
 PKG_URL_PROTO=git
 PKG_URL="https://github.com/tvheadend/tvheadend.git"
 #PKG_URL_REV=e0d07fa
-#PKG_VERSION=3.7+${PKG_URL_REV}
+#PKG_VERSION=3.7
 
 #PKG_URL="https://github.com/seife/tvheadend.git"
 PKG_REV=1

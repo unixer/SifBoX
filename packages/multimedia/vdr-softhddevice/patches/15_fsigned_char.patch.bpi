@@ -1,0 +1,23 @@
+--- softhddevice/Makefile.orig	2015-01-08 22:54:03.914030840 +0100
++++ softhddevice/Makefile	2015-01-08 22:56:22.152870622 +0100
+@@ -41,7 +41,7 @@
+ #CONFIG += -DUSE_MPEG_COMPLETE		# support only complete mpeg packets
+ #CONFIG += -DH264_EOS_TRICKSPEED	# insert seq end packets for trickspeed
+ #CONDIF += -DDUMP_TRICKSPEED		# dump trickspeed packets
+-#CONFIG += -DUSE_BITMAP			# VDPAU, use bitmap surface for OSD
++CONFIG += -DUSE_BITMAP			# VDPAU, use bitmap surface for OSD
+ CONFIG += -DUSE_VDR_SPU			# use VDR SPU decoder.
+ #CONFIG += -DUSE_SOFTLIMIT		# (tobe removed) limit the buffer fill
+ 
+@@ -145,9 +145,9 @@
+ ### Make it standard
+ 
+ override CXXFLAGS += $(_CFLAGS) $(DEFINES) $(INCLUDES) \
+-    -g -W -Wall -Wextra -Winit-self -Werror=overloaded-virtual
++    -g -W -Wall -Wextra -Winit-self -Werror=overloaded-virtual -fsigned-char
+ override CFLAGS	  += $(_CFLAGS) $(DEFINES) $(INCLUDES) \
+-    -g -W -Wall -Wextra -Winit-self -Wdeclaration-after-statement
++    -g -W -Wall -Wextra -Winit-self -Wdeclaration-after-statement -fsigned-char
+ 
+ ### The object files (add further files here):
+ 

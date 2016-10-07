@@ -69,8 +69,84 @@ if [ -d skindesigner_vectraskin ]; then
    cd skindesigner_vectraskin && git pull
    cd ..
 else
-  git clone https://github.com/Vectra130/skindesigner_vectraskin
+   git clone https://github.com/Vectra130/skindesigner_vectraskin
+   cd skindesigner_vectraskin
+   cd menuicons/customicons
+   ln -s Applikationen.png Applicazioni.png
+   ln -s System.png Sistema.png
+   ln -s XBMC.png KODI.png
+   ln -s Xterm.png Terminale.png
+   ln -s tux.png Giochi.png
+   ln -s Dienstprogramme.png "Aggiorna Canali SKY.png"
+   ln -s Sistema.png SifBoxConfig.png
+   cd ..
+   cd pluginicons
+   ln -s eepg.png loadepg.png
+   ln -s yaepghg.png reelchannellist.png
+   cd ../../..
 fi
 #cp -r skindesigner_vectraskin/themes/* .install/var/lib/vdr/themes
 cp -r skindesigner_vectraskin .install/etc/vdr/plugins/skindesigner/skins
 cp -r skindesigner_vectraskin/themes/* .install/etc/vdr/themes
+
+if [ -d blackhole ]; then
+   cd blackhole && git pull
+else 
+   git clone https://github.com/louisbraun/blackhole.git
+   cd blackhole
+   cd themes/default/menuicons/customicons
+   ln -s Applikationen.png Applicazioni.png
+   ln -s System.png Sistema.png
+   ln -s XBMC.png KODI.png
+   ln -s Xterm.png Terminale.png
+   ln -s tux.png Giochi.png
+   ln -s Dienstprogramme.png "Aggiorna Canali SKY.png"
+   ln -s Sistema.png SifBoxConfig.png
+   cd ..
+   cd pluginicons
+   ln -s eepg.png loadepg.png
+   ln -s yaepghg.png reelchannellist.png
+   cd ../../../../..
+
+fi
+cp -r blackhole/themes/* .install/etc/vdr/themes 
+cp -r blackhole .install/etc/vdr/plugins/skindesigner/skins
+
+if [ -d nopacity ]; then
+   cd nopacity && git pull
+   cd ..
+else
+   git clone https://github.com/louisbraun/nopacity.git
+   cd nopacity
+   cd themes/default/menuicons/customicons
+   ln -s Applikationen.png Applicazioni.png
+   ln -s System.png Sistema.png
+   ln -s XBMC.png KODI.png
+   ln -s Xterm.png Terminale.png
+   ln -s tux.png Giochi.png
+   ln -s Dienstprogramme.png "Aggiorna Canali SKY.png"
+   ln -s Sistema.png SifBoxConfig.png
+   cd ..
+   cd pluginicons
+   ln -s eepg.png loadepg.png
+   ln -s yaepghg.png reelchannellist.png
+   cd ../../../../..
+   cd nopacity
+   cd themes/darkred/menuicons/customicons
+   ln -s Applikationen.png Applicazioni.png
+   ln -s System.png Sistema.png
+   ln -s XBMC.png KODI.png
+   ln -s Xterm.png Terminale.png
+   ln -s tux.png Giochi.png
+   ln -s Dienstprogramme.png "Aggiorna Canali SKY.png"
+   ln -s Sistema.png SifBoxConfig.png
+   cd ..
+   cd pluginicons
+   ln -s eepg.png loadepg.png
+   ln -s yaepghg.png reelchannellist.png
+   cd ../../../../..
+fi
+cp -r nopacity/themes/* .install/etc/vdr/themes
+cp -r nopacity .install/etc/vdr/plugins/skindesigner/skins
+
+

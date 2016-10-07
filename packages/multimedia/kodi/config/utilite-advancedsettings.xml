@@ -1,7 +1,7 @@
 <advancedsettings>
-  <showexitbutton>false</showexitbutton>
+  <showexitbutton>true</showexitbutton>
   <gui>
-    <algorithmdirtyregions>1</algorithmdirtyregions>
+    <algorithmdirtyregions>0</algorithmdirtyregions>
     <nofliptimeout>1000</nofliptimeout>
   </gui>
   <cputempcommand>sed -e 's/\([0-9]*\)/\1 C/' /sys/class/thermal/thermal_zone0/temp</cputempcommand>
@@ -11,7 +11,7 @@
     <httpproxyusername></httpproxyusername>  <!-- username for Basic Proxy Authentication -->
     <httpproxypassword></httpproxypassword>  <!-- password for Basic Proxy Authentication -->
     <cachemembuffersize>5242880</cachemembuffersize>  <!-- number of bytes used for buffering streams ahead in memory 
-    KODI will not buffer ahead more than this. WARNING: for the bytes set here, KODI will consume 3x the amount of RAM
+    XBMC will not buffer ahead more than this. WARNING: for the bytes set here, XBMC will consume 3x the amount of RAM
     When set to 0 the cache will be written to disk instead of RAM, as of v12 Frodo -->
     <alwaysforcebuffer>1</alwaysforcebuffer>  <!-- enables cache for all streams with the exclusion of local DVD and local Blu-Ray. 0/off is default. -->
     <readbufferfactor>4.0</readbufferfactor> <!-- this factor determines the max readrate in terms of readbufferfactor * avg bitrate of a video file.

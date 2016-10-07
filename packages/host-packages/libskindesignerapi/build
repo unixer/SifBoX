@@ -10,6 +10,6 @@ make_install
 cp -r .install/usr/local/include .install/usr
 cp -r .install/usr/local/lib .install/usr
 #cd .install/usr 
-ln -s libskindesignerapi.so.0.0.1 .install/usr/lib/libskindesignerapi.so.0
-ln -s libskindesignerapi.so.0.0.1 .install/usr/local/lib/libskindesignerapi.so.0
+ln -s libskindesignerapi.so.0.1.2 .install/usr/lib/libskindesignerapi.so.0
+ln -s libskindesignerapi.so.0.1.2 .install/usr/local/lib/libskindesignerapi.so.0
 

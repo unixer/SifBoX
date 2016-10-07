@@ -1,5 +1,5 @@
 [Unit]
-Description=KODI Early Setup
+Description=Kodi Early Setup
 Before=kodi.service
 After=graphical.target
 

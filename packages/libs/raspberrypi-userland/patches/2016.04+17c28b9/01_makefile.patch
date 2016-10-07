@@ -1,0 +1,15 @@
+--- raspberrypi-userland-2015.09+/host_applications/linux/apps/hello_pi/hello_fft/makefile.org	2015-09-25 11:22:16.764079791 +0200
++++ raspberrypi-userland-2015.09+/host_applications/linux/apps/hello_pi/hello_fft/makefile	2015-09-25 11:22:37.848080153 +0200
+@@ -27,10 +27,10 @@
+ all:	hello_fft.bin hello_fft_2d.bin
+ 
+ hello_fft.bin:	$(S) $(C1D) $(H1D)
+-	gcc -o hello_fft.bin $(F) $(C1D)
++	$(CC) -o hello_fft.bin $(F) $(C1D)
+ 
+ hello_fft_2d.bin:	$(S) hex/shader_trans.hex $(C2D) $(H2D)
+-	gcc -o hello_fft_2d.bin $(F) $(C2D)
++	$(CC) -o hello_fft_2d.bin $(F) $(C2D)
+ 
+ clean:
+ 	rm -f *.bin

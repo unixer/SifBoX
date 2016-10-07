@@ -5,7 +5,12 @@
 cd $BUILD/$1*
 export CC_FOR_BUILD=$TARGET_CC
 export ac_cv_lib_nfsidmap_nfs4_init_name_mapping=yes
-do_configure --without-tcp-wrappers --disable-gss
+do_configure \
+		--without-tcp-wrappers \
+		--disable-gss \
+		--disable-tirpc \
+		--disable-ipv6 \
+
 make
 make_install
 #cd utils/nfsd

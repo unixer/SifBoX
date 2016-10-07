@@ -1,6 +1,6 @@
 PKG_NAME=libplayer
 PKG_URL_REV=1570
-PKG_VERSION=r${PKG_URL_REV}
+PKG_VERSION=${PKG_URL_REV}
 PKG_URL_PROTO=hg
 PKG_URL="http://hg.openbricks.org/${PKG_NAME}"
 PKG_REV=1

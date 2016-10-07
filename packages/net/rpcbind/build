@@ -4,8 +4,12 @@
 
 get_meta $1
 cd $PKG_BUILD_DIR
+sed -i "/servname/s:rpcbind:sunrpc:" src/rpcbind.c
 do_autoreconf -vi
-do_configure
+do_configure \
+            --with-rpcuser=root \
+            --without-systemdsystemunitdir
+
 make
 do_strip bin librpcbind.so.*
 make_install

@@ -68,6 +68,7 @@ fi
 
 echo "Using kernel config from: $KERNEL_CFG_FILE"
 
+echo $KERNEL_CFG_FILE
 #read enterKey
 cp $KERNEL_CFG_FILE $LINUX/.config
 

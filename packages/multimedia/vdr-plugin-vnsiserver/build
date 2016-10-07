@@ -25,7 +25,8 @@ NAME="vnsiserver"
 #ln -sf libvdr-vnsiserver.so.${VDR_VERSION} $ROOT/$PKG_BUILD_DIR/.install/usr/lib/vdr/plugins/libvdr-vnsiserver3.so.${VDR_VERSION} || true
 #cp -r $NAME $ROOT/$PKG_BUILD_DIR/.install/etc/vdr/plugins/$NAME
 
-echo "PLUGIN=${NAME}" > $ROOT/$PKG_BUILD_DIR/.install/etc/vdr/plugins.d/50_$NAME
+#echo "PLUGIN=${NAME}" > $ROOT/$PKG_BUILD_DIR/.install/etc/vdr/plugins.d/50_$NAME
+#echo "ENABLE=yes" >> $ROOT/$PKG_BUILD_DIR/.install/etc/vdr/plugins.d/50_$NAME
 echo '0.0.0.0/0' >> $ROOT/$PKG_BUILD_DIR/.install/etc/vdr/plugins/$NAME/allowed_hosts.conf
 
 

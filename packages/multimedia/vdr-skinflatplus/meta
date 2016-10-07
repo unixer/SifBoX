@@ -1,6 +1,6 @@
 PKG_NAME=vdr-skinflatplus
-PKG_VERSION=0.5.1
 PKG_URL_REV=389a4ff
+PKG_VERSION=0.5.1
 #PKG_URL_REV=5d1bcf0
 PKG_URL_PROTO=git
 PKG_URL="git://projects.vdr-developer.org/skin-flatplus.git"

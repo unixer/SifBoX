@@ -1,6 +1,6 @@
 PKG_NAME=vdr-menuorg
 #PKG_URL_REV=afb2151
-#PKG_VERSION=0.4.5-r${PKG_URL_REV}
+#PKG_VERSION=0.4.5
 #PKG_URL_PROTO=git
 #PKG_URL="git://projects.vdr-developer.org/vdr-plugin-menuorg.git"
 PKG_VERSION=0.5.1

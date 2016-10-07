@@ -5,5 +5,16 @@ get_meta $1
 
 cd $PKG_BUILD_DIR
 
+NAME="vnsiserver"
+mkdir -p $INSTALL/etc/vdr/plugins.d
+echo "PLUGIN=$NAME" > $INSTALL/etc/vdr/plugins.d/50_$NAME
+echo "ENABLED=yes" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
+
+
+mkdir -p $INSTALL/etc/vdr/plugins/$NAME
+cp $ROOT/$PACKAGES/$PKG_SECTION/$PKG_NAME/config/allowed_hosts.conf $INSTALL/etc/vdr/plugins/$NAME/
+cp -P $NAME/allowed_hosts.conf $INSTALL/etc/vdr/plugins/$NAME
+echo '0.0.0.0/0' >> $INSTALL/etc/vdr/plugins/$NAME/allowed_hosts.conf
+
 do_install usr
 do_install etc

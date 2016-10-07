@@ -1,5 +1,5 @@
 [Unit]
-Description=KODI Media Center
+Description=Kodi Media Center
 Requires=graphical.target
 Conflicts=rescue.service rescue.target
 After=graphical.target

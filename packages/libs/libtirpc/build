@@ -5,7 +5,7 @@
 get_meta $1
 cd $PKG_BUILD_DIR
 do_autoreconf -vi
-do_configure
+do_configure --disable-gssapi
 # --enable-gss \
 #             --with-gnu-ld
 make
