@@ -12,13 +12,14 @@ do_package() {
   
   [ -f packages/$PKG_SECTION/$package/install ] || continue
 
+
   KCONFIG_NAME="$PKG_NAME"
   [ -n "$PKG_SHORTDESC" ] && KCONFIG_NAME="$KCONFIG_NAME - $PKG_SHORTDESC"
   cat >> $KCONFIG <<EOF
 config PKG_$PKG_NAME
   tristate "$KCONFIG_NAME"
 EOF
-  if [ "$PKG_ARCH" != any -a "$PKG_ARCH" != all ]; then
+  if [ "$PKG_ARCH" != any ] && [ "$PKG_ARCH" != all ]; then
     archlist=""
     for a in $PKG_ARCH; do
       if [ -z "$archlist" ]; then
@@ -74,7 +75,7 @@ EOF
 EOF
   echo >> $KCONFIG
   for use in $PKG_USE; do
-    [ -n "`get_use_type $use`" -o "$use" = "cxx" ] && continue
+    [ -n "`get_use_type $use`" ] || [ "$use" = "cxx" ] && continue
 
     use_name=`valueof "PKG_USE_NAME_${use}"`
     [ -z "$use_name" ] && use_name=$use
@@ -137,25 +138,23 @@ echo -n "Building $KCONFIG."
 # Kconfig.packages generation starts here
 rm -f $KCONFIG
 
-. config/path
-
-SECTIONS='admin drivers filesystem firmware fonts games libs misc multimedia nodejs net perl python sound system utils x11'
+SECTIONS="admin drivers filesystem firmware fonts games libs misc multimedia nodejs net perl python sound system utils x11"
 
 # populate SEC_$section variables with list of packages per section
-for section in $SECTIONS; do
-  for package in packages/$section/*; do
-    package=`echo $package | sed s:packages/$section/::`
-    [ -f packages/$section/$package/meta ] || continue
-    # source the package meta to populate PKG_SECTION
-    PKG_SECTION=
-    . packages/$section/$package/meta
-    old=
-    cmd=
-    var="SEC_$PKG_SECTION"
-    old="`valueof $var`"
-    cmd="$var=\"$old $package\""
-    eval $cmd
-  done
+for section in $SECTIONS ; do
+for package in packages/$section/*; do
+  package=`echo $package | sed s:packages/$section/::`
+  [ -f packages/$section/$package/meta ] || continue
+  # source the package meta to populate PKG_SECTION
+  PKG_SECTION=
+  . packages/$section/$package/meta
+  old=
+  cmd=
+  var="SEC_$PKG_SECTION"
+  old="`valueof $var`"
+  cmd="$var=\"$old $package\""
+  eval $cmd
+done
 done
 
 echo -n .
@@ -168,7 +167,7 @@ cat >> $KCONFIG <<EOF
 EOF
 
 # check for packages with invalid section name
-for section in $SECTIONS; do
+for section in $SECTIONS ; do
 for package in packages/$section/*; do
   package=`echo $package | sed s:packages/$section/::`
   [ -f packages/$section/$package/meta ] || continue

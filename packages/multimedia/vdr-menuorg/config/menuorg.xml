@@ -73,7 +73,7 @@ description of the config file format.
     <menu name="Sistema">
          <menu name="Comandi">
                <command name="Rimozione unità USB in sicurezza" confirm="yes" execute="/usr/bin/vdr-mounter --unmount-all &amp;> /dev/null" />
-               <command name="Aggiorna elenco registrazioni VDR" execute="/usr/bin/vdr-dbus-send /Recording recording.Update &amp;> /dev/null " />
+               <command name="Aggiorna elenco registrazioni VDR" execute="/usr/bin/systemctl start reloadcfg.service" />
                <command name="Riavvia VDR" confirm="yes" execute="systemctl restart vdr.service" />
                <command name="Riavvia sistema" confirm="yes" execute="reboot" />
 	       <command name="Arresta sistema" confirm="yes" execute="/usr/bin/vdrshutdown" />

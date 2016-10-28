@@ -1,10 +1,10 @@
 <settings>
-    <setting id="no_fanart" type="bool">false</setting>
-    <setting id="use_custom_bg" type="bool">false</setting>
-    <setting id="HomeMenuNoTVShowButton" type="bool">false</setting>
     <setting id="show_weatherinfo" type="bool">false</setting>
-    <setting id="HomeMenuNoMovieButton" type="bool">false</setting>
+    <setting id="HomeMenuNoTVShowButton" type="bool">false</setting>
     <setting id="no_slide_animations" type="bool">false</setting>
+    <setting id="use_custom_bg" type="bool">false</setting>
+    <setting id="HomeMenuNoMovieButton" type="bool">false</setting>
+    <setting id="no_fanart" type="bool">false</setting>
     <setting id="HomeMenuNoMusicButton" type="bool">false</setting>
     <setting id="HomeMenuNoTVButton" type="bool">false</setting>
     <setting id="HomeMenuNoRadioButton" type="bool">false</setting>
@@ -12,6 +12,7 @@
     <setting id="HomeMenuNoPicturesButton" type="bool">false</setting>
     <setting id="HomeMenuNoVideosButton" type="bool">false</setting>
     <setting id="HomeMenuNoWeatherButton" type="bool">false</setting>
+    <setting id="pvr_iconlist" type="bool">false</setting>
     <setting id="custom_background" type="string"></setting>
     <setting id="HomeFanart.path" type="string"></setting>
     <setting id="HomeFanart.ext" type="string"></setting>

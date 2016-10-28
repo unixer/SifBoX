@@ -1,7 +1,7 @@
 PKG_NAME=libcec-daemon
-PKG_URL_REV=219b937 ##OK
-#PKG_URL_REV=583653b
-PKG_VERSION=0.9
+#PKG_URL_REV=219b937 ##OK
+PKG_URL_REV="1~3f2782e"
+PKG_VERSION="0.9+${PKG_URL_REV}"
 PKG_URL_PROTO=git
 PKG_URL="https://github.com/bramp/libcec-daemon.git"
 PKG_REV=1

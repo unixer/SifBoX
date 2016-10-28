@@ -1,5 +1,7 @@
 #!/bin/sh
 
+. /etc/pvr.conf
+
 set_cursor_mode () {
   [ -w /sys/class/graphics/fbcon/cursor_blink ] && \
     echo "$1" > /sys/class/graphics/fbcon/cursor_blink
@@ -36,7 +38,7 @@ case "$EXIT_CODE" in
   ;;
   0) # 0=quit
     echo "kodi exited with EXIT_CODE=$EXIT_CODE at $(date). Stopping..." >>$LOGFILE
-    prepare_shutdown
+    #prepare_shutdown
     set_cursor_mode 1
     killall -9 vdr
     /usr/bin/systemctl start vdr

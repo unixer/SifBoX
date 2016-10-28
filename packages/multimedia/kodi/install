@@ -30,11 +30,14 @@ copy_config config/*.xml .install/etc/kodi
 if [ "$PKG_VERSION" = "frodo-12.3" ]; then
    mkdir -p $INSTALL/root/.kodi
    cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi $INSTALL/root/
-else
-   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi13/* $INSTALL/root/.kodi
-   mkdir -p $INSTALL/root/.kodi
-   cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
 fi
+#else
+# Non funziona il PVR client se copio i defaults
+
+   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi13/* $INSTALL/root/.kodi
+   #mkdir -p $INSTALL/root/.kodi
+   #cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/defconfig/.kodi/.kodi $INSTALL/root/
+#fi
 #Fine
 
 do_install usr/bin

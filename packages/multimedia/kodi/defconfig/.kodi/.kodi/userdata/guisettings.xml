@@ -105,7 +105,7 @@
             <level>0</level>
             <showhigherlevels>true</showhigherlevels>
         </eventlog>
-        <systemtotaluptime>3</systemtotaluptime>
+        <systemtotaluptime>15</systemtotaluptime>
     </general>
     <input>
         <controllerpoweroff default="true">false</controllerpoweroff>

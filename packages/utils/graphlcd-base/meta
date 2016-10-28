@@ -1,9 +1,10 @@
 PKG_NAME=graphlcd-base
-#PKG_VERSION=0.1.7
-PKG_VERSION=0.1.9
-#PKG_URL="http://download.berlios.de/graphlcd/graphlcd-base-${PKG_VERSION}.tgz"
-#PKG_URL="http://projects.vdr-developer.org/attachments/download/426/graphlcd-base-0.1.7.tgz"
-PKG_URL="http://projects.vdr-developer.org/attachments/download/501/graphlcd-base-${PKG_VERSION}.tgz"
+#PKG_VERSION=0.1.9
+#PKG_URL="http://projects.vdr-developer.org/attachments/download/501/graphlcd-base-${PKG_VERSION}.tgz"
+PKG_URL_PROTO=git
+PKG_URL_REV="1~7958e1b"
+PKG_URL="git://projects.vdr-developer.org/graphlcd-base.git"
+PKG_VERSION="0.3.0+${PKG_URL_REV}"
 PKG_REV=1
 PKG_BUILD_DEPENDS="toolchain freetype"
 PKG_RUN_DEPENDS="$TARGET_LIBC freetype serdisplib"

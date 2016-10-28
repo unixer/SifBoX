@@ -1,8 +1,10 @@
 PKG_NAME=cryptodev
-#PKG_VERSION=1.6
-#PKG_VERSION=1.7
-PKG_VERSION=1.8
-PKG_URL="http://download.gna.org/cryptodev-linux/cryptodev-linux-${PKG_VERSION}.tar.gz"
+#PKG_VERSION=1.8
+#PKG_URL="http://download.gna.org/cryptodev-linux/cryptodev-linux-${PKG_VERSION}.tar.gz"
+PKG_URL_REV=f116a93
+PKG_URL_PROTO=git
+PKG_VERSION=1.9.0
+PKG_URL="https://github.com/cryptodev-linux/cryptodev-linux.git"
 PKG_REV=1
 PKG_RUN_DEPENDS="$TARGET_LIBC linux"
 PKG_BUILD_DEPENDS="toolchain"

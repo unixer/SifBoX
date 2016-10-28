@@ -7,6 +7,7 @@ cd $BUILD/$1*
 export LIBS="-ldl"
 export MAKEFLAGS=-j1
 
+sed -i "/seems to be moved/s/^/#/" build-aux/ltmain.sh
 do_configure \
 --disable-silent-rules \
                            --disable-nls \

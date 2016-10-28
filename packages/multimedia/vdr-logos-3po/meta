@@ -1,0 +1,12 @@
+PKG_NAME=vdr-logos-3po
+PKG_URL_PROTO=git
+PKG_URL_REV="1~3918ca9"
+PKG_VERSION="20160926+${PKG_URL_REV}"
+PKG_URL="https://github.com/3PO/Senderlogos.git"
+PKG_REV=1
+PKG_DEPENDS="$TARGET_LIBC vdr"
+PKG_BUILD_DEPENDS="toolchain vdr"
+PKG_PRIORITY=optional
+PKG_SECTION=multimedia
+PKG_SHORTDESC="vdr-logos-3po Logos for VDR"
+PKG_LONGDESC="Logos for VDR of 3PO"

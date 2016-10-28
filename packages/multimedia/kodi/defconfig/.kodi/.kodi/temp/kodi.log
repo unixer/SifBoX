@@ -1,56 +1,56 @@
-﻿22:23:38 T:1950523392  NOTICE: special://profile/ is mapped to: special://masterprofile/
-22:23:38 T:1950523392  NOTICE: -----------------------------------------------------------------------
-22:23:38 T:1950523392  NOTICE: Starting Kodi (17.0-BETA3 Git:5~150b669-1). Platform: Linux ARM 32-bit
-22:23:38 T:1950523392  NOTICE: Using Release Kodi x32 build (version for Raspberry Pi)
-22:23:38 T:1950523392  NOTICE: Kodi compiled Oct  4 2016 by GCC 4.8.3 for Linux ARM 32-bit version 4.1.10 (262410)
-22:23:38 T:1950523392  NOTICE: Running on SifBoX devel-2.0.0-20161002-rbf224bc, kernel: Linux ARM 32-bit version 4.1.10
-22:23:38 T:1950523392  NOTICE: FFmpeg version/source: 3.1.3
-22:23:38 T:1950523392  NOTICE: Host CPU: ARMv7 Processor rev 5 (v7l), 4 cores available
-22:23:38 T:1950523392  NOTICE: ARM Features: Neon enabled
-22:23:38 T:1950523392  NOTICE: special://xbmc/ is mapped to: /usr/share/kodi
-22:23:38 T:1950523392  NOTICE: special://xbmcbin/ is mapped to: /usr/lib/kodi
-22:23:38 T:1950523392  NOTICE: special://xbmcbinaddons/ is mapped to: /usr/lib/kodi/addons
-22:23:38 T:1950523392  NOTICE: special://masterprofile/ is mapped to: /root/.kodi/userdata
-22:23:38 T:1950523392  NOTICE: special://envhome/ is mapped to: /root
-22:23:38 T:1950523392  NOTICE: special://home/ is mapped to: /root/.kodi
-22:23:38 T:1950523392  NOTICE: special://temp/ is mapped to: /root/.kodi/temp
-22:23:38 T:1950523392  NOTICE: special://logpath/ is mapped to: /root/.kodi/temp
-22:23:38 T:1950523392  NOTICE: The executable running is: /usr/lib/kodi/kodi.bin
-22:23:38 T:1950523392  NOTICE: Local hostname: sifbox
-22:23:38 T:1950523392  NOTICE: Log File is located: /root/.kodi/temp//kodi.log
-22:23:38 T:1950523392  NOTICE: -----------------------------------------------------------------------
-22:23:38 T:1950523392  NOTICE: load settings...
-22:23:38 T:1950523392  NOTICE: Found 1 Lists of Devices
-22:23:38 T:1950523392  NOTICE: Enumerated PI devices:
-22:23:38 T:1950523392  NOTICE:     Device 1
-22:23:38 T:1950523392  NOTICE:         m_deviceName      : HDMI
-22:23:38 T:1950523392  NOTICE:         m_displayName     : HDMI
-22:23:38 T:1950523392  NOTICE:         m_displayNameExtra:
-22:23:38 T:1950523392  NOTICE:         m_deviceType      : AE_DEVTYPE_HDMI
-22:23:38 T:1950523392  NOTICE:         m_channels        : FL,FR
-22:23:38 T:1950523392  NOTICE:         m_sampleRates     : 8000,11025,16000,22050,24000,32000,44100,48000,88200,96000,176400,192000
-22:23:38 T:1950523392  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32NE,AE_FMT_S16NE,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP,AE_FMT_RAW
-22:23:38 T:1950523392  NOTICE:         m_streamTypes     : STREAM_TYPE_AC3,STREAM_TYPE_EAC3,STREAM_TYPE_DTSHD_CORE,STREAM_TYPE_DTS_2048,STREAM_TYPE_DTS_1024,STREAM_TYPE_DTS_512
-22:23:38 T:1950523392  NOTICE:     Device 2
-22:23:38 T:1950523392  NOTICE:         m_deviceName      : Analogue
-22:23:38 T:1950523392  NOTICE:         m_displayName     : Analogue
-22:23:38 T:1950523392  NOTICE:         m_displayNameExtra:
-22:23:38 T:1950523392  NOTICE:         m_deviceType      : AE_DEVTYPE_PCM
-22:23:38 T:1950523392  NOTICE:         m_channels        : FL,FR
-22:23:38 T:1950523392  NOTICE:         m_sampleRates     : 48000
-22:23:38 T:1950523392  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP
-22:23:38 T:1950523392  NOTICE:         m_streamTypes     : No passthrough capabilities
-22:23:38 T:1950523392  NOTICE:     Device 3
-22:23:38 T:1950523392  NOTICE:         m_deviceName      : Both
-22:23:38 T:1950523392  NOTICE:         m_displayName     : HDMI and Analogue
-22:23:38 T:1950523392  NOTICE:         m_displayNameExtra:
-22:23:38 T:1950523392  NOTICE:         m_deviceType      : AE_DEVTYPE_PCM
-22:23:38 T:1950523392  NOTICE:         m_channels        : FL,FR
-22:23:38 T:1950523392  NOTICE:         m_sampleRates     : 48000
-22:23:38 T:1950523392  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP
-22:23:38 T:1950523392  NOTICE:         m_streamTypes     : No passthrough capabilities
-22:23:38 T:1950523392  NOTICE: Loaded settings file from special://xbmc/system/advancedsettings.xml
-22:23:38 T:1950523392  NOTICE: Contents of special://xbmc/system/advancedsettings.xml are...
+﻿21:59:44 T:1950498816  NOTICE: special://profile/ is mapped to: special://masterprofile/
+21:59:44 T:1950498816  NOTICE: -----------------------------------------------------------------------
+21:59:44 T:1950498816  NOTICE: Starting Kodi (17.0-BETA3 Git:5~150b669-1). Platform: Linux ARM 32-bit
+21:59:44 T:1950498816  NOTICE: Using Release Kodi x32 build (version for Raspberry Pi)
+21:59:44 T:1950498816  NOTICE: Kodi compiled Oct  7 2016 by GCC 4.8.3 for Linux ARM 32-bit version 4.1.10 (262410)
+21:59:44 T:1950498816  NOTICE: Running on SifBoX devel-2.0.0-20161006-rbf224bc, kernel: Linux ARM 32-bit version 4.1.10
+21:59:44 T:1950498816  NOTICE: FFmpeg version/source: 3.1.3
+21:59:44 T:1950498816  NOTICE: Host CPU: ARMv7 Processor rev 5 (v7l), 4 cores available
+21:59:44 T:1950498816  NOTICE: ARM Features: Neon enabled
+21:59:44 T:1950498816  NOTICE: special://xbmc/ is mapped to: /usr/share/kodi
+21:59:44 T:1950498816  NOTICE: special://xbmcbin/ is mapped to: /usr/lib/kodi
+21:59:44 T:1950498816  NOTICE: special://xbmcbinaddons/ is mapped to: /usr/lib/kodi/addons
+21:59:44 T:1950498816  NOTICE: special://masterprofile/ is mapped to: /root/.kodi/userdata
+21:59:44 T:1950498816  NOTICE: special://envhome/ is mapped to: /root
+21:59:44 T:1950498816  NOTICE: special://home/ is mapped to: /root/.kodi
+21:59:44 T:1950498816  NOTICE: special://temp/ is mapped to: /root/.kodi/temp
+21:59:44 T:1950498816  NOTICE: special://logpath/ is mapped to: /root/.kodi/temp
+21:59:44 T:1950498816  NOTICE: The executable running is: /usr/lib/kodi/kodi.bin
+21:59:44 T:1950498816  NOTICE: Local hostname: sifbox
+21:59:44 T:1950498816  NOTICE: Log File is located: /root/.kodi/temp//kodi.log
+21:59:44 T:1950498816  NOTICE: -----------------------------------------------------------------------
+21:59:44 T:1950498816  NOTICE: load settings...
+21:59:44 T:1950498816  NOTICE: Found 1 Lists of Devices
+21:59:44 T:1950498816  NOTICE: Enumerated PI devices:
+21:59:44 T:1950498816  NOTICE:     Device 1
+21:59:44 T:1950498816  NOTICE:         m_deviceName      : HDMI
+21:59:44 T:1950498816  NOTICE:         m_displayName     : HDMI
+21:59:44 T:1950498816  NOTICE:         m_displayNameExtra:
+21:59:44 T:1950498816  NOTICE:         m_deviceType      : AE_DEVTYPE_HDMI
+21:59:44 T:1950498816  NOTICE:         m_channels        : FL,FR
+21:59:44 T:1950498816  NOTICE:         m_sampleRates     : 8000,11025,16000,22050,24000,32000,44100,48000,88200,96000,176400,192000
+21:59:44 T:1950498816  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32NE,AE_FMT_S16NE,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP,AE_FMT_RAW
+21:59:44 T:1950498816  NOTICE:         m_streamTypes     : STREAM_TYPE_AC3,STREAM_TYPE_EAC3,STREAM_TYPE_DTSHD_CORE,STREAM_TYPE_DTS_2048,STREAM_TYPE_DTS_1024,STREAM_TYPE_DTS_512
+21:59:44 T:1950498816  NOTICE:     Device 2
+21:59:44 T:1950498816  NOTICE:         m_deviceName      : Analogue
+21:59:44 T:1950498816  NOTICE:         m_displayName     : Analogue
+21:59:44 T:1950498816  NOTICE:         m_displayNameExtra:
+21:59:44 T:1950498816  NOTICE:         m_deviceType      : AE_DEVTYPE_PCM
+21:59:44 T:1950498816  NOTICE:         m_channels        : FL,FR
+21:59:44 T:1950498816  NOTICE:         m_sampleRates     : 48000
+21:59:44 T:1950498816  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP
+21:59:44 T:1950498816  NOTICE:         m_streamTypes     : No passthrough capabilities
+21:59:44 T:1950498816  NOTICE:     Device 3
+21:59:44 T:1950498816  NOTICE:         m_deviceName      : Both
+21:59:44 T:1950498816  NOTICE:         m_displayName     : HDMI and Analogue
+21:59:44 T:1950498816  NOTICE:         m_displayNameExtra:
+21:59:44 T:1950498816  NOTICE:         m_deviceType      : AE_DEVTYPE_PCM
+21:59:44 T:1950498816  NOTICE:         m_channels        : FL,FR
+21:59:44 T:1950498816  NOTICE:         m_sampleRates     : 48000
+21:59:44 T:1950498816  NOTICE:         m_dataFormats     : AE_FMT_FLOAT,AE_FMT_S32LE,AE_FMT_S16LE,AE_FMT_FLOATP,AE_FMT_S32NEP,AE_FMT_S16NEP
+21:59:44 T:1950498816  NOTICE:         m_streamTypes     : No passthrough capabilities
+21:59:44 T:1950498816  NOTICE: Loaded settings file from special://xbmc/system/advancedsettings.xml
+21:59:44 T:1950498816  NOTICE: Contents of special://xbmc/system/advancedsettings.xml are...
                                             <?xml version="1.0" encoding="UTF-8" ?>
                                             <advancedsettings>
                                               <video>
@@ -58,8 +58,8 @@
                                                 <defaultVideoPlayer>VideoPlayer</defaultVideoPlayer>
                                               </video>
                                             </advancedsettings>
-22:23:38 T:1950523392  NOTICE: Loaded settings file from special://profile/advancedsettings.xml
-22:23:38 T:1950523392  NOTICE: Contents of special://profile/advancedsettings.xml are...
+21:59:44 T:1950498816  NOTICE: Loaded settings file from special://profile/advancedsettings.xml
+21:59:44 T:1950498816  NOTICE: Contents of special://profile/advancedsettings.xml are...
                                             <advancedsettings>
                                               <useddsfanart>true</useddsfanart>
                                               <showexitbutton>true</showexitbutton>
@@ -88,22 +88,22 @@
                                                 </styleoverrides>
                                               </libass>
                                             </advancedsettings>
-22:23:38 T:1950523392  NOTICE: Default Video Player: omxplayer
-22:23:38 T:1950523392  NOTICE: Default Audio Player: omxplayer
-22:23:38 T:1950523392  NOTICE: Disabled debug logging due to GUI setting. Level 0.
-22:23:38 T:1950523392  NOTICE: Log level changed to "LOG_LEVEL_NORMAL"
-22:23:38 T:1950523392  NOTICE: CMediaSourceSettings: loading media sources from special://masterprofile/sources.xml
-22:23:38 T:1950523392  NOTICE: Loading player core factory settings from special://xbmc/system/playercorefactory.xml.
-22:23:38 T:1950523392  NOTICE: Loaded playercorefactory configuration
-22:23:38 T:1950523392  NOTICE: Loading player core factory settings from special://masterprofile/playercorefactory.xml.
-22:23:38 T:1950523392  NOTICE: special://masterprofile/playercorefactory.xml does not exist. Skipping.
-22:23:38 T:1950523392  NOTICE: Running database version Addons26
-22:23:39 T:1950523392  NOTICE: ADDONS: Using repository repository.xbmc.org
-22:23:39 T:1950523392  NOTICE: Raspberry PI firmware version: Mar  4 2016 17:53:16 
+21:59:44 T:1950498816  NOTICE: Default Video Player: omxplayer
+21:59:44 T:1950498816  NOTICE: Default Audio Player: omxplayer
+21:59:44 T:1950498816  NOTICE: Disabled debug logging due to GUI setting. Level 0.
+21:59:44 T:1950498816  NOTICE: Log level changed to "LOG_LEVEL_NORMAL"
+21:59:44 T:1950498816  NOTICE: CMediaSourceSettings: loading media sources from special://masterprofile/sources.xml
+21:59:44 T:1950498816  NOTICE: Loading player core factory settings from special://xbmc/system/playercorefactory.xml.
+21:59:44 T:1950498816  NOTICE: Loaded playercorefactory configuration
+21:59:44 T:1950498816  NOTICE: Loading player core factory settings from special://masterprofile/playercorefactory.xml.
+21:59:44 T:1950498816  NOTICE: special://masterprofile/playercorefactory.xml does not exist. Skipping.
+21:59:44 T:1950498816  NOTICE: Running database version Addons26
+21:59:45 T:1950498816  NOTICE: ADDONS: Using repository repository.xbmc.org
+21:59:45 T:1950498816  NOTICE: Raspberry PI firmware version: Mar  4 2016 17:53:16 
                                             Copyright (c) 2012 Broadcom
                                             version 764f403f69e25e8a014c24f8a26f057960331205 (clean) (release)
-22:23:39 T:1950523392  NOTICE: ARM mem: 752MB GPU mem: 256MB MPG2:1 WVC1:1
-22:23:39 T:1950523392  NOTICE: Config:
+21:59:45 T:1950498816  NOTICE: ARM mem: 752MB GPU mem: 256MB MPG2:1 WVC1:1
+21:59:45 T:1950498816  NOTICE: Config:
                                             arm_freq=900
                                             audio_pwm_mode=1
                                             audio_sdm_mod_order=2
@@ -128,78 +128,200 @@
                                             program_serial_random=1
                                             sdram_freq=450
                                             temp_limit=85
-22:23:39 T:1950523392  NOTICE: Config:
+21:59:45 T:1950498816  NOTICE: Config:
                                             decode_MPG2=0xac0ab958
                                             decode_WVC1=0xbdcbd2bf
                                             device_tree=-
-22:23:39 T:1950523392  NOTICE: InitWindowSystem: Using EGL Implementation: raspberrypi
-22:23:39 T:1950523392  NOTICE: Found resolution 640 x 480 for display 0 with 640 x 480 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 640 x 480 for display 0 with 640 x 480 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 800 x 600 for display 0 with 800 x 600 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 800 x 600 for display 0 with 800 x 600 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 960 x 720 for display 0 with 1024 x 768 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 960 x 720 for display 0 with 1024 x 768 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 900 x 720 for display 0 with 1280 x 1024 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 900 x 720 for display 0 with 1280 x 1024 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 720 x 480 for display 0 with 720 x 480 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 720 x 480 for display 0 with 720 x 480 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 60.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 59.940063 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 720 x 576 for display 0 with 720 x 576 @ 50.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 50.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 50.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 24.000000 Hz
-22:23:39 T:1950523392  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 23.976025 Hz
-22:23:39 T:1950523392  NOTICE: Found (1280x720@60.000000) at 28, setting to RES_DESKTOP at 16
-22:23:39 T:1950523392  NOTICE: Checking resolution 16
-22:23:40 T:1950523392  NOTICE: GL_VENDOR = Broadcom
-22:23:40 T:1950523392  NOTICE: GL_RENDERER = VideoCore IV HW
-22:23:40 T:1950523392  NOTICE: GL_VERSION = OpenGL ES 2.0
-22:23:40 T:1950523392  NOTICE: GL_SHADING_LANGUAGE_VERSION = OpenGL ES GLSL ES 1.00
-22:23:40 T:1950523392  NOTICE: GL_EXTENSIONS = GL_OES_compressed_ETC1_RGB8_texture GL_OES_compressed_paletted_texture GL_OES_texture_npot GL_OES_depth24 GL_OES_vertex_half_float GL_OES_EGL_image GL_OES_EGL_image_external GL_EXT_discard_framebuffer GL_OES_rgb8_rgba8 GL_OES_depth32 GL_OES_mapbuffer GL_EXT_texture_format_BGRA8888 GL_APPLE_rgb_422 GL_EXT_debug_marker
-22:23:42 T:1950523392  NOTICE: Running database version Addons26
-22:23:42 T:1950523392  NOTICE: Running database version ViewModes6
-22:23:42 T:1950523392  NOTICE: Running database version Textures13
-22:23:42 T:1950523392  NOTICE: Running database version MyMusic60
-22:23:42 T:1950523392  NOTICE: Running database version MyVideos107
-22:23:42 T:1950523392  NOTICE: Running database version TV29
-22:23:42 T:1950523392  NOTICE: Running database version Epg11
-22:23:42 T:1950523392  NOTICE: start dvd mediatype detection
-22:23:43 T:1822602144  NOTICE: Register - new cec device registered on cec->RPI: CEC Adapter (2708:1001)
-22:23:43 T:1950523392 WARNING: JSONRPC: Could not parse type "Setting.Details.SettingList"
-22:23:43 T:1950523392   ERROR: JSONRPC: Unable to parse JSON Schema definition for ""
-22:23:43 T:1950523392   ERROR: JSONRPC: Invalid JSON Schema definition for method ""
-22:23:45 T:1950523392  NOTICE: initialize done
-22:23:45 T:1950523392  NOTICE: Running the application...
-22:23:45 T:1950523392  NOTICE: starting zeroconf publishing
-22:23:45 T:1950523392  NOTICE: CWebServer[8080]: Started
-22:23:45 T:1950523392  NOTICE: starting upnp client
-22:23:45 T:1950523392  NOTICE: starting upnp renderer
-22:23:45 T:1606415264  NOTICE: ES: Starting UDP Event server on port 9777
-22:23:45 T:1606415264  NOTICE: UDP: Listening on port 9777 (ipv6 : false)
-22:23:45 T:1757410208   ERROR: GetDirectory - Error getting
-22:23:45 T:1757410208   ERROR: GetDirectory - Error getting pvr://channels/tv/*?view=lastplayed
-22:23:45 T:1930425248   ERROR: GetDirectory - Error getting pvr://recordings/tv/active?view=flat
-22:23:45 T:1757410208   ERROR: GetDirectory - Error getting pvr://channels/radio/*?view=lastplayed
-22:23:45 T:1930425248   ERROR: GetDirectory - Error getting pvr://recordings/radio/active?view=flat
-22:24:27 T:1950523392  NOTICE: Storing total System Uptime
-22:24:27 T:1950523392  NOTICE: Saving settings
-22:24:28 T:1950523392  NOTICE: Saving skin settings
-22:24:28 T:1950523392  NOTICE: stop all
-22:24:28 T:1950523392  NOTICE: stop player
-22:24:28 T:1950523392  NOTICE: ES: Stopping event server
-22:24:28 T:1950523392  NOTICE: stopping upnp
-22:24:28 T:1950523392  NOTICE: stopping zeroconf publishing
-22:24:28 T:1950523392  NOTICE: CWebServer[8080]: Stopped
-22:24:28 T:1606415264  NOTICE: ES: UDP Event server stopped
-22:24:28 T:1950523392  NOTICE: stop dvd detect media
-22:24:29 T:1950523392  NOTICE: clean cached files!
-22:24:29 T:1950523392  NOTICE: closing down remote control service
-22:24:29 T:1950523392  NOTICE: stopped
-22:24:30 T:1950523392  NOTICE: destroy
-22:24:30 T:1950523392  NOTICE: unload skin
-22:24:30 T:1950523392  NOTICE: unload sections
-22:24:30 T:1950523392  NOTICE: special://profile/ is mapped to: special://masterprofile/
-22:24:30 T:1950523392  NOTICE: application stopped...
+21:59:45 T:1950498816  NOTICE: InitWindowSystem: Using EGL Implementation: raspberrypi
+21:59:45 T:1950498816  NOTICE: Found resolution 640 x 480 for display 0 with 640 x 480 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 640 x 480 for display 0 with 640 x 480 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 800 x 600 for display 0 with 800 x 600 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 800 x 600 for display 0 with 800 x 600 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 960 x 720 for display 0 with 1024 x 768 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 960 x 720 for display 0 with 1024 x 768 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 900 x 720 for display 0 with 1280 x 1024 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 900 x 720 for display 0 with 1280 x 1024 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 720 x 480 for display 0 with 720 x 480 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 720 x 480 for display 0 with 720 x 480 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 60.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 59.940063 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 720 x 576 for display 0 with 720 x 576 @ 50.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1280 x 720 @ 50.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 50.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 24.000000 Hz
+21:59:45 T:1950498816  NOTICE: Found resolution 1280 x 720 for display 0 with 1920 x 1080 @ 23.976025 Hz
+21:59:45 T:1950498816  NOTICE: Found (1280x720@50.000000) at 32, setting to RES_DESKTOP at 16
+21:59:45 T:1950498816  NOTICE: Checking resolution 16
+21:59:46 T:1950498816  NOTICE: GL_VENDOR = Broadcom
+21:59:46 T:1950498816  NOTICE: GL_RENDERER = VideoCore IV HW
+21:59:46 T:1950498816  NOTICE: GL_VERSION = OpenGL ES 2.0
+21:59:46 T:1950498816  NOTICE: GL_SHADING_LANGUAGE_VERSION = OpenGL ES GLSL ES 1.00
+21:59:46 T:1950498816  NOTICE: GL_EXTENSIONS = GL_OES_compressed_ETC1_RGB8_texture GL_OES_compressed_paletted_texture GL_OES_texture_npot GL_OES_depth24 GL_OES_vertex_half_float GL_OES_EGL_image GL_OES_EGL_image_external GL_EXT_discard_framebuffer GL_OES_rgb8_rgba8 GL_OES_depth32 GL_OES_mapbuffer GL_EXT_texture_format_BGRA8888 GL_APPLE_rgb_422 GL_EXT_debug_marker
+21:59:48 T:1950498816  NOTICE: Running database version Addons26
+21:59:48 T:1950498816  NOTICE: Running database version ViewModes6
+21:59:48 T:1950498816  NOTICE: Running database version Textures13
+21:59:48 T:1950498816  NOTICE: Running database version MyMusic60
+21:59:48 T:1950498816  NOTICE: Running database version MyVideos107
+21:59:48 T:1950498816  NOTICE: Running database version TV29
+21:59:48 T:1950498816  NOTICE: Running database version Epg11
+21:59:48 T:1950498816  NOTICE: start dvd mediatype detection
+21:59:49 T:1822602144  NOTICE: Register - new cec device registered on cec->RPI: CEC Adapter (2708:1001)
+21:59:49 T:1950498816 WARNING: JSONRPC: Could not parse type "Setting.Details.SettingList"
+21:59:50 T:1950498816   ERROR: JSONRPC: Unable to parse JSON Schema definition for ""
+21:59:50 T:1950498816   ERROR: JSONRPC: Invalid JSON Schema definition for method ""
+21:59:51 T:1950498816  NOTICE: initialize done
+21:59:51 T:1950498816  NOTICE: Running the application...
+21:59:51 T:1950498816  NOTICE: starting zeroconf publishing
+21:59:51 T:1950498816  NOTICE: CWebServer[8080]: Started
+21:59:51 T:1950498816  NOTICE: starting upnp client
+21:59:51 T:1950498816  NOTICE: starting upnp renderer
+21:59:51 T:1606415264  NOTICE: ES: Starting UDP Event server on port 9777
+21:59:51 T:1606415264  NOTICE: UDP: Listening on port 9777 (ipv6 : false)
+21:59:51 T:1930425248   ERROR: GetDirectory - Error getting
+21:59:51 T:1740632992   ERROR: GetDirectory - Error getting pvr://channels/tv/*?view=lastplayed
+21:59:51 T:1930425248   ERROR: GetDirectory - Error getting pvr://channels/radio/*?view=lastplayed
+21:59:51 T:1740632992   ERROR: GetDirectory - Error getting pvr://recordings/tv/active?view=flat
+21:59:51 T:1740632992   ERROR: GetDirectory - Error getting pvr://recordings/radio/active?view=flat
+22:00:21 T:1534522272   ERROR: AddOnLog: VDR VNSI Client: Login - failed to read greeting from server
+22:00:22 T:1534522272  NOTICE: AddOnLog: VDR VNSI Client: Logged in at '1475870422+7200' to 'VDR-Network-Streaming-Interface (VNSI) Server' Version: '1.5.1' with protocol version '9'
+22:00:24 T:1950498816   ERROR: AddOnLog: VDR VNSI Client: ReadResult - request timed out after 3 seconds
+22:00:24 T:1950498816   ERROR: AddOnLog: VDR VNSI Client: SupportChannelScan - Can't get response packed
+22:00:40 T:1767895968   ERROR: PVR - GetChannelGroupMembers - addon 'VDR-Network-Streaming-Interface (VNSI) Server:127.0.0.1:34890' returned an error: server error
+22:00:40 T:1767895968   ERROR: PVR - GetChannelGroupMembers - cannot get group members from client '764685095': server error
+22:00:42 T:1767895968   ERROR: PVR - GetChannelGroupMembers - addon 'VDR-Network-Streaming-Interface (VNSI) Server:127.0.0.1:34890' returned an error: server error
+22:00:42 T:1767895968   ERROR: PVR - GetChannelGroupMembers - cannot get group members from client '764685095': server error
+22:00:43 T:1767895968   ERROR: PVR - GetChannelGroupMembers - addon 'VDR-Network-Streaming-Interface (VNSI) Server:127.0.0.1:34890' returned an error: server error
+22:00:43 T:1767895968   ERROR: PVR - GetChannelGroupMembers - cannot get group members from client '764685095': server error
+22:00:43 T:1767895968   ERROR: PVR - GetChannelGroupMembers - addon 'VDR-Network-Streaming-Interface (VNSI) Server:127.0.0.1:34890' returned an error: server error
+22:00:43 T:1767895968   ERROR: PVR - GetChannelGroupMembers - cannot get group members from client '764685095': server error
+22:00:44 T:1767895968 WARNING: CPVRRecording::CPVRRecording - unable to determine channel type. Defaulting to TV.
+22:00:44 T:1930425248 WARNING: Previous line repeats 36 times.
+22:00:44 T:1930425248  NOTICE: Start - EPG thread started
+22:00:55 T:1950498816 WARNING: CPlayerCoreFactory::GetPlayer(videodefaultplayer): no such player: omxplayer
+22:00:55 T:1950498816  NOTICE: VideoPlayer: Opening: pvr://channels/tv/Tutti i Canali/pvr.vdr.vnsi_1607216289.pvr
+22:00:55 T:1950498816 WARNING: CDVDMessageQueue(player)::Put MSGQ_NOT_INITIALIZED
+22:00:55 T:1623192480  NOTICE: Creating InputStream
+22:00:55 T:1623192480  NOTICE: AddOnLog: VDR VNSI Client: Logged in at '1475870455+7200' to 'VDR-Network-Streaming-Interface (VNSI) Server' Version: '1.5.1' with protocol version '9'
+22:00:55 T:1623192480  NOTICE: Creating Demuxer
+22:00:56 T:1623192480  NOTICE: Opening stream: 438 source: 256
+22:00:56 T:1623192480  NOTICE: Creating video codec with codec id: 28
+22:00:56 T:1623192480  NOTICE: Creating video thread
+22:00:56 T:1623192480  NOTICE: Opening stream: 449 source: 256
+22:00:56 T:1623192480  NOTICE: Finding audio codec for: 86019
+22:00:56 T:1623192480  NOTICE: Creating audio thread
+22:00:56 T:1648358304  NOTICE: running thread: CVideoPlayerAudio::Process()
+22:00:56 T:1526133664  NOTICE: running thread: video_thread
+22:00:56 T:1623192480  NOTICE: Opening stream: 438 source: 256
+22:00:56 T:1623192480  NOTICE: Creating video codec with codec id: 28
+22:00:56 T:1623192480  NOTICE: Opening stream: 449 source: 256
+22:00:56 T:1648358304  NOTICE: Creating audio stream (codec id: 86019, channels: 2, sample rate: 48000, no pass-through)
+22:00:57 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:01:44 T:1648358304 WARNING: Previous line repeats 2 times.
+22:01:44 T:1648358304  NOTICE: CVideoPlayerAudio::Process - stream stalled
+22:01:46 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:01:48 T:1648358304 WARNING: Previous line repeats 1 times.
+22:01:48 T:1648358304  NOTICE: CVideoPlayerAudio::Process - stream stalled
+22:01:49 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:01:52 T:1950498816 WARNING: Previous line repeats 1 times.
+22:01:52 T:1950498816   ERROR: Control 602 in window 12901 has been asked to focus, but it can't
+22:01:54 T:1648358304  NOTICE: CVideoPlayerAudio::Process - stream stalled
+22:01:58 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:02:01 T:1648358304 WARNING: Previous line repeats 2 times.
+22:02:01 T:1648358304  NOTICE: CVideoPlayerAudio::Process - stream stalled
+22:02:01 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:02:02 T:1623192480  NOTICE: PVRManager - PerformChannelSwitch - switched to channel 'Rai 1'
+22:02:02 T:1623192480  NOTICE: Creating Demuxer
+22:02:02 T:1623192480  NOTICE: Opening stream: 512 source: 256
+22:02:02 T:1623192480  NOTICE: Creating video codec with codec id: 2
+22:02:02 T:1623192480  NOTICE: Opening stream: 650 source: 256
+22:02:02 T:1623192480  NOTICE: Finding audio codec for: 86016
+22:02:02 T:1623192480  NOTICE: Opening stream: 576 source: 256
+22:02:02 T:1623192480  NOTICE: CDVDMessageQueue(teletext)::WaitUntilEmpty
+22:02:02 T:1623192480 WARNING: CDVDMessageQueue(teletext)::Put MSGQ_NOT_INITIALIZED
+22:02:02 T:1623192480  NOTICE: waiting for teletext data thread to exit
+22:02:02 T:1623192480  NOTICE: Creating teletext data thread
+22:02:02 T:1623192480  NOTICE: Opening stream: 512 source: 256
+22:02:02 T:1623192480  NOTICE: Creating video codec with codec id: 2
+22:02:02 T:1740632992  NOTICE: running thread: CDVDTeletextData
+22:02:03 T:1623192480  NOTICE: Opening stream: 650 source: 256
+22:02:03 T:1623192480  NOTICE: Opening stream: 576 source: 256
+22:02:03 T:1648358304  NOTICE: Creating audio stream (codec id: 86016, channels: 2, sample rate: 48000, no pass-through)
+22:02:03 T:1526133664 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:10:16 T:1950498816 WARNING: Previous line repeats 3 times.
+22:10:16 T:1950498816  NOTICE: CVideoPlayer::CloseFile()
+22:10:16 T:1950498816  NOTICE: VideoPlayer: waiting for threads to exit
+22:10:16 T:1623192480  NOTICE: CVideoPlayer::OnExit()
+22:10:16 T:1623192480  NOTICE: Closing stream player 1
+22:10:16 T:1623192480  NOTICE: Waiting for audio thread to exit
+22:10:16 T:1648358304  NOTICE: thread end: CVideoPlayerAudio::OnExit()
+22:10:16 T:1623192480  NOTICE: Closing audio device
+22:10:16 T:1623192480  NOTICE: Deleting audio codec
+22:10:16 T:1623192480  NOTICE: Closing stream player 2
+22:10:16 T:1623192480  NOTICE: waiting for video thread to exit
+22:10:16 T:1526133664  NOTICE: thread end: video_thread
+22:10:16 T:1623192480  NOTICE: deleting video codec
+22:10:16 T:1623192480  NOTICE: Closing stream player 4
+22:10:16 T:1623192480  NOTICE: waiting for teletext data thread to exit
+22:10:16 T:1740632992   ERROR: Got MSGQ_ABORT or MSGO_IS_ERROR return true (-1)
+22:10:16 T:1740632992  NOTICE: thread end: data_thread
+22:10:16 T:1950498816  NOTICE: VideoPlayer: finished waiting
+22:10:16 T:1950498816  NOTICE: CVideoPlayer::CloseFile()
+22:10:16 T:1950498816  NOTICE: VideoPlayer: waiting for threads to exit
+22:10:16 T:1950498816  NOTICE: VideoPlayer: finished waiting
+22:10:16 T:1950498816  NOTICE: VideoPlayer: Opening: pvr://channels/tv/Tutti i Canali/pvr.vdr.vnsi_1607216289.pvr
+22:10:16 T:1950498816 WARNING: CDVDMessageQueue(player)::Put MSGQ_NOT_INITIALIZED
+22:10:16 T:1467413408  NOTICE: Creating InputStream
+22:10:17 T:1467413408  NOTICE: AddOnLog: VDR VNSI Client: Logged in at '1475871017+7200' to 'VDR-Network-Streaming-Interface (VNSI) Server' Version: '1.5.1' with protocol version '9'
+22:10:17 T:1467413408  NOTICE: Creating Demuxer
+22:10:17 T:1467413408  NOTICE: Opening stream: 438 source: 256
+22:10:17 T:1467413408  NOTICE: Creating video codec with codec id: 28
+22:10:17 T:1467413408  NOTICE: Creating video thread
+22:10:17 T:1467413408  NOTICE: Opening stream: 449 source: 256
+22:10:17 T:1467413408  NOTICE: Finding audio codec for: 86019
+22:10:17 T:1467413408  NOTICE: Creating audio thread
+22:10:17 T:1467413408  NOTICE: Opening stream: 438 source: 256
+22:10:17 T:1467413408  NOTICE: Creating video codec with codec id: 28
+22:10:17 T:1623192480  NOTICE: running thread: CVideoPlayerAudio::Process()
+22:10:17 T:1459024800  NOTICE: running thread: video_thread
+22:10:17 T:1467413408  NOTICE: Opening stream: 449 source: 256
+22:10:17 T:1623192480  NOTICE: Creating audio stream (codec id: 86019, channels: 2, sample rate: 48000, no pass-through)
+22:10:18 T:1459024800 WARNING: CRenderManager::WaitForBuffer - timeout waiting for buffer
+22:12:18 T:1950498816 WARNING: Previous line repeats 2 times.
+22:12:18 T:1950498816  NOTICE: Storing total System Uptime
+22:12:18 T:1950498816  NOTICE: Saving settings
+22:12:18 T:1950498816  NOTICE: Saving skin settings
+22:12:18 T:1950498816  NOTICE: stop all
+22:12:18 T:1950498816  NOTICE: stop player
+22:12:18 T:1950498816  NOTICE: CVideoPlayer::CloseFile()
+22:12:18 T:1950498816  NOTICE: VideoPlayer: waiting for threads to exit
+22:12:18 T:1467413408  NOTICE: CVideoPlayer::OnExit()
+22:12:18 T:1467413408  NOTICE: Closing stream player 1
+22:12:18 T:1467413408  NOTICE: Waiting for audio thread to exit
+22:12:18 T:1623192480  NOTICE: thread end: CVideoPlayerAudio::OnExit()
+22:12:18 T:1467413408  NOTICE: Closing audio device
+22:12:18 T:1467413408  NOTICE: Deleting audio codec
+22:12:18 T:1467413408  NOTICE: Closing stream player 2
+22:12:18 T:1467413408  NOTICE: waiting for video thread to exit
+22:12:18 T:1459024800  NOTICE: thread end: video_thread
+22:12:18 T:1467413408  NOTICE: deleting video codec
+22:12:18 T:1950498816  NOTICE: VideoPlayer: finished waiting
+22:12:18 T:1950498816  NOTICE: CVideoPlayer::CloseFile()
+22:12:18 T:1950498816  NOTICE: VideoPlayer: waiting for threads to exit
+22:12:18 T:1950498816  NOTICE: VideoPlayer: finished waiting
+22:12:18 T:1950498816  NOTICE: PVRManager - stopping
+22:12:18 T:1950498816  NOTICE: ES: Stopping event server
+22:12:18 T:1950498816  NOTICE: stopping upnp
+22:12:19 T:1950498816  NOTICE: stopping zeroconf publishing
+22:12:19 T:1950498816  NOTICE: CWebServer[8080]: Stopped
+22:12:19 T:1606415264  NOTICE: ES: UDP Event server stopped
+22:12:19 T:1950498816  NOTICE: stop dvd detect media
+22:12:20 T:1950498816  NOTICE: clean cached files!
+22:12:20 T:1950498816  NOTICE: closing down remote control service
+22:12:20 T:1950498816  NOTICE: stopped
+22:12:20 T:1950498816  NOTICE: destroy
+22:12:20 T:1950498816  NOTICE: unload skin
+22:12:20 T:1950498816  NOTICE: unload sections
+22:12:20 T:1950498816  NOTICE: special://profile/ is mapped to: special://masterprofile/
+22:12:20 T:1950498816  NOTICE: application stopped...

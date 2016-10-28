@@ -1,0 +1,5 @@
+#!/bin/sh
+
+/usr/bin/svdrpsend -d 127.0.0.1 -p 6419 UPDR
+/usr/bin/svdrpsend MESG "Update Recorders"
+

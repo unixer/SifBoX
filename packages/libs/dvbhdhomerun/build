@@ -21,7 +21,16 @@ echo "dvb_hdhomerun" > .install/usr/lib/modules-load.d/dvbhdhomerun.conf
 
 
 cd userhdhomerun
-make
+
+read enterKey
+#mkdir build && cd build
+  cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
+        -DCMAKE_INSTALL_PREFIX=/usr \
+        -DLIBHDHOMERUN_PATH=$(ls -d $ROOT/$BUILD/libhdhomerun-*/) \
+        ../userhdhomerun
+
+
+#make
 
 cd ..
 

@@ -1,0 +1,9 @@
+[Unit]
+Description=Video Disk Recorder reload registrations
+
+[Service]
+ExecStart=/usr/bin/reloadreg
+Restart=never
+
+[Install]
+WantedBy=multi-user.target
