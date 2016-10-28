@@ -34,6 +34,7 @@ case $TARGET_ARCH in
 esac
 
 make oldconfig
+#make olddefconfig
 make $IMAGE
 #make modules
 make CONFIG_DEBUG_SECTION_MISMATCH=y modules

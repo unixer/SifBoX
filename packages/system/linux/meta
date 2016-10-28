@@ -1,6 +1,6 @@
 PKG_NAME=linux
-PKG_VERSION=4.1.10
-#PKG_VERSION=4.4.9
+#PKG_VERSION=4.1.10
+PKG_VERSION=4.8.4
 PKG_URL="https://www.kernel.org/pub/linux/kernel/v4.x/linux-${PKG_VERSION}.tar.xz"
 PKG_REV=1
 PKG_BUILD_DEPENDS="toolchain kmod-host pciutils gettext"
