@@ -1,0 +1,56 @@
+--- vdr-image-0.4.0/liboutput/encode.c.org	2016-11-07 11:20:56.974984442 +0100
++++ vdr-image-0.4.0/liboutput/encode.c	2016-11-07 11:23:49.878987412 +0100
+@@ -52,7 +52,7 @@
+     av_register_all();
+     avcodec_register_all();
+ 
+-    m_pavCodec = avcodec_find_encoder(CODEC_ID_MPEG2VIDEO);
++    m_pavCodec = avcodec_find_encoder(AV_CODEC_ID_MPEG2VIDEO);
+     if (!m_pavCodec) {
+         esyslog("imageplugin: Failed to find CODEC_ID_MPEG2VIDEO.");
+ 	      return false;
+@@ -102,7 +102,7 @@
+     }
+     else
+     {
+-        pAVF = avcodec_alloc_frame();
++        pAVF = av_frame_alloc();
+         if (! pAVF)
+         {
+             esyslog("imageplugin: Failed to alloc memory for AVFrame.");
+@@ -150,7 +150,7 @@
+     }
+     context->max_b_frames=1;
+     context->flags |= CODEC_FLAG_QSCALE;
+-    context->pix_fmt = PIX_FMT_YUV420P;
++    context->pix_fmt = AV_PIX_FMT_YUV420P;
+ }
+ 
+ bool cEncode::ConvertImageToFrame(AVFrame *frame)
+@@ -173,7 +173,7 @@
+     // Convert RGB to YUV 
+     if(!avpicture_fill((AVPicture*)m_pImageFilled, 
+                                     m_pImageRGB, 
+-                                    PIX_FMT_RGB24, m_nWidth, m_nHeight)) 
++				    AV_PIX_FMT_RGB24, m_nWidth, m_nHeight))
+     {
+         esyslog("imageplugin: failed avpicture_fill");
+         return false;
+@@ -182,13 +182,13 @@
+     {
+         int result;
+ #ifndef HAVE_SWSCALER
+-        result=img_convert((AVPicture*)frame->data, PIX_FMT_YUV420P, 
+-                       (AVPicture*)m_pImageFilled, PIX_FMT_RGB24, 
++        result=img_convert((AVPicture*)frame->data, AV_PIX_FMT_YUV420P,
++                       (AVPicture*)m_pImageFilled, AV_PIX_FMT_RGB24,
+                        m_nWidth, m_nHeight);
+ #else
+         SwsContext* convert_ctx = sws_getContext(m_nWidth, m_nHeight, 
+-                        PIX_FMT_RGB24, m_nWidth, m_nHeight, 
+-                        PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
++                        AV_PIX_FMT_RGB24, m_nWidth, m_nHeight,
++                        AV_PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
+ 
+ 	    if(!convert_ctx) {
+             esyslog("imageplugin: failed to initialize swscaler context");

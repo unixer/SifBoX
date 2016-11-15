@@ -1,0 +1,69 @@
+--- vlc-2.2.4/configure.ac.org	2016-11-04 09:05:39.738395749 +0100
++++ vlc-2.2.4/configure.ac	2016-11-04 09:07:14.854397381 +0100
+@@ -2380,13 +2380,13 @@
+ 
+ have_avcodec_vaapi="no"
+ AS_IF([test "${have_vaapi}" = "yes" -a "${have_avcodec}" = "yes"], [
+-  case "${avfork}" in
+-    ffmpeg)
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
+-      ;;
+-  esac
++#  case "${avfork}" in
++#    ffmpeg)
++#      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++#        AC_MSG_ERROR([VA API requires FFmpeg libavcodec < 57.10 or libav.])
++#      ])
++#      ;;
++#  esac
+   VLC_SAVE_FLAGS
+   CPPFLAGS="${CPPFLAGS} ${AVCODEC_CFLAGS}"
+   CFLAGS="${CFLAGS} ${AVCODEC_CFLAGS}"
+--- vlc-2.2.4/configure.ac.org	2016-11-04 09:11:33.158401816 +0100
++++ vlc-2.2.4/configure.ac	2016-11-04 09:12:21.830402651 +0100
+@@ -2414,13 +2414,13 @@
+ AS_IF([test "${enable_dxva2}" != "no"], [
+   if test "${SYS}" = "mingw32"; then
+   AS_IF([test "x${have_avcodec}" = "xyes"], [
+-    case "${avfork}" in
+-      ffmpeg)
+-        PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
+-        ])
+-        ;;
+-    esac
++#    case "${avfork}" in
++#      ffmpeg)
++#        PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++#          AC_MSG_ERROR([DXVA2 requires FFmpeg libavcodec < 57.10 or libav.])
++#        ])
++#        ;;
++#    esac
+     AC_CHECK_HEADERS(dxva2api.h,
+       [
+         AC_CHECK_HEADERS(libavcodec/dxva2.h, [
+@@ -3177,14 +3177,14 @@
+ 
+ have_avcodec_vdpau="no"
+ AS_IF([test "${have_vdpau}" = "yes" -a "${have_avcodec}" = "yes"], [
+-  case "${avfork}" in
+-    libav) av_vdpau_ver="55.26.0" ;;
+-    ffmpeg) av_vdpau_ver="55.42.100"
+-      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
+-        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
+-      ])
+-      ;;
+-  esac
++#  case "${avfork}" in
++#    libav) av_vdpau_ver="55.26.0" ;;
++#    ffmpeg) av_vdpau_ver="55.42.100"
++#      PKG_CHECK_EXISTS([libavcodec >= 57.10.100], [
++#        AC_MSG_ERROR([VDPAU requires FFmpeg libavcodec < 57.10 or libav.])
++#      ])
++#      ;;
++#  esac
+   PKG_CHECK_EXISTS([libavutil >= 52.4.0 libavcodec >= ${av_vdpau_ver}], [
+     have_avcodec_vdpau="yes"
+     AC_MSG_NOTICE([VDPAU decoding acceleration activated])

@@ -1,0 +1,223 @@
+--- vdr-xineliboutput-2.0.1/HISTORY	2015-04-22 10:23:48.000000000 +0200
++++ xineliboutput-git/HISTORY	2016-11-07 11:52:24.159016837 +0100
+@@ -3,6 +3,9 @@
+ 
+ ????-??-??: Version 2.0.0
+ 
++- Moved from CVS to GIT (see README)
++- Support vdr-2.3.1
++- Support libcec 3
+ - Support for cDevice::ScaleVideo()
+ - Dropped support for vdr < 2.0
+ 
+--- vdr-xineliboutput-2.0.1/configure	2015-04-22 10:23:48.000000000 +0200
++++ xineliboutput-git/configure	2016-11-07 11:52:24.163016837 +0100
+@@ -7,7 +7,7 @@
+ # See the main source file 'xineliboutput.c' for copyright information and
+ # how to reach the author.
+ #
+-# * $Id: configure,v 1.45 2014-01-14 08:21:33 phintuka Exp $
++# * $Id$
+ #
+ 
+ PKG_CONFIG="pkg-config"
+@@ -247,7 +247,7 @@
+ 
+ # set defaults
+ 
+-enable x11 vdr fb xine i18n
++enable x11 vdr fb xine i18n libcec
+ 
+ # clear log file
+ 
+@@ -374,7 +374,16 @@
+   test_library   JPEG    libjpeg      "jpeglib.h"              "-ljpeg"      "jpeg_create_compress(0)"
+   test_library   X11     x11          "X11/X.h"                "-lX11"       "XInitThreads()"
+   test_library   PTHREAD pthread      "pthread.h"              "-lpthread"   "pthread_create(0,0,0,0)"
+-  test_library   CEC     libcec       "libcec/cecc.h"          "-lcec"       "cec_initialize(0)"
++
++  if enabled libcec; then
++    test_library   CEC     libcec       "libcec/cecc.h"          "-lcec"       "libcec_initialise(0)"
++    if disabled libcec; then
++      # try libcec < 3.0.0
++      enable libcec
++      test_library   CEC     libcec       "libcec/cecc.h"          "-lcec"       "cec_initialise(0)"
++    fi
++  fi
++
+   if enabled x11; then
+     test_library X11  xext         "X11/extensions/Xext.h"     "-lXext"      ""
+     test_library X11  xshm         "X11/extensions/XShm.h"     "-lXext"      "XShmQueryExtension(0)"
+--- vdr-xineliboutput-2.0.1/xine_frontend_cec.c	2015-04-22 10:23:48.000000000 +0200
++++ xineliboutput-git/xine_frontend_cec.c	2016-11-07 11:52:24.179016837 +0100
+@@ -4,7 +4,7 @@
+  * See the main source file 'xineliboutput.c' for copyright information and
+  * how to reach the author.
+  *
+- * $Id: xine_frontend_cec.c,v 1.4 2015-04-22 07:35:15 phintuka Exp $
++ * $Id$
+  *
+  */
+ 
+@@ -31,6 +31,19 @@
+ 
+ #ifdef HAVE_LIBCEC
+ 
++#if defined(CEC_LIB_VERSION_MAJOR) && CEC_LIB_VERSION_MAJOR >= 3
++#define HAVE_LIBCEC_3
++#else
++typedef void * libcec_connection_t;
++#  define libcec_initialise(c) ((void*)cec_initialise(c))
++#  define libcec_init_video_standalone(c) cec_init_video_standalone()
++#  define libcec_find_adapters(a,b,c,d) cec_find_adapters(b,c,d)
++#  define libcec_ping_adapters(c) cec_ping_adapters()
++#  define libcec_open(c,d,e) cec_open(d,e)
++#  define libcec_close(c) cec_close()
++#  define libcec_destroy(c) cec_destroy()
++#endif
++
+ /* static data */
+ static volatile int exit_req = 0;
+ static pthread_t cec_thread;
+@@ -246,7 +259,7 @@
+  * configuration
+  */
+ 
+-static void libcec_config_clear(libcec_configuration *p)
++static void _libcec_config_clear(libcec_configuration *p)
+ {
+   memset(p, 0, sizeof(*p));
+ 
+@@ -254,8 +267,13 @@
+   p->baseDevice = CEC_DEFAULT_BASE_DEVICE;
+   p->iHDMIPort = CEC_DEFAULT_HDMI_PORT;
+   p->tvVendor = CEC_VENDOR_UNKNOWN;
++#ifdef HAVE_LIBCEC_3
++  p->clientVersion = LIBCEC_VERSION_CURRENT;
++  p->serverVersion = LIBCEC_VERSION_CURRENT;
++#else
+   p->clientVersion = CEC_CLIENT_VERSION_CURRENT;
+   p->serverVersion = CEC_SERVER_VERSION_CURRENT;
++#endif
+   p->bAutodetectAddress = CEC_DEFAULT_SETTING_AUTODETECT_ADDRESS;
+   p->bGetSettingsFromROM = CEC_DEFAULT_SETTING_GET_SETTINGS_FROM_ROM;
+   p->bUseTVMenuLanguage = CEC_DEFAULT_SETTING_USE_TV_MENU_LANGUAGE;
+@@ -350,13 +368,13 @@
+   return 0;
+ }
+ 
+-static int libcec_init(void *fe_gen)
++static libcec_connection_t _libcec_init(void *fe_gen)
+ {
+   libcec_configuration config;
++  libcec_connection_t conn;
+ 
+-  libcec_config_clear(&config);
++  _libcec_config_clear(&config);
+ 
+-  config.clientVersion = CEC_CLIENT_VERSION_CURRENT;
+   strncpy(config.strDeviceName, "VDR", sizeof(config.strDeviceName));
+ 
+   config.iPhysicalAddress = detect_hdmi_address(fe_gen);
+@@ -372,24 +390,24 @@
+   config.deviceTypes.types[2] = CEC_DEVICE_TYPE_TUNER;
+   //config.deviceTypes.types[3] = CEC_DEVICE_TYPE_AUDIO_SYSTEM;
+ 
+-  if (!cec_initialise(&config)) {
+-    LOGMSG("cec_initialize() failed");
+-    return 0;
++  if (!(conn = libcec_initialise(&config))) {
++    LOGMSG("libcec_initialize() failed");
++    return NULL;
+   }
+ 
+-  cec_init_video_standalone();
++  libcec_init_video_standalone(conn);
+ 
+-  return 1;
++  return conn;
+ }
+ 
+ /*
+  *
+  */
+ 
+-static int libcec_open(void)
++static int _libcec_open(libcec_connection_t conn)
+ {
+   cec_adapter devices[10];
+-  int count = cec_find_adapters(devices, 10, NULL);
++  int count = libcec_find_adapters(conn, devices, 10, NULL);
+   if (count < 1) {
+     LOGMSG("No HDMI-CEC adapters found");
+     return 0;
+@@ -397,7 +415,7 @@
+ 
+   LOGMSG("%d adapters found. Opening %s", count, devices[0].comm);
+ 
+-  if (!cec_open(devices[0].comm, 3000)) {
++  if (!libcec_open(conn, devices[0].comm, 3000)) {
+     LOGMSG("error opening CEC adapter");
+     return 0;
+   }
+@@ -407,10 +425,10 @@
+   return 1;
+ }
+ 
+-static int libcec_check_device(void)
++static int _libcec_check_device(libcec_connection_t conn)
+ {
+-  if (!cec_ping_adapters()) {
+-    LOGMSG("cec_ping_adapters() failed");
++  if (!libcec_ping_adapters(conn)) {
++    LOGMSG("libcec_ping_adapters() failed");
+     return 0;
+   }
+ 
+@@ -419,16 +437,20 @@
+ 
+ static void cleanup(void *p)
+ {
+-  cec_close();
+-  cec_destroy();
++#ifdef HAVE_LIBCEC_3
++  libcec_connection_t conn = *(libcec_connection_t *)p;
++#endif
++  libcec_close(conn);
++  libcec_destroy(conn);
+ }
+ 
+ static void *cec_receiver_thread(void *fe_gen)
+ {
++  libcec_connection_t conn;
+ 
+   LOGDBG("started");
+ 
+-  pthread_cleanup_push(cleanup, NULL);
++  pthread_cleanup_push(cleanup, &conn);
+ 
+   enum { INIT, WAIT_DEVICE, RUNNING } state = INIT;
+ 
+@@ -438,19 +460,19 @@
+ 
+     switch (state) {
+     case INIT:
+-      if (!libcec_init(fe_gen)) {
++      if (!(conn = _libcec_init(fe_gen))) {
+ 	return NULL;
+       }
+       state = WAIT_DEVICE;
+       break;
+     case WAIT_DEVICE:
+-      if (libcec_open()) {
++      if (_libcec_open(conn)) {
+ 	state = RUNNING;
+       }
+       usleep(5000*1000);
+       break;
+     case RUNNING:
+-      if (!libcec_check_device()) {
++      if (!_libcec_check_device(conn)) {
+         state = WAIT_DEVICE;
+       }
+       usleep(1000*1000);

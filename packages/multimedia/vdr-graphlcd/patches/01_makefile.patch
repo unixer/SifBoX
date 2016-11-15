@@ -1,0 +1,29 @@
+--- graphlcd/Makefile.orig	2013-01-27 01:50:48.000000000 +0100
++++ graphlcd/Makefile	2013-02-03 16:06:58.516584347 +0100
+@@ -113,7 +113,7 @@
+
+ # some paranoia security checks
+ ifeq ($(LIBDIR),)
+-  $(error LIBDIR not set, bailing out ...)
++   LIBDIR = ../../lib
+ endif
+ ifeq ($(shell [ $(APIVERSNUM) -ge 10500 ] && echo yes),yes)
+   ifeq ($(LOCDIR),)
+@@ -170,7 +170,7 @@
+ ifneq ($(FLAG_PKGCFG),auto)
+   INCLUDES += -I$(TEMP_VDRDIR)/include
+ endif
+-INCLUDES += -I./graphlcd-base/ -I$(PREFIX)/include
++INCLUDES += -I$(BASEDIR)/ -I$(VDRDIR)/include -I$(INSTALLPREFIX)/include
+
+ DEFINES += -DPLUGIN_NAME_I18N='"$(PLUGIN)"'
+
+@@ -257,7 +257,7 @@
+ ### Targets:
+
+ $(SOFILE): $(OBJS)
+-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(OBJS) -lglcddrivers -lglcdgraphics -lglcdskin -lstdc++ -o $@
++	$(CXX) $(CXXFLAGS) -L$(INSTALLPREFIX)/lib -L$(BASEDIR)/glcddrivers/ -L$(BASEDIR)/glcdgraphics/ -L$(BASEDIR)/glcdskin/ -shared $(OBJS) -lglcddrivers -lglcdgraphics -lglcdskin -lstdc++ -o $@
+
+ install-lib: $(SOFILE)
+ 	install -D $^ $(DESTDIR)$(LIBDIR)/$^.$(APIVERSION)

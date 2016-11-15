@@ -1,30 +1,31 @@
 #!/bin/sh
 
 . config/options
+get_meta vdr
+verlte 1.7.36 $PKG_VERSION && VDRINS="no" || VDRINS="yes"
 
 get_meta $1
 
-mkdir -p $INSTALL/usr/lib/vdr/plugins
-cp -a $BUILD/${PKG_NAME}-${PKG_VERSION}/lib$1*.so.* $INSTALL/usr/lib/vdr/plugins
+cd $PKG_BUILD_DIR
+#mkdir -p $INSTALL/usr/lib/vdr/plugins
+#cp -a $BUILD/${PKG_NAME}-${PKG_VERSION}/libvdr-*.so.* $INSTALL/usr/lib/vdr/plugins
 
-for loc in $INCLUDED_LOCALES; do
+if [ $VDRINS = "no" ]; then
+  mkdir -p $INSTALL/usr/lib/vdr/plugins
+  cp -a lib$1*.so.* $INSTALL/usr/lib/vdr/plugins
+  for loc in $INCLUDED_LOCALES; do
   LOCALE=`echo $loc|cut -f1 -d.`
-  if [ -d $BUILD/${PKG_NAME}-${PKG_VERSION}/locale/$LOCALE ]; then
-    mkdir -p $INSTALL/usr/share/locale/$LOCALE
-    cp -a $BUILD/${PKG_NAME}-${PKG_VERSION}/locale/$LOCALE/* $INSTALL/usr/share/locale/$LOCALE/
-  fi
-done
+    if [ -d locale/$LOCALE ]; then
+      mkdir -p $INSTALL/usr/share/locale/$LOCALE
+      cp -a locale/$LOCALE/* $INSTALL/usr/share/locale/$LOCALE/
+    fi
+  done
+else
+  do_install usr
+fi
 
 NAME=`echo $1 | sed s/vdr-//`
 mkdir -p $INSTALL/etc/vdr/plugins.d
 echo "PLUGIN=${NAME}" > $INSTALL/etc/vdr/plugins.d/50_$NAME
-echo "OPTIONS=\"-c /etc/graphlcd.conf -d serdisp\"" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
 echo "ENABLED=yes" >> $INSTALL/etc/vdr/plugins.d/50_$NAME
-
-mkdir -p $INSTALL/etc/vdr/plugins/graphlcd
-#cp -a $BUILD/$1*/graphlcd/* $INSTALL/etc/vdr/plugins/graphlcd
-cp -a $BUILD/${PKG_NAME}-${PKG_VERSION}/graphlcd/* $INSTALL/etc/vdr/plugins/graphlcd
-cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/config/* $INSTALL/etc/vdr/plugins/graphlcd
-mkdir -p $INSTALL/usr/share/fonts
-cp -r $ROOT/$PACKAGES/$PKG_SECTION/$1/fonts/* $INSTALL/usr/share/fonts
 

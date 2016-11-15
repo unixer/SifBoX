@@ -22,7 +22,6 @@ echo "dvb_hdhomerun" > .install/usr/lib/modules-load.d/dvbhdhomerun.conf
 
 cd userhdhomerun
 
-read enterKey
 #mkdir build && cd build
   cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
         -DCMAKE_INSTALL_PREFIX=/usr \
@@ -30,7 +29,7 @@ read enterKey
         ../userhdhomerun
 
 
-#make
+make
 
 cd ..
 

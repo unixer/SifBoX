@@ -1,0 +1,11 @@
+--- vdr-audiorecorder-2.0.0/Makefile.org	2016-11-07 10:18:38.322920264 +0100
++++ vdr-audiorecorder-2.0.0/Makefile	2016-11-07 10:18:41.878920325 +0100
+@@ -43,7 +43,7 @@
+ ## avcodec_decode_audio3 --> avcodec_decode_audio4
+ ## avcodec_encode_audio --> avcodec_encode_audio2
+ 
+-#DEFINES += -DAVCODEC_NEW
++DEFINES += -DAVCODEC_NEW
+ 
+ ## end new avcodec
+ 

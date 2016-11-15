@@ -11,4 +11,5 @@ make
 cd ..
 mkdir -p .install/usr/bin && cp satip/satip .install/usr/bin
 cd vtuner_tweak
+
 make KDIR=$(kernel_path) CC=$CC
