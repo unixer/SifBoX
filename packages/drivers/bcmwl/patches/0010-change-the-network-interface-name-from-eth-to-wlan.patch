@@ -8,10 +8,10 @@ Thanks to Shuduo Sang for the patch.
  src/wl/sys/wl_linux.c |    2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/x86-64/src/wl/sys/wl_linux.c b/x86-64/src/wl/sys/wl_linux.c
+diff --git a/src/src/wl/sys/wl_linux.c b/src/src/wl/sys/wl_linux.c
 index 3ead3c3..b662ff7 100644
---- a/x86-64/src/wl/sys/wl_linux.c
-+++ b/x86-64/src/wl/sys/wl_linux.c
+--- a/src/src/wl/sys/wl_linux.c
++++ b/src/src/wl/sys/wl_linux.c
 @@ -235,7 +235,7 @@ module_param(nompc, int, 0);
  #define to_str(s) #s
  #define quote_str(s) to_str(s)
@@ -23,3 +23,4 @@ index 3ead3c3..b662ff7 100644
  
 -- 
 1.7.9.5
+
