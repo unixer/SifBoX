@@ -1,0 +1,70 @@
+--- /dev/null	2016-11-13 16:55:16.743097918 +0100
++++ vdr-scraper2vdr-0.1.6/po/it_IT.po	2016-11-16 17:24:35.924304705 +0100
+@@ -0,0 +1,67 @@
++# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
++# This file is distributed under the same license as the PACKAGE package.
++# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: vdr-scraper2vdr 0.0.1\n"
++"Report-Msgid-Bugs-To: <see README>\n"
++"POT-Creation-Date: 2014-04-27 12:22+0200\n"
++"PO-Revision-Date: 2014-03-30 18:30+0100\n"
++"Last-Translator: fiveten_59\n"
++"Language-Team: Italian\n"
++"Language: it\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=UTF-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++msgid "Update Scraper Information from Database"
++msgstr "Aggiornamento dal database delle Scraper Information"
++
++msgid "Update Scraper Recordings Information from Database"
++msgstr "Aggiornamento dal database delle Scraper Recordings Information"
++
++msgid "Scan for new recordings in video directory"
++msgstr "Ricerca nuove registrazione nella cartella video"
++
++msgid "Scan for new or updated scrapinfo files"
++msgstr "Ricerca nuovi o aggiornati file scrapinfo"
++
++msgid "Cleanup Recordings in Database"
++msgstr "Cancellazione delle registrazioni dal Datatbase"
++
++msgid "Updating Scraper EPG Information from Database"
++msgstr "Sto aggiornando dal database le Scraper EPG Information"
++
++msgid "Updating Scraper Recordings Information from Database"
++msgstr "Sto aggiornando dal database le Scraper Recordings Information"
++
++msgid "Scanning for new recordings in video directory"
++msgstr "Sto ricercando nuove registrazione nella cartella video"
++
++msgid "Scanning for new or updated scrapinfo files"
++msgstr "Sto ricercando nuovi o aggiornati file scrapinfo"
++
++msgid "Cleaning up Recordings in Database"
++msgstr "Sto cancellando delle registrazioni dal Datatbase"
++
++msgid "Show Main Menu Entry"
++msgstr "Mostra menù principale"
++
++msgid "Debug Mode"
++msgstr "Modalità Debug"
++
++msgid "MySQL Host"
++msgstr "MySQL Host"
++
++msgid "MySQL Port"
++msgstr "Porta MySQL"
++
++msgid "MySQL Database Name"
++msgstr "MySQL Database Name"
++
++msgid "MySQL User"
++msgstr "MySQL User"
++
++msgid "MySQL Password"
++msgstr "MySQL Password"

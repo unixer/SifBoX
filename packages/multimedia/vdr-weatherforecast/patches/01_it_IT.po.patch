@@ -1,0 +1,118 @@
+--- /dev/null	2016-11-13 16:55:16.743097918 +0100
++++ vdr-weatherforecast-0.2.0/po/it_IT.po	2016-11-16 17:28:35.556297563 +0100
+@@ -0,0 +1,115 @@
++# Copyright (C) 2015 
++# This file is distributed under the same license as the PACKAGE package.
++# iFIRST AUTHOR <louis.braun@gmx.de>, 2015.
++#
++msgid ""
++msgstr ""
++"Project-Id-Version: vdr-weatherforecast 0.0.1\n"
++"Report-Msgid-Bugs-To: <see README>\n"
++"POT-Creation-Date: 2015-01-23 16:53+0100\n"
++"PO-Revision-Date: 2015-01-12 11:46+0100\n"
++"Last-Translator: fiveten_59\n"
++"Language-Team: Italian \n"
++"Language: it_IT \n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=utf-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++msgid "City"
++msgstr "Città"
++
++msgid "Latitude"
++msgstr "Latitudine"
++
++msgid "Longitude"
++msgstr "Longitudine"
++
++msgid "API Key"
++msgstr "API Key"
++
++msgid "Update Frequency in hours"
++msgstr "Frequenza aggiornamento in ore"
++
++msgid "WeatherForecast"
++msgstr "Previsione del tempo"
++
++msgid "Weather Forecast"
++msgstr "Previsione del tempo"
++
++msgid "Current Weather"
++msgstr "Tempo attuale"
++
++msgid "Next 48 Hours"
++msgstr "Prossime 48 ore"
++
++msgid "Next 7 Days"
++msgstr "Prossimi 7 giorni"
++
++msgid "Weather for"
++msgstr "Tempo per"
++
++msgid "Current Temperature"
++msgstr "Temperatura Attuale"
++
++msgid "Apparent Temperature"
++msgstr "Temperatura percepita"
++
++msgid "Minimum Temperature today"
++msgstr "Temperatura minima oggi"
++
++msgid "Maximum Temperature today"
++msgstr "Temperatura massima oggi"
++
++msgid "Precipitation Probability"
++msgstr "Probabilità precipitazioni"
++
++msgid "Precipitation Intensity"
++msgstr "Intensità precipitazioni"
++
++msgid "Humidity"
++msgstr "Umidità"
++
++msgid "Wind Speed"
++msgstr "Velocità del vento"
++
++msgid "Wind Bearing"
++msgstr "Direzione del vento"
++
++msgid "Visibility"
++msgstr "Visibilità"
++
++msgid "Cloud Cover"
++msgstr "Copertura nuvole"
++
++msgid "Pressure"
++msgstr "Pressione"
++
++msgid "Ozone"
++msgstr "Ozono"
++
++msgid "Weather in the next 48 Hours"
++msgstr "Tempo nelle prossime 48 ore"
++
++msgid "Temperature"
++msgstr "Temperatura"
++
++msgid "felt"
++msgstr "percepita"
++
++msgid "Intensity"
++msgstr "Intensità"
++
++msgid "Wind"
++msgstr "Vento"
++
++msgid "Weather the next 7 days"
++msgstr "Tempo nei prossimi 7 giorni"
++
++msgid "Minimum Temperature"
++msgstr "Temperatura minima"
++
++msgid "at"
++msgstr "a"
++
++msgid "Maximum Temperature"
++msgstr "Temperatura massima"

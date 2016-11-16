@@ -1,0 +1,944 @@
+--- /dev/null	2016-11-13 16:55:16.743097918 +0100
++++ vdr-tvguide-1.2.0/po/it_IT.po	2016-11-16 17:26:01.016302169 +0100
+@@ -0,0 +1,941 @@
++# VDR plugin language source file.
++msgid ""
++msgstr ""
++"Project-Id-Version: vdr-tvguide 0.0.1\n"
++"Report-Msgid-Bugs-To: <see README>\n"
++"POT-Creation-Date: 2014-05-10 17:24+0200\n"
++"PO-Revision-Date: 2012-08-25 17:49+0200\n"
++"Last-Translator: fiveten_59\n"
++"Language-Team: \n"
++"Language: it\n"
++"MIME-Version: 1.0\n"
++"Content-Type: text/plain; charset=utf-8\n"
++"Content-Transfer-Encoding: 8bit\n"
++
++msgid "Main Program"
++msgstr "Programma principale"
++
++msgid "Channel"
++msgstr "Canale"
++
++msgid "min"
++msgstr "min"
++
++msgid "Reruns of "
++msgstr "Riavvio di "
++
++msgid "No reruns found"
++msgstr "Nessun riavvio trovato"
++
++msgid "No EPG Information available"
++msgstr "Nessuna informazione EPG disponibile"
++
++msgid "Search & Rec"
++msgstr "Cerca & Registra"
++
++msgid "Channels back"
++msgstr "Canale precedente"
++
++msgid "Channels forward"
++msgstr "Canale seguente"
++
++msgid "Switch to Channel"
++msgstr "Cambia al Canale"
++
++msgid "Detailed EPG"
++msgstr "EPG dettagliato"
++
++msgid "Close detailed EPG"
++msgstr "Chiudi EPG dettagliato"
++
++msgid "Favorites"
++msgstr "Favoriti"
++
++msgid "images"
++msgstr "Immagini"
++
++msgid "root video folder"
++msgstr "cartella video di root"
++
++msgid "Transp."
++msgstr "Transp."
++
++msgid "Timer Conflict"
++msgstr "Timer in conflitto"
++
++msgid "all Channels"
++msgstr "Tutti i Canali"
++
++msgid "unknown channel"
++msgstr "Canale sconosciuto"
++
++msgid "Duration"
++msgstr "Durata"
++
++msgid "recorded at"
++msgstr "registrato a"
++
++msgid "from"
++msgstr "da"
++
++msgid "Timers for"
++msgstr "Timers per"
++
++msgid "Rec"
++msgstr "Rec"
++
++msgid "No Timers active"
++msgstr "Nessun Timer attivo"
++
++msgid "inactive"
++msgstr "inattivo"
++
++msgid "active timers"
++msgstr "Timers attivi"
++
++msgid "recordings done"
++msgstr "registrazione eseguita"
++
++msgid "What's on now"
++msgstr "Was läuft jetzt?"
++
++msgid "What's on next"
++msgstr "Was läuft als nächstes?"
++
++msgid "Instant Record"
++msgstr "Registrazione immediata"
++
++msgid "Delete Timer"
++msgstr "Cancella il Timer"
++
++msgid "Edit Timer"
++msgstr "Edita il Timer"
++
++msgid "Timer Timeline"
++msgstr "Scadenza del Timer"
++
++msgid "Create Search Timer"
++msgstr "Crea Search Timer"
++
++msgid "Search Timers"
++msgstr "Search Timers"
++
++msgid "Create Series Timer"
++msgstr "Crea Series Timer"
++
++msgid "Create Switch Timer"
++msgstr "Crea lo Switch Timer"
++
++msgid "Delete Switch Timer"
++msgstr "Rimuovi lo Switch Timer"
++
++msgid "Search"
++msgstr "Cerca"
++
++msgid "Check for Timer Conflicts"
++msgstr "Verifica conflitti del Timer"
++
++msgid "Search in Recordings"
++msgstr "Cerca nelle registrazioni"
++
++msgid "Set Folder for"
++msgstr "Crea cartella per"
++
++msgid "Timer created"
++msgstr "Timer creato"
++
++msgid "Timer NOT created"
++msgstr "Timer non creato"
++
++msgid "OK"
++msgstr "OK"
++
++msgid "Timer deleted"
++msgstr "Timer eliminato"
++
++msgid "Timer"
++msgstr "Timer"
++
++msgid "still recording - really delete?"
++msgstr "registrazione in corso - vuoi veramente eliminare?"
++
++msgid "Yes"
++msgstr "Si"
++
++msgid "No"
++msgstr "No"
++
++msgid "One"
++msgstr "Uno"
++
++msgid "detected"
++msgstr "rilevato"
++
++msgid "Timer Conflicts"
++msgstr "Conflitti del Timer"
++
++msgid "Show conflict"
++msgstr "Mostra conflitto"
++
++msgid "timers involved"
++msgstr "Timers impegnati"
++
++msgid "Ignore Conflicts"
++msgstr "Ignora conflitti"
++
++msgid "Ignore Conflict"
++msgstr "Ignora conflitto"
++
++msgid "No Timer Conflicts found"
++msgstr "Nessun conflitto rilevato nel Timer"
++
++msgid "Close"
++msgstr "Chiudere"
++
++msgid "reruns for"
++msgstr "riavvii per"
++
++msgid "rerun for"
++msgstr "riavvio per"
++
++msgid "found"
++msgstr "trovato"
++
++msgid "Ignore reruns"
++msgstr "Wiederholungen ignorieren"
++
++msgid "No reruns found for Event"
++msgstr "Nessun riavvio trovato per l'evento"
++
++msgid "Timer for"
++msgstr "Timer per"
++
++msgid "replaced by rerun"
++msgstr "rimosso dal riavvio"
++
++msgid "Timer Active"
++msgstr "Timer attivo"
++
++msgid "Priority"
++msgstr "Priorità"
++
++msgid "Lifetime"
++msgstr "Durata"
++
++msgid "Day"
++msgstr "Giorno"
++
++msgid "Timer start time"
++msgstr "Ora d'inizio del Timer"
++
++msgid "Timer stop time"
++msgstr "Ora finale del Timer"
++
++msgid "Timer File"
++msgstr "File del Timer"
++
++msgid "New Folder"
++msgstr "Nuova cartella"
++
++msgid "Save"
++msgstr "Salva"
++
++msgid "Cancel"
++msgstr "Cancella"
++
++msgid "Create Series Timer based on"
++msgstr "Crea il Series Timer basato su"
++
++msgid "Series Timer start time"
++msgstr "Ora d'avvio del Series Timer"
++
++msgid "Series Timer stop time"
++msgstr "Ora di chiusura del Series Timer"
++
++msgid "Days to record"
++msgstr "Giorni da registrare"
++
++msgid "Day to start"
++msgstr "Giorno d'inizio"
++
++msgid "Create Timer"
++msgstr "Crea il Timer"
++
++msgid "Series Timer created"
++msgstr "Series Timer creato"
++
++msgid "Start"
++msgstr "Avvio"
++
++msgid "Stop"
++msgstr "Ferma"
++
++msgid "Configure Search Timer based on"
++msgstr "Configura il Search Timer in serie basato su"
++
++msgid "Search Expression:"
++msgstr "Cerca espressione:"
++
++msgid "Continue"
++msgstr "Continua"
++
++msgid "Configure Search Timer for Search String"
++msgstr "Configura il Search Timer basato su Search String"
++
++msgid "Manually configure Options"
++msgstr "Configura manualmente le Opzioni"
++
++msgid "Use Template"
++msgstr "Utilizza Template"
++
++msgid "EPGSearch Search Timers"
++msgstr "EPGSearch Search Timers"
++
++msgid "No Search Timers Configured"
++msgstr "Messun Search Timers configurato"
++
++msgid "Configure Search Timer Options"
++msgstr "Configura le opzione del Search Timer"
++
++msgid "Save Search Timer"
++msgstr "Salva il Search Timer"
++
++msgid "Search String"
++msgstr "Suchbegriff"
++
++msgid "Active"
++msgstr "Attivo"
++
++msgid "Search Mode"
++msgstr "Modalità di ricerca"
++
++msgid "Use Title"
++msgstr "Usa Titolo"
++
++msgid "Use Subtitle"
++msgstr "Usa Sottotitolo"
++
++msgid "Use Description"
++msgstr "Usa Descrizione"
++
++msgid "Limit Channels"
++msgstr "Limite Canale"
++
++msgid "Use Time"
++msgstr "Utilizza Time"
++
++msgid "Display advanced Options"
++msgstr "Mostra Opzioni avanzate"
++
++msgid "Limit Days of the Week"
++msgstr "Limite dei giorni della settimana"
++
++msgid "Time margin for start in minutes"
++msgstr "Margine di tempo per l'avvio in minuti"
++
++msgid "Time margin for stop in minutes"
++msgstr "Margine di tempo per lo stop in minuti"
++
++msgid "Series Recording"
++msgstr "Serie di registrazioni"
++
++msgid "Folder"
++msgstr "Cartella"
++
++msgid "Use VPS"
++msgstr "Utilizza VPS"
++
++msgid "Avoid Repeats"
++msgstr "Evita ripetizioni"
++
++msgid "Use in Favorites"
++msgstr "Utilizza nei favoriti"
++
++msgid "Hide advanced Options"
++msgstr "Nascondi Opzioni avanzate"
++
++msgid "Display Results for Search Timer"
++msgstr "Mostra risultati per il Search Timer"
++
++msgid "Start Channel"
++msgstr "Avvia il Canale"
++
++msgid "Stop Channel"
++msgstr "Ferma il Canale"
++
++msgid "Start after"
++msgstr "Avvia dopo"
++
++msgid "Start before"
++msgstr "Avvia prima"
++
++msgid "Select Days"
++msgstr "Seleziona i giorni"
++
++msgid "Number of allowed repeats"
++msgstr "Numero di ripetizioni permesse"
++
++msgid "Compare Title"
++msgstr "Confonta Titolo"
++
++msgid "Compare Subtitle"
++msgstr "Confonta Sottotitolo"
++
++msgid "Compare Description"
++msgstr "Confonta Descrizione"
++
++msgid "Really delete Search Timer"
++msgstr "Veramente eliminare il Search Timer"
++
++msgid "Delete only Search Timer"
++msgstr "Elimina solo il Search Timer"
++
++msgid "Delete Search Timer and created Timers"
++msgstr "Elimina il Search Timer e Timers creati"
++
++msgid "Search Timer sucessfully created."
++msgstr "Search Timer creato con successo"
++
++msgid "Search Timer update initialised"
++msgstr "Search Timer aggiornato con successo"
++
++msgid "Search Timer NOT sucessfully created"
++msgstr "Suchtimer NICHT erfolgreich angelegt"
++
++msgid "Creating Search Timer"
++msgstr "Creando il Search Timer"
++
++msgid "Search Term"
++msgstr "Suchbegriff"
++
++msgid "Using Template"
++msgstr "Template"
++
++msgid "Use other Template"
++msgstr "Anderes Template benutzen"
++
++msgid "search results for Favorite"
++msgstr "Suchergebnisse für Favorit"
++
++msgid "search result for Favorite"
++msgstr "Suchergebnis für Favorit"
++
++msgid "search results for Search Timer"
++msgstr "Treffer für Suchtimer"
++
++msgid "search result for Search Timer"
++msgstr "Treffer für Suchtimer"
++
++msgid "Nothing found for Search String"
++msgstr "Keine Treffer für Suchbegriff"
++
++msgid "Configure Options for Switchtimer"
++msgstr "Optionen für Umschalttimer konfigurieren"
++
++msgid "Minutes before switching"
++msgstr "Minuten vor umschalten"
++
++msgid "switch"
++msgstr "cambio"
++
++msgid "announce only"
++msgstr "Segnala solamente"
++
++msgid "ask for switch"
++msgstr "chiedi per cambiare"
++
++msgid "Switch Mode"
++msgstr "Modalità Switch"
++
++msgid "Create"
++msgstr "Creare"
++
++msgid "Switch Timer sucessfully created"
++msgstr "Switch Timer creato con successo"
++
++msgid "Switch Timer NOT sucessfully created"
++msgstr "Switch Timer NON creato"
++
++msgid "Switch Timer deleted"
++msgstr "Switch Timer eliminato"
++
++msgid "Channel to Search"
++msgstr "Canale da cercare"
++
++msgid "Search in title"
++msgstr "Cerca nel titolo"
++
++msgid "Search in Subtitle"
++msgstr "Cerca nel sottotitolo"
++
++msgid "Search in Description"
++msgstr "Cerca nella descrizione"
++
++msgid "Show Search Options"
++msgstr "Mostra opzioni di ricerca"
++
++msgid "Perform Search"
++msgstr "Fai una ricerca"
++
++msgid "search results for"
++msgstr "cerca risultati per"
++
++msgid "search result for"
++msgstr "cerca risultato per"
++
++msgid "Adapt Search"
++msgstr "Adatta la ricerca"
++
++msgid "Search String has to have at least three letters"
++msgstr "Search String deve avere almeno tre lettere"
++
++msgid "Found"
++msgstr "Trovato"
++
++msgid "recording"
++msgstr "registrazione"
++
++msgid "recordings"
++msgstr "registrazioni"
++
++msgid "for"
++msgstr "per"
++
++msgid "No recordings found for"
++msgstr "Nessuna registrazione trovata per"
++
++msgid "No Favorites available"
++msgstr "Nessun Favoriti disponibile"
++
++msgid "whole term must appear"
++msgstr "vollständiger Ausdruck"
++
++msgid "all terms must exist"
++msgstr "tutte le parole devono esistere"
++
++msgid "one term must exist"
++msgstr "ein Wort"
++
++msgid "exact match"
++msgstr "exakt"
++
++msgid "regular expression"
++msgstr "Regulärer Ausdruck"
++
++msgid "General Settings"
++msgstr "Allgemeine Einstellungen"
++
++msgid "Screen Presentation"
++msgstr "Anzeigeoptionen"
++
++msgid "Fonts and Fontsizes"
++msgstr "Schriften und Schriftgrößen"
++
++msgid "Recording Menus and Favorites"
++msgstr "Aufzeichnungsmenü und Favoriten"
++
++msgid "Image Loading and Caching"
++msgstr "Image Loading und Caching"
++
++msgid "x channels back / forward"
++msgstr "x canali precedente / successivo"
++
++msgid "previous / next channel group"
++msgstr "precedente / successivo Gruppo Canali"
++
++msgid "Blue: Channel Switch, Ok: Detailed EPG"
++msgstr "Blu: Cambio canale, OK: EPG dettagliat"
++
++msgid "Blue: Detailed EPG, Ok: Channel Switch"
++msgstr "Blu: EPG dettagliato, OK: Cambio canale"
++
++msgid "Blue: Favorites / Switch, Ok: Detailed EPG"
++msgstr "Blau: Favoriten / Umschalten, OK: Det. EPG"
++
++msgid "Timely Jump"
++msgstr "Zeitsprung"
++
++msgid "Jump to specific channel"
++msgstr "Passa ad uno specifico canale"
++
++msgid "never"
++msgstr "mai"
++
++msgid "if exists"
++msgstr "se esiste"
++
++msgid "always"
++msgstr "sempre"
++
++msgid "Show Main Menu Entry"
++msgstr "Hauptmenüeintrag anzeigen"
++
++msgid "Replace VDR Schedules Menu"
++msgstr "VDR Programm Menü ersetzen"
++
++msgid "Use appropriate nOpacity Theme"
++msgstr "Entsprechendes nOpacity Theme benutzen"
++
++msgid "Theme"
++msgstr "Tema"
++
++msgid "Time to display in minutes"
++msgstr "Angezeigte Zeitspanne in Minuten"
++
++msgid "Rounded Corners"
++msgstr "Angoli arrotondati"
++
++msgid "Channel Jump Mode (Keys Green / Yellow)"
++msgstr "Modalità cambio canale (Tasti verde / giallo)"
++
++msgid "Keys Blue and OK"
++msgstr "Tasto Blu e OK"
++
++msgid "Close TVGuide after channel switch"
++msgstr "Chiudi TVGuide dopo cambio canale"
++
++msgid "Functionality of numeric Keys"
++msgstr "Funzionalità dei tasti numerici"
++
++msgid "Hide last Channel Group"
++msgstr "Nascondi l'ultimo Gruppo Canali"
++
++msgid "Big Step (Keys 1 / 3) in hours"
++msgstr "Piccolo salto (Tasti 1 / 3) in ore"
++
++msgid "Huge Step (Keys 4 / 6) in hours"
++msgstr "Gran salto (Tasti 4 / 6) in ore"
++
++msgid "Time Format (12h/24h)"
++msgstr "Formato ora (12h/24h)"
++
++msgid "EPG Window Text Scrolling Speed"
++msgstr "Velocità di scorrimento della finestra EPG"
++
++msgid "Display Reruns in detailed EPG View"
++msgstr "Wiederholungen in der detailierten EPG Ansicht anzeigen"
++
++msgid "Number of reruns to display"
++msgstr "Numero di riavvii da visualizzare"
++
++msgid "Use Subtitle for reruns"
++msgstr "Untertitel für Wiederholungssuche nutzen"
++
++msgid "Display Mode"
++msgstr "Anzeigemodus"
++
++msgid "Height of Channel Header (Perc. of osd height)"
++msgstr "Höhe des Kanalheaders (% der OSD Höhe)"
++
++msgid "Width of Timeline (Perc. of osd width)"
++msgstr "Breite der Zeitleiste (% der OSD Breite)"
++
++msgid "Number of Channels to display"
++msgstr "Anzahl der angezeigten Kanäle"
++
++msgid "Width of Channel Header (Perc. of osd width)"
++msgstr "Breite des Kanalheaders (% der OSD Breite)"
++
++msgid "Height of Timeline (Perc. of osd height)"
++msgstr "Höhe der Zeitleiste (% der OSD Höhe)"
++
++msgid "Display time in EPG Grids"
++msgstr "Zeit in EPG Grids anzeigen"
++
++msgid "Height of Headers (Status Header and EPG View, Perc. of osd height)"
++msgstr "Höhe der Header (Status Header und EPG View, % der OSD Höhe)"
++
++msgid "Height of Footer (Perc. of osd height)"
++msgstr "Höhe des Footers (% der OSD Höhe)"
++
++msgid "Display status header"
++msgstr "Status Header anzeigen"
++
++msgid "Scale video to upper right corner"
++msgstr "Video in obere rechte Ecke skalieren"
++
++msgid "Rounded corners around video frame"
++msgstr "Abgerundete Ecken um Videofenster"
++
++msgid "Display Channel Names in Header"
++msgstr "Kanalnamen im Header anzeigen"
++
++msgid "Display channel groups"
++msgstr "Kanalgruppen anzeigen"
++
++msgid "Height of channel groups (Perc. of osd height)"
++msgstr "Höhe der Kanalgruppen (% der OSD Höhe)"
++
++msgid "Width of channel groups (Perc. of osd width)"
++msgstr "Breite der Kanalgruppen (% der OSD Breite)"
++
++msgid "Display current time baseline"
++msgstr "Linie für aktuelle Uhrzeit anzeigen"
++
++msgid "Show Channel Logos"
++msgstr "Kanallogos anzeigen"
++
++msgid "Logo Path used"
++msgstr "Benutzer Pfad für Kanallogos"
++
++msgid "Logo Extension"
++msgstr "Logo Extension"
++
++msgid "Logo width ratio"
++msgstr "Logo Breitenverhältnis"
++
++msgid "Logo height ratio"
++msgstr "Logo Höhenverhältnis"
++
++msgid "Text Border in Detailed View (pixel)"
++msgstr "Rand im detailierten EPG View"
++
++msgid "Show EPG Images"
++msgstr "EPG Bilder anzeigen"
++
++msgid "EPG Images Path used"
++msgstr "Benutzer EPG Bilder Pfad"
++
++msgid "EPG Image width"
++msgstr "Breite der EPG Bilder"
++
++msgid "EPG Image height"
++msgstr "Höhe der EPG Bilder"
++
++msgid "Number of additional EPG Images"
++msgstr "Anzahl zusätzlicher EPG Bilder"
++
++msgid "Additional EPG Image width"
++msgstr "Breite der zus. EPG Bilder"
++
++msgid "Additional EPG Image height"
++msgstr "Höhe der zus. EPG Bilder"
++
++msgid "Font"
++msgstr "Font"
++
++msgid "Status Header Font Size"
++msgstr "Status Header Schriftgröße"
++
++msgid "Status Header Large Font Size"
++msgstr "Status Header große Schriftgröße"
++
++msgid "Detail EPG View Font Size"
++msgstr "Detailierte EPG Ansicht Schriftgröße"
++
++msgid "Detail EPG View Header Font Size"
++msgstr "Detailierte EPG Ansicht Header Schriftgröße"
++
++msgid "Message Font Size"
++msgstr "Nachrichten Schriftgröße"
++
++msgid "Message Large Font Size"
++msgstr "Nachrichten große Schriftgröße"
++
++msgid "Button Font Size"
++msgstr "Button Schriftgröße"
++
++msgid "Channel Header Font Size"
++msgstr "Kanal Header Schriftgröße"
++
++msgid "Channel Groups Font Size"
++msgstr "Kanalgruppen Schriftgröße"
++
++msgid "Grid Font Size"
++msgstr "Grid Schriftgröße"
++
++msgid "Grid Font Small Size"
++msgstr "Grid kleine Schriftgröße"
++
++msgid "Timeline Weekday Font Size"
++msgstr "Zeitleiste Wochentag Schriftgröße"
++
++msgid "Timeline Date Font Size"
++msgstr "Zeitleiste Datum Schriftgröße"
++
++msgid "Timeline Time Font Size"
++msgstr "Zeitleiste Zeit Schriftgröße"
++
++msgid "Search & Recording Menu Font Size"
++msgstr "Suchen & Aufnehmen Menu Schriftgröße"
++
++msgid "Search & Recording Menu Small Font Size"
++msgstr "Suchen & Aufnehmen Menu kleine Schriftgröße"
++
++msgid "Search & Recording Menu Header Font Size"
++msgstr "Suchen & Aufnehmen Menu Header Schriftgröße"
++
++msgid "Always use root video folder"
++msgstr "Usa sempre la cartella video di root"
++
++msgid "Select from folder list"
++msgstr "Scegli dall'elenco cartelle"
++
++msgid "Use fixed folder"
++msgstr "Usa cartella fissa"
++
++msgid "Folder for instant Recordings"
++msgstr "Cartella per la registrazione immediata"
++
++msgid "Use Remotetimers"
++msgstr "Usa Remotetimers"
++
++msgid "Use \"What's on now\" in favorites"
++msgstr "Usa \"In programma ora\" nei favoriti"
++
++msgid "Use \"What's on next\" in favorites"
++msgstr "Usa \"Programma prossimo\" nei favoriti"
++
++msgid "Use user defined time 1 in favorites"
++msgstr "Usa il tempo definito per l'user 1 in favoriti"
++
++msgid "Description"
++msgstr "Descrizione"
++
++msgid "Time"
++msgstr "Tempo"
++
++msgid "Use user defined time 2 in favorites"
++msgstr "Usa il tempo definito per l'user 2 in favoriti"
++
++msgid "Use user defined time 3 in favorites"
++msgstr "Usa il tempo definito per l'user 3 in favoriti"
++
++msgid "Use user defined time 4 in favorites"
++msgstr "Usa il tempo definito per l'user 4 in favoriti"
++
++msgid "Limit channels in favorites"
++msgstr "Limite dei canali nei favoriti"
++
++msgid "Create Log Messages for image loading"
++msgstr "Log Nachrichten für das Laden der Bilder erzeugen"
++
++msgid "Limit Logo Cache"
++msgstr "Logo Cash beschränken"
++
++msgid "Maximal number of logos to cache"
++msgstr "Maximale Anzahl Logos"
++
++msgid "Number of  logos to cache at start"
++msgstr "Anzahl der zu cachenden Logos beim Start"
++
++msgid "Cache Sizes"
++msgstr "Cache Größe"
++
++msgid "OSD Element Cache"
++msgstr "OSD Element Cache"
++
++msgid "Logo cache"
++msgstr "Logo Cache"
++
++msgid "EPG Grid Cache"
++msgstr "EPG Grid Cache"
++
++msgid "Channel Groups Cache"
++msgstr "Cache dei Gruppi Canale"
++
++msgid "Recording Menus Icon Cache"
++msgstr "Recording Menüs Icon Cache"
++
++msgid "No Cast available"
++msgstr "Nessun cast disponibile"
++
++msgid "Cast"
++msgstr "Besetzung"
++
++msgid "EPG Info"
++msgstr "EPG Info"
++
++msgid "Reruns"
++msgstr "riavvii"
++
++msgid "Recording Information"
++msgstr ""
++
++msgid "Image Galery"
++msgstr "Bildergalerie"
++
++msgid "TheTVDB Info"
++msgstr "TheTVDB Info"
++
++msgid "TheTVDB Information"
++msgstr "TheTVDB Information"
++
++msgid "Episode"
++msgstr "Episodio"
++
++msgid "Season"
++msgstr "Stagione"
++
++msgid "Episode Overview"
++msgstr "Episodenüberblick"
++
++msgid "First aired"
++msgstr "Erstausstrahlung"
++
++msgid "Guest Stars"
++msgstr "Guest Stars"
++
++msgid "TheMovieDB Rating"
++msgstr "Voto di TheMovieDB"
++
++msgid "Series Overview"
++msgstr "Serienüberblick"
++
++msgid "Genre"
++msgstr "Genere"
++
++msgid "Network"
++msgstr "Network"
++
++msgid "Status"
++msgstr "Status"
++
++msgid "TheMovieDB Information"
++msgstr "TheMovieDB Information"
++
++msgid "Original Title"
++msgstr "Titolo Originale"
++
++msgid "Tagline"
++msgstr "Zusammenfassung"
++
++msgid "Overview"
++msgstr "Überblick"
++
++msgid "yes"
++msgstr "Si"
++
++msgid "no"
++msgstr "No"
++
++msgid "Adult"
++msgstr "Per adulti"
++
++msgid "Collection"
++msgstr "Kollektion"
++
++msgid "Budget"
++msgstr "Budget"
++
++msgid "Revenue"
++msgstr "Einnahmen"
++
++msgid "Homepage"
++msgstr "Homepage"
++
++msgid "Release Date"
++msgstr "Data di rilascio"
++
++msgid "Runtime"
++msgstr "Runtime"
++
++msgid "minutes"
++msgstr "Minuti"
++
++msgid "TheMovieDB Popularity"
++msgstr "TheMovieDB Popularità"
++
++msgid "TheMovieDB Vote Average"
++msgstr "Voto medio di TheMovieDB"
++

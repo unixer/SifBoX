@@ -79,8 +79,12 @@
 # to obtain keys visit the shop at http://www.raspberrypi.com
 ################################################################################
 
-decode_MPG2=0xac0ab958
-decode_WVC1=0xbdcbd2bf
+decode_MPG2=0xac0ab958 # Raspberry PI 2 Ex Salone
+decode_WVC1=0xbdcbd2bf # Raspberry PI 2 Ex Salone
+decode_MPG2=0x9e57566c # Raspberry PI 2 Garage
+decode_WVC1=0x5f1b859e # Raspberry PI 2 Garage
+decode_MPG2=0xc61d97cd # Raspberry PI 3
+decode_WVC1=0x9814b54e # Raspberry PI 3
 # decode_DTS=0x00000000
 # decode_DDP=0x00000000
 
