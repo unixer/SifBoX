@@ -1,0 +1,22 @@
+
+#!/bin/sh
+
+. config/options
+
+get_meta vdr
+VDR_VERSION=$PKG_VERSION
+
+get_meta linux
+DVB_DIR="$SYSROOT_PREFIX/usr/include"
+
+get_meta $1
+VDR_DIR=`basename $BUILD/vdr-$VDR_VERSION`
+
+cd $PKG_BUILD_DIR
+
+mkdir -p .install/etc/vdr/plugins/skinnopacity/logos/ || true
+# mv \-frisbee-.png .install/etc/vdr/plugins/skinnopacity/logos
+# mv \-freesbe-.png .install/etc/vdr/plugins/skinnopacity/logos
+mv ../vdr-logos-fiveten-0.0.1/*.* .install/etc/vdr/plugins/skinnopacity/logos
+
+
