@@ -1,8 +1,9 @@
 PKG_NAME=json
 #PKG_VERSION=0.9
 PKG_VERSION=0.12.1
+##PKG_VERSION=0.99.4
+#PKG_URL="https://github.com/rsyslog/libfastjson/archive/v0.99.4.tar.gz"
 PKG_URL="https://s3.amazonaws.com/json-c_releases/releases/json-c-0.12.1.tar.gz"
-#PKG_URL="http://oss.metaparadigm.com/json-c/json-c-${PKG_VERSION}.tar.gz"
 PKG_REV=1
 PKG_DEPENDS="$TARGET_LIBC"
 PKG_BUILD_DEPENDS="toolchain"
