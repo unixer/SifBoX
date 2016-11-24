@@ -172,6 +172,14 @@ ENV{ID_VENDOR_ID}=="15c2", ENV{ID_MODEL_ID}=="0038", \
   ENV{eventlircd_enable}="true", \
   ENV{eventlircd_evmap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.evmap"
 
+ENV{ID_VENDOR_ID}=="0c40", ENV{ID_MODEL_ID}=="7a17", \
+  ENV{eventlircd_enable}="true", \
+  ENV{eventlircd_evmap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.evmap"
+
+ENV{ID_VENDOR_ID}=="1915", ENV{ID_MODEL_ID}=="0145", \
+  ENV{eventlircd_enable}="true", \
+  ENV{eventlircd_evmap}="03_$env{ID_VENDOR_ID}_$env{ID_MODEL_ID}.evmap"
+
 #ENV{DEVNAME}=="*event0*", \
 #  ENV{eventlircd_enable}="true", \
 #  ENV{eventlircd_evmap}="03_keyboard.evmap"

@@ -1,0 +1,20 @@
+# dummy entry
+
+begin
+    prog = irexec
+    button = KEY_DASHBOARD
+    config = systemctl stop vdr.service ; systemctl start kodi.service
+    config = systemctl start vdr.service ; systemctl stop kodi.service
+end
+
+# Button Zoom
+begin
+	prog = xine
+	remote = *
+	button = KEY_ZOOM
+	delay = 4
+	repeat = 0
+	config = z
+	config = Z
+	flags = toggle_reset
+end
