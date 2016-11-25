@@ -1,0 +1,80 @@
+--- v4l-utils-1.10.1+1~f0db4b1f62/lib/libv4l1/v4l1compat.c.org	2016-06-15 20:57:30.000000000 +0200
++++ v4l-utils-1.10.1+1~f0db4b1f62/lib/libv4l1/v4l1compat.c	2016-11-25 12:16:15.069681788 +0100
+@@ -61,6 +61,7 @@
+ 	return fd;
+ }
+ 
++/*
+ #if defined(linux) && defined(__GLIBC__)
+ LIBV4L_PUBLIC int open64(const char *file, int oflag, ...)
+ {
+@@ -82,7 +83,7 @@
+ 	return fd;
+ }
+ #endif
+-
++*/
+ LIBV4L_PUBLIC int close(int fd)
+ {
+ 	return v4l1_close(fd);
+@@ -120,6 +121,7 @@
+ 	return v4l1_mmap(start, length, prot, flags, fd, offset);
+ }
+ 
++/*
+ #if defined(linux) && defined(__GLIBC__)
+ LIBV4L_PUBLIC void *mmap64(void *start, size_t length, int prot, int flags, int fd,
+ 		__off64_t offset)
+@@ -127,6 +129,7 @@
+ 	return v4l1_mmap(start, length, prot, flags, fd, offset);
+ }
+ #endif
++*/
+ 
+ LIBV4L_PUBLIC int munmap(void *start, size_t length)
+ {
+--- v4l-utils-1.10.1+1~f0db4b1f62/lib/libv4l2/v4l2convert.c.org	2016-06-15 20:57:30.000000000 +0200
++++ v4l-utils-1.10.1+1~f0db4b1f62/lib/libv4l2/v4l2convert.c	2016-11-25 12:17:30.053679556 +0100
+@@ -90,12 +90,12 @@
+ 	return fd;
+ }
+ 
++/*
+ #if defined(linux) && defined(__GLIBC__)
+ LIBV4L_PUBLIC int open64(const char *file, int oflag, ...)
+ {
+ 	int fd;
+ 
+-	/* original open code */
+ 	if (oflag & O_CREAT) {
+ 		va_list ap;
+ 		mode_t mode;
+@@ -109,11 +109,11 @@
+ 	} else {
+ 		fd = open(file, oflag | O_LARGEFILE);
+ 	}
+-	/* end of original open code */
+ 
+ 	return fd;
+ }
+ #endif
++*/
+ 
+ #ifndef ANDROID
+ LIBV4L_PUBLIC int close(int fd)
+@@ -153,6 +153,7 @@
+ 	return v4l2_mmap(start, length, prot, flags, fd, offset);
+ }
+ 
++/*
+ #if defined(linux) && defined(__GLIBC__)
+ LIBV4L_PUBLIC void *mmap64(void *start, size_t length, int prot, int flags, int fd,
+ 		off64_t offset)
+@@ -160,6 +161,7 @@
+ 	return v4l2_mmap(start, length, prot, flags, fd, offset);
+ }
+ #endif
++*/
+ 
+ LIBV4L_PUBLIC int munmap(void *start, size_t length)
+ {
