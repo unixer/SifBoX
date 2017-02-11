@@ -12,7 +12,8 @@ get_meta $1
 export MYSQL_CFLAGS="-I$SYSROOT_PREFIX/usr/local"
 export CPPFLAGS="$CPPFLAGS -I$SYSROOT_PREFIX/usr/local"
 
-cd $BUILD/$1*
+cd $PKG_BUILD_DIR
+
 [ "$TARGET_CPU" = "generic" ] && MARCH="i686" 
 #[ "$TARGET_CPU" <> "generic" ] && MARCH=$TARGET_CPU 
 do_autoreconf -fvi

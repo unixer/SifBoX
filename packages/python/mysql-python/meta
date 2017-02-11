@@ -1,7 +1,7 @@
 PKG_NAME=mysql-python
 PKG_VERSION=1.2.5
 PKG_URL="https://pypi.python.org/packages/source/M/MySQL-python/MySQL-python-${PKG_VERSION}.zip"
-PKG_REV=1
+PKG_REV="3"
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_BUILD_DEPENDS="toolchain python-distribute"
 PKG_DEPENDS="Python mysql"
@@ -10,3 +10,4 @@ PKG_SECTION=python
 PKG_SHORTDESC="A Python interface to MySQL"
 PKG_LONGDESC="MySQLdb is an interface to the popular MySQL database server for
  Python."
+PKG_MD5="654f75b302db6ed8dc5a898c625e030c"

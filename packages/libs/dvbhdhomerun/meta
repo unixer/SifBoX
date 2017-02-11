@@ -1,6 +1,8 @@
 PKG_NAME=dvbhdhomerun
 PKG_VERSION=0.16
 PKG_URL="$DISTRO_SRCS/$PKG_NAME-$PKG_VERSION.tar.bz2"
+#PKG_VERSION=20130704
+#PKG_URL="http://sources.openelec.tv/devel/dvbhdhomerun-20130704.tar.xz"
 PKG_REV=1
 PKG_RUN_DEPENDS="$TARGET_LIBC"
 PKG_BUILD_DEPENDS="toolchain cmake"

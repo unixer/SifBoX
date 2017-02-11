@@ -1,10 +1,13 @@
 PKG_NAME=xine-lib
-PKG_URL_REV=7f1387a18473
-PKG_VERSION=1.2.6
+#PKG_URL_REV=7f1387a18473
+#PKG_VERSION=1.2.6
+PKG_URL_REV=e81e9663b4f7
+PKG_VERSION=1.2.7
 #PKG_URL_REV=a7822d3d0
 #PKG_URL_PROTO=git
 #PKG_URL="git://projects.vdr-developer.org/xine-lib.git"
 PKG_URL_PROTO=hg
+##PKG_URL="https://anonscm.debian.org/hg/xine-lib/xine-lib-1.2/archive/e81e9663b4f7.tar.bz2"
 PKG_URL="http://anonscm.debian.org/hg/xine-lib/xine-lib-1.2"
 PKG_REV=1
 PKG_BUILD_DEPENDS="toolchain"

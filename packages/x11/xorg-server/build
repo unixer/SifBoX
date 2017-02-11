@@ -6,19 +6,12 @@ get_meta $1
 
 $SCRIPTS/unpack mesa
 
-if pkg_uses $1 mesa; then
-  XORG_MESA="--enable-glx --enable-dri"
-else
-  XORG_MESA="--disable-glx --disable-dri"
-fi
-
-if pkg_uses $1 glamor; then
-  XORG_GLAMOR="--enable-glamor"
-else
-  XORG_GLAMOR="--disable-glamor"
-fi
-
 cd $PKG_BUILD_DIR
+
+OPT_IPV6="--disable-ipv6"
+if pkg_uses linux ipv6 ; then 
+  OPT_IPV6="--enable-ipv6"
+fi
 
 do_autoconf
 
@@ -48,6 +41,8 @@ do_configure \
             --enable-screensaver \
             --disable-xdmcp \
             --disable-xdm-auth-1 \
+            --enable-glx \
+            --enable-dri \
             --enable-dri2 \
             --enable-gestures \
             --enable-xinerama \
@@ -77,8 +72,8 @@ do_configure \
             --enable-xfbdev \
             --disable-install-setuid \
             --disable-secure-rpc \
-            --disable-ipv6 \
-            --with-os-vendor="SifBoX" \
+            $OPT_IPV6 \
+            --with-os-vendor="OpenBricks" \
             --with-int10=x86emu \
             --with-module-dir=$XORG_PATH_MODULES \
             --with-xkb-path=$XORG_PATH_XKB \
@@ -87,8 +82,6 @@ do_configure \
             --with-fontrootdir=$XORG_PATH_FONTS \
             --with-default-font-path="$XORG_PATH_FONTS/misc,built-ins" \
             --with-sha1=libgcrypt \
-            $XORG_MESA \
-	    $XORG_GLAMOR
 
 make V=1
 make_install

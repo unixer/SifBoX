@@ -146,7 +146,7 @@ if [ "$DL" = yes ]; then
             ;;
           hg)
             [ -n "$PKG_URL_REV" ] && HGREV="-u $PKG_URL_REV"
-            hg clone $HGREV $PKG_URL $SOURCES/$1/$REPO_BASENAME
+            hg clone $HGREV $PKG_URL $SOURCES/$1/$REPO_BASENAME --insecure
             hg -R $SOURCES/$1/$REPO_BASENAME archive --prefix=$REPO_BASENAME/ $SOURCES/$1/$REPO_ARCHIVE
             ;;
           cvs)

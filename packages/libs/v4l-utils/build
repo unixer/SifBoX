@@ -12,11 +12,12 @@ touch build-aux/config.rpath libdvbv5-po/Makefile.in.in v4l-utils-po/Makefile.in
 install_dir="$PWD/.install"
 
 do_autoreconf -vfi
-do_configure --libdir="$install_dir/usr/lib" #--prefix=$install_dir
+do_configure --libdir="$install_dir/usr/lib" \
+	     --includedir="$install_dir/usr/include"
 
 make -C lib PREFIX=/usr KERNEL_DIR=$(kernel_path)
 make -C utils PREFIX=/usr KERNEL_DIR=$(kernel_path)
-make -C lib install #PREFIX=$install_dir/usr
+make -C lib install PREFIX=$install_dir/usr
 make -C utils install PREFIX=/usr DESTDIR=$install_dir
 
 mkdir -p .install-unstripped

@@ -9,14 +9,17 @@ get_meta $1
 
 require_cxx $1
 
-cd $BUILD/$1*
+cd $PKG_BUILD_DIR
+install_dir="$PWD/.install"
+
 
 sed -i 's/^video.output.vdpau_enable_inverse_telecine:0/video.output.vdpau_enable_inverse_telecine:1/' \
 	data/xine.conf
 
 do_autoconf
 
-export CXXFLAGS="$CXXFLAGS -I../linux-3.*/include/uapi/"
+export CXXFLAGS="$CXXFLAGS -I../linux-4.*/include/uapi/" 
+export CXXFLAGS="$CXXFLAGS -I../toolchain/x86_64-openbricks-linux-gnu/sysroot/usr/local/include/libnl3"
 
 export PYTHON_VERSION=2.7
 export PYTHON_CPPFLAGS=-I$LIB_PREFIX/include/python2.7
@@ -31,7 +34,9 @@ do_configure \
              --with-arch=$TARGET_ARCH \
              --with-cpu=$TARGET_CPU \
              --with-xlib \
-             --with-pic
+             --with-pic \
+	     CXXFLAGS="$CXXFLAGS -I/root/SifBoX/build/build.kbb.eglibc/toolchain/x86_64-openbricks-linux-gnu/sysroot/usr/local/include/libnl3"
+
 
 make
 make_install

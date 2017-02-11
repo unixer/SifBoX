@@ -22,6 +22,21 @@ echo "dvb_hdhomerun" > .install/usr/lib/modules-load.d/dvbhdhomerun.conf
 
 cd userhdhomerun
 
+LIBHDHOMERUN_PATH=$(ls -d $ROOT/$BUILD/libhdhomerun-*/)
+sed -i "s|SET(LIBHDHOMERUN_PATH .*)|SET(LIBHDHOMERUN_PATH $LIBHDHOMERUN_PATH)|g" ../userhdhomerun/CMakeLists.txt
+sed -i "s|/etc/dvbhdhomerun|/tmp/dvbhdhomerun|g" ../userhdhomerun/hdhomerun_tuner.cpp
+sed -i "s|/etc/dvbhdhomerun|/tmp/dvbhdhomerun|g" ../userhdhomerun/hdhomerun_controller.cpp
+
+echo "SET(CMAKE_SYSTEM_NAME Linux)" >> $CMAKE_CONF
+echo "SET(CMAKE_SYSTEM_VERSION 1)"  >> $CMAKE_CONF
+echo "SET(CMAKE_SYSTEM_PROCESSOR  $TARGET_ARCH)" >> $CMAKE_CONF
+echo "SET(CMAKE_C_COMPILER   $CC)"  >> $CMAKE_CONF
+echo "SET(CMAKE_CXX_COMPILER $CXX)" >> $CMAKE_CONF
+echo "SET(CMAKE_CPP_COMPILER $CPP)" >> $CMAKE_CONF
+echo "SET(CMAKE_FIND_ROOT_PATH  $SYSROOT_PREFIX)"   >> $CMAKE_CONF
+echo "SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)" >> $CMAKE_CONF
+echo "SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)"  >> $CMAKE_CONF
+echo "SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)"  >> $CMAKE_CONF
 #mkdir build && cd build
   cmake -DCMAKE_TOOLCHAIN_FILE=$CMAKE_CONF \
         -DCMAKE_INSTALL_PREFIX=/usr \
@@ -34,7 +49,7 @@ make
 cd ..
 
 mkdir -p .install/usr/bin
-cp userhdhomerun/build/userhdhomerun .install/usr/bin
+cp userhdhomerun/userhdhomerun .install/usr/bin
 
 mkdir -p .install/etc
 cp etc/dvbhdhomerun .install/etc

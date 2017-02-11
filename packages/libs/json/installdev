@@ -3,6 +3,11 @@
 . config/options
 
 cd $BUILD/$1*
+cd .install/usr/lib/pkgconfig
+ln -s json-c.pc json.pc || true
+cd ../../include
+ln -s json-c json ||true
+cd ../../..
 
 do_installdev usr/include
 do_installdev usr/lib

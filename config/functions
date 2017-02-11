@@ -509,6 +509,20 @@ do_autoconf () {
     $@
 }
 
+do_autoconf () {
+  setup_toolchain host
+
+  ACLOCAL_INCLUDES=""
+  [ -d m4 ] && ACLOCAL_INCLUDES="-I m4"
+  [ -d common/m4 ] && ACLOCAL_INCLUDES="$ACLOCAL_INCLUDES -I common/m4"
+
+  $AUTORECONF -i -f -v \
+    $ACLOCAL_INCLUDES \
+    -I $ROOT/$TOOLCHAIN/share/aclocal \
+    -I $ROOT/$TOOLCHAIN/share/aclocal-1.12 \
+    $@
+}
+
 # Usage: do_configure [host|target] [configure_options...]
 do_configure () {
   local buildfor=target

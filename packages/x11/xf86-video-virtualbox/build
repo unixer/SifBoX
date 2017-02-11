@@ -21,14 +21,13 @@ else
   fic="data-extracted/VBoxGuestAdditions-amd64.tar.bz2"
 fi
 
-tar xjfv $fic -C work
+tar xjf $fic -C work
 
 make -C work/src/vboxguest-$myver \
      CC=${CC} \
      KERN_VER=$(kernel_version) \
      KERN_DIR=$(kernel_path)
 
-#cp work/lib/VBoxGuestAdditions/vboxvideo_drv_114.so work/lib/VBoxGuestAdditions/vboxvideo_drv_115.so
 mkdir -p .install/lib/modules/$(kernel_version)/kernel/drivers/misc
 cp work/src/vboxguest-$myver/*.ko .install/lib/modules/$(kernel_version)/kernel/drivers/misc
 

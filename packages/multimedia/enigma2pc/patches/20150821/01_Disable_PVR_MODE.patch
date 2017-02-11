@@ -1,0 +1,19 @@
+--- enigma2pc-20150821/lib/gdi/xineLib.cpp.org	2016-12-01 14:49:52.753957557 +0100
++++ enigma2pc-20150821/lib/gdi/xineLib.cpp	2016-12-01 14:50:09.397957061 +0100
+@@ -453,14 +453,14 @@
+ 	}
+ 
+ // SET_PVR_MODE, call event set 'demux_ts' to read PAT, PMT files *.ts, *.m2ts
+-        int data;
++/*        int data;
+         xine_event_t event;
+         event.type = XINE_EVENT_SET_PVR_MODE;
+ 	data = 1;
+         event.data = &data;
+         event.data_length = sizeof (int);
+         xine_event_send (stream, &event);
+-
++*/
+ 
+ 	if (!xine_play(stream, 0, 0))
+ 	{
